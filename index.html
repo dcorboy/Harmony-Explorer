@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns = "http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<!-- midi.js package -->
+	<script src="./MIDI.js/build/MIDI.js" type="text/javascript"></script>	
+	<!-- extras -->
+	<script src="./MIDI.js/inc/Base64.js" type="text/javascript"></script>
+	<script src="./MIDI.js/inc/base64binary.js" type="text/javascript"></script>
+
+	<script src="./chords.js" type="text/javascript"></script>
+	
+</head>
+<body>
+	<script type="text/javascript">
+		window.onload = init();
+	</script>
+
+	<div id="chordinputs">
+		<form name = "inputs">
+			<select id="chordroot" onchange="chgChord(this.form.root,this.form.chord);" size="10" name="root"></select>
+			<select id="chord" onchange="chgChord(this.form.root,this.form.chord);" size="10" name="chord"></select>
+		</form>
+	</div>
+	<div id = "chordoutput">Output here...</div>
+	<button id="play" onclick="playChord(gChord);" >Play Chord</button>
+
+	<div style="clear: both;"></div>
+	
+	<div id="harmonyinputs">
+		<form name = "inputs">
+			<select id="keyroot" onchange="chgKey(this.form.root,this.form.r1[0].checked);" size="10" name="root"></select>
+			<input type="radio" onclick="chgKey(this.form.root,this.form.r1[0].checked);" value="major" name="r1" checked>Major
+			<input type="radio" onclick="chgKey(this.form.root,this.form.r1[0].checked);" value="minor" name="r1">Minor
+		</form>
+		<div id="harmonies">
+			<button id="h1" onclick="playHarmony(1);" >I</button>
+			<button id="h1" onclick="playHarmony(2);" >II</button>
+			<button id="h1" onclick="playHarmony(3);" >III</button>
+			<button id="h1" onclick="playHarmony(4);" >IV</button>
+			<button id="h1" onclick="playHarmony(5);" >V</button>
+			<button id="h1" onclick="playHarmony(6);" >VI</button>
+			<button id="h1" onclick="playHarmony(7);" >VII</button>
+		</div>
+	</div>
+
+	<noscript>
+		<div align="center">
+			<b>Chord-Explorer requires Javascript</b>
+				You will need to enable JavaScript in your browser
+				in order to explore chords.
+		</div>
+	</noscript> 
+</body>
+</html>
