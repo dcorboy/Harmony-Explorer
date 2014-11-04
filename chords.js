@@ -46,12 +46,14 @@ function chgKey(root, major)
 	else gScale = minorscale;
 }
 
-function playHarmony(harmony)
+function playHarmony(harmony, octave)
 {
 	var chord = [];
 	// uses gKey and gScale
 	// a harmony is the notes indexed by n, n+2 and n+4 in the notes of the key scale
 	// where n is the root note
+	// harmony is the harmony # -1 as an index into harmonynames[]
+	// octave is the relative octave from 4 (Middle C)
 
 	var i1 = (0+harmony)%7;
 	
@@ -63,9 +65,9 @@ function playHarmony(harmony)
 	console.log(i1+1,i2+1,i3+1);
 	console.log(r2,r3);
 
-	var n1 = 60 + gKey + gScale[i1];
-	var n2 = 60 + gKey + gScale[i2] + r2*12;
-	var n3 = 60 + gKey + gScale[i3] + r3*12;
+	var n1 = 60 + gKey + gScale[i1] + octave * 12;
+	var n2 = 60 + gKey + gScale[i2] + (r2+octave)*12;
+	var n3 = 60 + gKey + gScale[i3] + (r3+octave)*12;
 	
 	console.log(n1,n2,n3);
 	
@@ -112,9 +114,18 @@ function startup() {
 	for (var i = 0; i < len; i++) {
 		var elem = document.createElement('button')
 		elem.innerHTML = harmonynames[i];
-		elem.setAttribute('onclick','playHarmony('+i+');');
+		elem.setAttribute('onclick','playHarmony('+i+', 0);');
 		parent.appendChild(elem);
-	}	
+	}
+	
+	parent = document.getElementById('lowharmonies');
+	len = harmonynames.length;
+	for (var i = 0; i < len; i++) {
+		var elem = document.createElement('button')
+		elem.innerHTML = harmonynames[i];
+		elem.setAttribute('onclick','playHarmony('+i+', -1);');
+		parent.appendChild(elem);
+	}
 
 	chgChord('0', chord);	// C Major
 	chgKey('0', true);		// C Major
