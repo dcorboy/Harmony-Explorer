@@ -53,14 +53,18 @@ function playHarmony(harmony)
 	harmony--;	// easier for array math
 
 	var i1 = (0+harmony)%7;
+	
 	var i2 = (2+harmony)%7;
+	var r2 = ((2+harmony)/7) >> 0;
 	var i3 = (4+harmony)%7;
+	var r3 = ((4+harmony) >= 7) ? 1 : 0
 
 	console.log(i1+1,i2+1,i3+1);
+	console.log(r2,r3);
 
 	var n1 = 60 + gKey + gScale[i1];
-	var n2 = 60 + gKey + gScale[i2];
-	var n3 = 60 + gKey + gScale[i3];
+	var n2 = 60 + gKey + gScale[i2] + r2*12;
+	var n3 = 60 + gKey + gScale[i3] + r3*12;
 	
 	console.log(n1,n2,n3);
 	
