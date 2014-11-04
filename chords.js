@@ -4,6 +4,7 @@ var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
 var harmonynames = ['I','ii','iii','IV','V','vi','vii','5/5'];
+var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','1,#3,5'];
 
 var majorscale = [0,2,4,5,7,9,11];
 var minorscale = [0,2,3,5,7,8,10];
@@ -48,43 +49,6 @@ function chgKey(root, major)
 
 function playHarmony(harmony, octave)
 {
-	var chord = [];
-	var h = harmony;
-	// uses gKey and gScale
-	// a h is the notes indexed by n, n+2 and n+4 in the notes of the key scale
-	// where n is the root note
-	// h is the h # -1 as an index into harmonynames[]
-	// octave is the relative octave from 4 (Middle C)
-
-	if (harmony == 7) h = 1;
-
-	var i1 = (0+h)%7;
-	
-	var i2 = (2+h)%7;
-	var r2 = ((2+h)/7) >> 0;
-	var i3 = (4+h)%7;
-	var r3 = ((4+h) >= 7) ? 1 : 0
-
-	console.log(i1+1,i2+1,i3+1);
-	console.log(r2,r3);
-
-	var n1 = 60 + gKey + gScale[i1] + octave * 12;
-	var n2 = 60 + gKey + gScale[i2] + (r2+octave)*12;
-	var n3 = 60 + gKey + gScale[i3] + (r3+octave)*12;
-	
-	if (harmony == 7) n2++;
-	
-	console.log(n1,n2,n3);
-	
-	chord.push(n1);
-	chord.push(n2);
-	chord.push(n3);
-
-	playChord(chord);
-}
-
-function playHarmony2(harmony, octave)
-{
 	// harmony indexes into some kind of data structure in which teh chord is coded
 	// Thoughts:
 	// ['0,2,4','1,3,5','2,4,6', ...
@@ -103,6 +67,30 @@ function playHarmony2(harmony, octave)
 	//   convert to n as above
 	//   add the accidental a
 	//   push it into the chord array
+
+	var chord = [];
+	var harmonyformula = harmonyformulas[harmony].split(',');
+
+	for (var i=0; i<harmonyformula.length; i++) {
+		var n;
+		var str = harmonyformula[i];
+		var a = (str.charAt(0) == 'b') ? -1 : ((str.charAt(0) == '#') ? 1 : 0);	// set a to +1 for '#' and -1 for 'b'
+
+		if (a) n = parseInt(str.slice(1));
+		else n = parseInt(str);
+		console.log('formula extraction: ', n, a);
+
+		var idx = n%7;
+		var r = (n/7) >> 0;
+		console.log('index extraction: ', idx, r);
+
+		var note = 60 + gKey + gScale[idx] + (r+octave) * 12 + a;
+		console.log('note: ', note);
+		
+		chord.push(note);
+	}
+
+	playChord(chord);
 }
 
 function startup() {
