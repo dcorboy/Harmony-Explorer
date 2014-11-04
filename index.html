@@ -18,8 +18,8 @@
 
 	<div id="chordinputs">
 		<form name = "inputs">
-			<select id="chordroot" onchange="chgChord(this.form.root,this.form.chord);" size="10" name="root"></select>
-			<select id="chord" onchange="chgChord(this.form.root,this.form.chord);" size="10" name="chord"></select>
+			<select id="chordroot" onchange="chgChord(this.form.root.value,this.form.chord);" size="10" name="root"></select>
+			<select id="chord" onchange="chgChord(this.form.root.value,this.form.chord);" size="10" name="chord"></select>
 		</form>
 	</div>
 	<div id = "chordoutput">Output here...</div>
@@ -29,9 +29,9 @@
 	
 	<div id="harmonyinputs">
 		<form name = "inputs">
-			<select id="keyroot" onchange="chgKey(this.form.root,this.form.r1[0].checked);" size="10" name="root"></select>
-			<input type="radio" onclick="chgKey(this.form.root,this.form.r1[0].checked);" value="major" name="r1" checked>Major
-			<input type="radio" onclick="chgKey(this.form.root,this.form.r1[0].checked);" value="minor" name="r1">Minor
+			<select id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked);" size="10" name="root"></select>
+			<input type="radio" onclick="chgKey(this.form.root.value,this.form.r1[0].checked);" value="major" name="r1" checked>Major
+			<input type="radio" onclick="chgKey(this.form.root.value,this.form.r1[0].checked);" value="minor" name="r1">Minor
 		</form>
 		<div id="harmonies">
 			<button id="h1" onclick="playHarmony(1);" >I</button>

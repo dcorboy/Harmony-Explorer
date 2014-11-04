@@ -23,7 +23,7 @@ function playChord(chord) {
 
 function chgChord (root, chord)
 {
-	var rootnote = parseInt(root.value);
+	var rootnote = parseInt(root);
 	var chordformula = chord.value.split(',');
 	var output = '';
 	
@@ -39,10 +39,9 @@ function chgChord (root, chord)
 
 function chgKey(root, major)
 {
-	gKey = parseInt(root.value);
+	gKey = parseInt(root);
 	if (major) gScale = majorscale;
 	else gScale = minorscale;
-	playChord(gChord);
 }
 
 function playHarmony(harmony)
@@ -84,7 +83,6 @@ function startup() {
 		var elem = document.createElement('option')
 		elem.value = i;
 		elem.innerHTML = notes[i];
-		if (i == 0) root = elem;
 		select.appendChild(elem);
 		select2.appendChild(elem.cloneNode(true));
 	}
@@ -106,7 +104,8 @@ function startup() {
 	
 	// maybe set major/minor here also
 
-	chgChord(root, chord);
+	chgChord('0', chord);	// C Major
+	chgKey('0', true);		// C Major
 	playChord(gChord);
 }
 
