@@ -27,12 +27,12 @@ function chgChord (root, chord)
 	var chordformula = chord.value.split(',');
 	var output = '';
 	
-	gChord.length = 0;	// reset chord
+	gChord.length = 0;	// reset chord array
 
 	for (var i=0; i<chordformula.length; i++) {
 		var note = rootnote + parseInt(chordformula[i]);
 		output += (disp[note%12] + ' '); 
-		gChord.push(note+60);
+		gChord.push(note+60);	// FIXME adjust for octave later
 	}
 	document.getElementById("chordoutput").innerHTML = output;
 }
@@ -47,6 +47,17 @@ function chgKey(root, major)
 
 function playHarmony(harmony)
 {
+	var chord = [];
+	//uses gKey and gScale
+	// a harmony is the notes indexed by n, n+2 and n+4 in the notes of the key scale
+	// where n
+	harmony--;	// easier for array math
+
+	var n1 = (0+harmony)%7;
+	var n2 = (2+harmony)%7;
+	var n3 = (4+harmony)%7;
+	
+	console.log(n1+1,n2+1,n3+1);
 }
 
 function startup() {
