@@ -53,11 +53,23 @@ function playHarmony(harmony)
 	// where n
 	harmony--;	// easier for array math
 
-	var n1 = (0+harmony)%7;
-	var n2 = (2+harmony)%7;
-	var n3 = (4+harmony)%7;
+	var i1 = (0+harmony)%7;
+	var i2 = (2+harmony)%7;
+	var i3 = (4+harmony)%7;
+
+	console.log(i1+1,i2+1,i3+1);
+
+	var n1 = 60 + gKey + gScale[i1];
+	var n2 = 60 + gKey + gScale[i2];
+	var n3 = 60 + gKey + gScale[i3];
 	
-	console.log(n1+1,n2+1,n3+1);
+	console.log(n1,n2,n3);
+	
+	chord.push(n1);
+	chord.push(n2);
+	chord.push(n3);
+
+	playChord(chord);
 }
 
 function startup() {

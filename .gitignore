@@ -218,5 +218,5 @@ pip-log.txt
 #############
 ## My Stuff
 #############
-# Ignore all directories and files in a directory.
+# Ignore everything in the soundfont directories for now
 soundfont/
