@@ -1,21 +1,46 @@
+// chords.js
+// JavaScript functionality for creating a chord & harmony explorer.
+//
+// Copyright 2014 Dave Corboy <dave@corboy.com>
+//
+// This file is part of Harmony-Explorer.
+// Harmony-Explorer does some interesting things that I will summarize
+// at some point FIXME
+//
+// Harmony-Explorer is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Harmony-Explorer is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// If you did not receive a copy of the GNU General Public License
+// along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
-var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B / Cb'];
+var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
 var harmonynames = ['I','ii','iii','IV','V','vi','vii','5/5'];
 var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','1,#3,5'];
 
-var majorscale = [0,2,4,5,7,9,11];
-var minorscale = [0,2,3,5,7,8,10];
+var majorscale = [0,2,4,5,7,9,11];	// intervals of the major scale
+var minorscale = [0,2,3,5,7,8,10];	// intervals of the minor scale
 
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
-var gChord = [];	// array of MIDI note numbers
-var gKey = 0;
-var gScale = [];	// array of major/minor scale intervals
+var gChord = [];	// array of MIDI note numbers representing current chord
+var gKey = 0;		// root note of current key where C=0 and B=11
+var gScale = [];	// array of major or minor scale intervals, depending on current setting
 
+// playChord (chord)
+// chord - array of MIDI note values
+//
+// Basically a pass-through to MIDI.js.
 function playChord(chord) {
 	var delay = 0;
 	var velocity = 127; // how hard the note hits
@@ -24,6 +49,12 @@ function playChord(chord) {
 	MIDI.chordOn(0, chord, velocity, delay);
 }
 
+// chgChord (root, chord)
+// root - string representation of a root note where C=0 and B=11
+// chord - a select element containing the chord formula as its value 
+//
+// Sets the global chord to the chord defined by the root note
+// and the chord formula FIXME don't pass an element here.
 function chgChord (root, chord)
 {
 	var rootnote = parseInt(root);
@@ -40,6 +71,12 @@ function chgChord (root, chord)
 	document.getElementById("chordoutput").innerHTML = output;
 }
 
+// chgKey (root, major)
+// root - string representation of a root note where C=0 and B=11
+// major - a boolean indicating major or minor key 
+//
+// Sets the global key to the root note
+// and sets the global scale to either major or minor intervals.
 function chgKey(root, major)
 {
 	gKey = parseInt(root);
@@ -47,27 +84,20 @@ function chgKey(root, major)
 	else gScale = minorscale;
 }
 
+// playHarmony(harmony, octave)
+// harmony - indexes into harmonyformulas for a harmony coding
+//   ['0,2,4','1,3,5','2,4,6', ...
+//     note: h4 is '3,5,7', not '3,5,0'
+//   Past the basic harmonies, we need to encode # and b
+//     so 5/5 is '1,#3,5'
+//     5/4 is '1,3,5,b7'
+// octave - defines the octave above/below middle C
+//
+// Decodes the harmony chord based on the harmony formula,
+// the global key gKey and the global major/minor scale gScale
+// then plays the chord.
 function playHarmony(harmony, octave)
 {
-	// harmony indexes into some kind of data structure in which teh chord is coded
-	// Thoughts:
-	// ['0,2,4','1,3,5','2,4,6', ...
-	//   by the way h4 is '3,5,7', not '3,5,0'
-	//
-	// Past the basic harmonies, we need to encode # and b
-	// so 5/5 is '1,#3,5'
-	// 5/4 is '1,3,5,b7'
-	//
-	// So split the code into string tokens
-	// for each token, check the 1st char for '#' or 'b'
-	//   if they have one, set a signed modifier a (accidental)
-	//     and parseInt str.slice(1);
-	//   otherwise just parse it as-is
-	//   these are the i#s above, but need to be cut down to %7 with a carry flag, as above
-	//   convert to n as above
-	//   add the accidental a
-	//   push it into the chord array
-
 	var chord = [];
 	var harmonyformula = harmonyformulas[harmony].split(',');
 
