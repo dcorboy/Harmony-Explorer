@@ -154,19 +154,26 @@ function startup() {
 		parent.appendChild(elem);
 	}
 
-	parent2 = document.getElementById('harmonybuttons');
+	parent = document.getElementById('harmonybuttons');
 	for (var j = 0; j < 3; j++) {		// three rows of harmony buttons, starting at C3
-		parent = document.createElement('div');
-		parent.id = 'harmonies'+j;
-		parent.className = 'harmonies';
+		var child = document.createElement('div');
+		child.id = 'harmonies'+j;
+		child.className = 'harmonies';
+
+		var label = document.createElement('label');
+		//label.id = 'harmonies'+j;
+		label.className = 'hmy-label';
+		label.innerHTML = 'C'+(5-j)+': ';	// really, this all needs to be octave generalized
+		child.appendChild(label);
+
 		len = harmonynames.length;
 		for (var i = 0; i < len; i++) {
 			var elem = document.createElement('button');
 			elem.innerHTML = harmonynames[i];
-			elem.setAttribute('onclick','playHarmony('+i+', '+(j-1)+');');
-			parent.appendChild(elem);
+			elem.setAttribute('onclick','playHarmony('+i+', '+(1-j)+');');
+			child.appendChild(elem);
 		}
-		parent2.appendChild(parent);
+		parent.appendChild(child);
 	}
 
 	chgChord('0', chord);	// C Major
