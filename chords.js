@@ -45,11 +45,12 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
 // these will be the private members
-var gChord = [];	// array of MIDI note numbers representing current chord
-var gKey = 0;		// root note of current key where C=0 and B=11
-var gScale = 0;		// index into scales for current mode (0=major, 1=minor)
-var gHarmony = 0;	// index into harmony 
+var gChord = [];		// array of MIDI note numbers representing current chord
+var gKey = 0;			// root note of current key where C=0 and B=11
+var gScale = 0;			// index into scales for current mode (0=major, 1=minor)
+var gHarmony = 0;		// index into harmony 
 var gHarmonyChord = [];	// structure like gChord, but for the harmonies section
+var gHarmonyOctave = 0;	// octave number (middle C starts octave 4)
 
 // playMIDIChord (chord)
 // chord - array of MIDI note values
@@ -80,14 +81,17 @@ function playHarmonyChord() {
 // Sets the global chord to the chord defined by the root note
 // and the chord formula FIXME don't pass an element here.
 function chgChord (root, chord) {
-	var rootnote = parseInt(root);
+	changeChord (parseInt(root), chord)
+}
+// integer version
+function changeChord (root, chord) {
 	var chordformula = chord.split(',');
 	var output = '';
 	
 	gChord.length = 0;	// reset chord array
 
 	for (var i=0; i<chordformula.length; i++) {
-		var note = rootnote + parseInt(chordformula[i]);
+		var note = root + parseInt(chordformula[i]);
 		output += (disp[note%12] + ' '); 
 		gChord.push(note+60);	// FIXME adjust for octave later
 	}
@@ -101,8 +105,14 @@ function chgChord (root, chord) {
 // Sets the global key to the root note
 // and sets the global scale to indicate either major or minor intervals.
 function chgKey(root, scale) {
-	gKey = parseInt(root);
+	var type = typeof root;
+	changeKey(parseInt(root), scale);
+}
+// int version
+function changeKey(root, scale) {
+	gKey = root;
 	gScale = scale;
+	SetHarmonyChord();
 }
 
 function recordChord(chord) {
