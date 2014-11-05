@@ -154,22 +154,19 @@ function startup() {
 		parent.appendChild(elem);
 	}
 
-	parent = document.getElementById('harmonies');
-	len = harmonynames.length;
-	for (var i = 0; i < len; i++) {
-		var elem = document.createElement('button')
-		elem.innerHTML = harmonynames[i];
-		elem.setAttribute('onclick','playHarmony('+i+', 0);');
-		parent.appendChild(elem);
-	}
-	
-	parent = document.getElementById('lowharmonies');
-	len = harmonynames.length;
-	for (var i = 0; i < len; i++) {
-		var elem = document.createElement('button')
-		elem.innerHTML = harmonynames[i];
-		elem.setAttribute('onclick','playHarmony('+i+', -1);');
-		parent.appendChild(elem);
+	parent2 = document.getElementById('harmonybuttons');
+	for (var j = 0; j < 3; j++) {		// three rows of harmony buttons, starting at C3
+		parent = document.createElement('div');
+		parent.id = 'harmonies'+j;
+		parent.className = 'harmonies';
+		len = harmonynames.length;
+		for (var i = 0; i < len; i++) {
+			var elem = document.createElement('button');
+			elem.innerHTML = harmonynames[i];
+			elem.setAttribute('onclick','playHarmony('+i+', '+(j-1)+');');
+			parent.appendChild(elem);
+		}
+		parent2.appendChild(parent);
 	}
 
 	chgChord('0', chord);	// C Major
