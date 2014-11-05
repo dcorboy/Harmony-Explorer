@@ -20,6 +20,9 @@
 // If you did not receive a copy of the GNU General Public License
 // along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
+// FIXME
+// convert chgChord and chgKey to supply root as an integer index into chordformulas
+
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
@@ -33,16 +36,13 @@ var harmonynames = ['I','ii','iii','IV','V','vi','vii','5/5'];
 //     5/4 is '1,3,5,b7'
 //     etc.
 var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','1,#3,5'];
-
-var majorscale = [0,2,4,5,7,9,11];	// intervals of the major scale
-var minorscale = [0,2,3,5,7,8,10];	// intervals of the minor scale
-
+var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and minor scales
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
 var gChord = [];	// array of MIDI note numbers representing current chord
 var gKey = 0;		// root note of current key where C=0 and B=11
-var gScale = [];	// array of major or minor scale intervals, depending on current setting
+var gScale = 0;		// index into scales for current mode (0=major, 1=minor)
 
 // playChord (chord)
 // chord - array of MIDI note values
@@ -80,15 +80,14 @@ function chgChord (root, chord)
 
 // chgKey (root, major)
 // root - string representation of a root note where C=0 and B=11
-// major - a boolean indicating major or minor key 
+// scale - index into scales indicating major or minor key (0=major, 1=minor)
 //
 // Sets the global key to the root note
-// and sets the global scale to either major or minor intervals.
-function chgKey(root, major)
+// and sets the global scale to indicate either major or minor intervals.
+function chgKey(root, scale)
 {
 	gKey = parseInt(root);
-	if (major) gScale = majorscale;
-	else gScale = minorscale;
+	gScale = scale;
 }
 
 function recordChord(chord)
@@ -117,7 +116,7 @@ function recordChord(chord)
 // octave - defines the octave above/below middle C
 //
 // Decodes the harmony chord based on the harmony formula,
-// the global key gKey and the global major/minor scale gScale
+// the global key gKey and the global major/minor scale index gScale
 // then plays the chord.
 function playHarmony(harmony, octave)
 {
@@ -137,7 +136,7 @@ function playHarmony(harmony, octave)
 		var r = (n/7) >> 0;
 		console.log('index extraction: ', idx, r);
 
-		var note = 60 + gKey + gScale[idx] + (r+octave) * 12 + a;
+		var note = 60 + gKey + scales[gScale][idx] + (r+octave) * 12 + a;
 		console.log('note: ', note);
 		
 		chord.push(note);
@@ -152,14 +151,15 @@ function playHarmony(harmony, octave)
 // octave - defines the octave (octave 4 starts with middle C)
 //
 // Decodes the harmony chord based on the harmony formula,
-// the global key gKey and the global major/minor scale gScale
+// the global key gKey and the global major/minor scale index gScale
 // then plays the chord.
 function selectHarmony(harmony, octave)
 {
 	// so the harmony is described as
 	// C4-I or F#4-ii or Dm3-I
 	// although I am pretty sure this is wrong
-	var name = disp[gKey]+octave+'-'+harmonynames[harmony];
+	// name = nameHarmony(
+	var name = disp[gKey]+(gScale ? 'm' : '')+octave+'-'+harmonynames[harmony];
 	document.getElementById("recording").innerHTML = name;
 	playHarmony(harmony, octave);
 }
@@ -219,7 +219,7 @@ function startup() {
 
 	document.getElementById("modemajor").checked = true;
 	chgChord('0', chord);	// C Major
-	chgKey('0', true);		// C Major
+	chgKey('0', 0);		// C Major
 	playChord(gChord);
 }
 

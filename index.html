@@ -29,9 +29,9 @@
 	
 	<div id="harmonyinputs">
 		<form name = "inputs">
-			<select id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked);" size="10" name="root"></select>
-			<input id="modemajor" type="radio" onclick="chgKey(this.form.root.value,this.form.r1[0].checked);" value="major" name="r1" checked>Major
-			<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,this.form.r1[0].checked);" value="minor" name="r1">Minor
+			<select id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked === true ? 0 : 1);" size="10" name="root"></select>
+			<input id="modemajor" type="radio" onclick="chgKey(this.form.root.value,0);" value="major" name="r1" checked>Major
+			<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,1);" value="minor" name="r1">Minor
 		</form>
 		<div id="harmonybuttons">
 		</div>
