@@ -21,7 +21,11 @@
 // along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
 // FIXME
+// add https://github.com/gleitz/midi-js-soundfonts/tree/master/FluidR3_GM as a submodule
+//    unless mudcube will merge the dev changes into master
 // convert chgChord and chgKey to supply root as an integer index into chordformulas
+// all these globals (and functions) should be encapsulated into a singleton object
+// collapse the paired arrays --> 2-dimensional, notes 3
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -40,20 +44,33 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
+// these will be the private members
 var gChord = [];	// array of MIDI note numbers representing current chord
 var gKey = 0;		// root note of current key where C=0 and B=11
 var gScale = 0;		// index into scales for current mode (0=major, 1=minor)
+var gHarmony = 0;	// index into harmony 
+var gHarmonyChord = [];	// structure like gChord, but for the harmonies section
 
-// playChord (chord)
+// playMIDIChord (chord)
 // chord - array of MIDI note values
 //
 // Basically a pass-through to MIDI.js.
-function playChord(chord) {
+function playMIDIChord(chord) {
 	var delay = 0;
 	var velocity = 127; // how hard the note hits
 	MIDI.setVolume(0, 127);
 
 	MIDI.chordOn(0, chord, velocity, delay);
+}
+
+// plays the current chord
+function playChord() {
+	playMIDIChord(gChord);
+}
+
+// plays the current harmony chord
+function playHarmonyChord() {
+	playMIDIChord(gHarmonyChord);
 }
 
 // chgChord (root, chord)
@@ -62,8 +79,7 @@ function playChord(chord) {
 //
 // Sets the global chord to the chord defined by the root note
 // and the chord formula FIXME don't pass an element here.
-function chgChord (root, chord)
-{
+function chgChord (root, chord) {
 	var rootnote = parseInt(root);
 	var chordformula = chord.split(',');
 	var output = '';
@@ -84,14 +100,12 @@ function chgChord (root, chord)
 //
 // Sets the global key to the root note
 // and sets the global scale to indicate either major or minor intervals.
-function chgKey(root, scale)
-{
+function chgKey(root, scale) {
 	gKey = parseInt(root);
 	gScale = scale;
 }
 
-function recordChord(chord)
-{
+function recordChord(chord) {
 	var parent = document.getElementById('recording');
 	var child = document.createElement('div');
 }
@@ -118,8 +132,7 @@ function recordChord(chord)
 // Decodes the harmony chord based on the harmony formula,
 // the global key gKey and the global major/minor scale index gScale
 // then plays the chord.
-function playHarmony(harmony, octave)
-{
+function playHarmony(harmony, octave) {
 	var chord = [];
 	var harmonyformula = harmonyformulas[harmony].split(',');
 
@@ -142,7 +155,8 @@ function playHarmony(harmony, octave)
 		chord.push(note);
 	}
 
-	playChord(chord);
+	gHarmonyChord = chord;	//FIXME
+	playHarmonyChord();
 	recordChord(chord);
 }
 
@@ -153,14 +167,14 @@ function playHarmony(harmony, octave)
 // Decodes the harmony chord based on the harmony formula,
 // the global key gKey and the global major/minor scale index gScale
 // then plays the chord.
-function selectHarmony(harmony, octave)
-{
+function selectHarmony(harmony, octave) {
 	// so the harmony is described as
 	// C4-I or F#4-ii or Dm3-I
 	// although I am pretty sure this is wrong
-	// name = nameHarmony(
+
 	var name = disp[gKey]+(gScale ? 'm' : '')+octave+'-'+harmonynames[harmony];
 	document.getElementById("recording").innerHTML = name;
+	// maybe record
 	playHarmony(harmony, octave);
 }
 
@@ -220,7 +234,7 @@ function startup() {
 	document.getElementById("modemajor").checked = true;
 	chgChord('0', chord);	// C Major
 	chgKey('0', 0);		// C Major
-	playChord(gChord);
+	playChord();
 }
 
 function init() {
