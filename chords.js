@@ -167,7 +167,7 @@ function setHarmonyChord() {
 		var r = (n/7) >> 0;
 		console.log('index extraction: ', idx, r);
 
-		var note = 60 + gKey + scales[gScale][idx] + (r+gHarmonyOctave) * 12 + a;
+		var note = ((gHarmonyOctave + 1) * 12) + gKey + scales[gScale][idx] + (r * 12) + a;
 		console.log('note: ', note);
 		
 		gHarmonyChord.push(note);
@@ -246,7 +246,7 @@ function startup() {
 		for (var i = 0; i < len; i++) {
 			var elem = document.createElement('button');
 			elem.innerHTML = harmonynames[i];
-			elem.setAttribute('onclick','selectHarmony('+i+', '+(1-j)+');');
+			elem.setAttribute('onclick','selectHarmony('+i+', '+(j+3)+');');
 			child.appendChild(elem);
 		}
 		parent.appendChild(child);
