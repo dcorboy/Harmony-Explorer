@@ -176,6 +176,7 @@ function startup() {
 		parent.appendChild(child);
 	}
 
+	document.getElementById("modemajor").checked = true;
 	chgChord('0', chord);	// C Major
 	chgKey('0', true);		// C Major
 	playChord(gChord);
