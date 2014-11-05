@@ -58,7 +58,7 @@ function playChord(chord) {
 function chgChord (root, chord)
 {
 	var rootnote = parseInt(root);
-	var chordformula = chord.value.split(',');
+	var chordformula = chord.split(',');
 	var output = '';
 	
 	gChord.length = 0;	// reset chord array
@@ -149,7 +149,7 @@ function startup() {
 		elem.innerHTML = chordnames[i];
 		if (i == 0) {
 			elem.selected = "selected";
-			chord = elem;
+			chord = elem.value;
 		}
 		parent.appendChild(elem);
 	}
