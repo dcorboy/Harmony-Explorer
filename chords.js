@@ -26,6 +26,7 @@
 // convert chgChord and chgKey to supply root as an integer index into chordformulas
 // all these globals (and functions) should be encapsulated into a singleton object
 // collapse the paired arrays --> 2-dimensional, notes 3
+// split out the decoding of a harmony chord from the setting of the globals
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -83,7 +84,7 @@ function playHarmonyChord() {
 function chgChord (root, chord) {
 	changeChord (parseInt(root), chord)
 }
-// integer version
+// int version
 function changeChord (root, chord) {
 	var chordformula = chord.split(',');
 	var output = '';
@@ -142,9 +143,16 @@ function recordChord(chord) {
 // Decodes the harmony chord based on the harmony formula,
 // the global key gKey and the global major/minor scale index gScale
 // then plays the chord.
-function playHarmony(harmony, octave) {
-	var chord = [];
-	var harmonyformula = harmonyformulas[harmony].split(',');
+function playHarmonyChord() {
+	playMIDIChord(gHarmonyChord);
+}
+
+//sets gHarmonyChord from all the other member vars
+function setHarmonyChord() {
+// harmony, octave
+	var harmonyformula = harmonyformulas[gHarmony].split(',');
+	
+	gHarmonyChord.length = 0;	// reset chord array
 
 	for (var i=0; i<harmonyformula.length; i++) {
 		var n;
@@ -159,15 +167,17 @@ function playHarmony(harmony, octave) {
 		var r = (n/7) >> 0;
 		console.log('index extraction: ', idx, r);
 
-		var note = 60 + gKey + scales[gScale][idx] + (r+octave) * 12 + a;
+		var note = 60 + gKey + scales[gScale][idx] + (r+gHarmonyOctave) * 12 + a;
 		console.log('note: ', note);
 		
-		chord.push(note);
+		gHarmonyChord.push(note);
 	}
+}
 
-	gHarmonyChord = chord;	//FIXME
-	playHarmonyChord();
-	recordChord(chord);
+function changeHarmonyChord(harmony, octave) {
+	gHarmony = harmony;
+	gHarmonyOctave = octave;
+	setHarmonyChord();
 }
 
 // selectHarmony(harmony, octave)
@@ -176,7 +186,7 @@ function playHarmony(harmony, octave) {
 //
 // Decodes the harmony chord based on the harmony formula,
 // the global key gKey and the global major/minor scale index gScale
-// then plays the chord.
+// then plays the chord. //FIXME split out nameHarmony f()?
 function selectHarmony(harmony, octave) {
 	// so the harmony is described as
 	// C4-I or F#4-ii or Dm3-I
@@ -185,7 +195,8 @@ function selectHarmony(harmony, octave) {
 	var name = disp[gKey]+(gScale ? 'm' : '')+octave+'-'+harmonynames[harmony];
 	document.getElementById("recording").innerHTML = name;
 	// maybe record
-	playHarmony(harmony, octave);
+	changeHarmonyChord(harmony, octave);
+	playHarmonyChord();
 }
 
 function startup() {
