@@ -25,6 +25,13 @@ var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
 var harmonynames = ['I','ii','iii','IV','V','vi','vii','5/5'];
+// harmonyformulas represents the harmony encodings
+//   e.g., ['0,2,4','1,3,5','2,4,6', ...
+//     note: h4 is '3,5,7', not '3,5,0'
+//   Past the basic harmonies, we need to encode # and b
+//     so 5/5 is '1,#3,5'
+//     5/4 is '1,3,5,b7'
+//     etc.
 var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','1,#3,5'];
 
 var majorscale = [0,2,4,5,7,9,11];	// intervals of the major scale
@@ -51,7 +58,7 @@ function playChord(chord) {
 
 // chgChord (root, chord)
 // root - string representation of a root note where C=0 and B=11
-// chord - a select element containing the chord formula as its value 
+// chord - a chord formula as semitones from the root 
 //
 // Sets the global chord to the chord defined by the root note
 // and the chord formula FIXME don't pass an element here.
@@ -83,6 +90,22 @@ function chgKey(root, major)
 	if (major) gScale = majorscale;
 	else gScale = minorscale;
 }
+
+function recordChord(chord)
+{
+	var parent = document.getElementById('recording');
+	var child = document.createElement('div');
+}
+
+/* 		var child = document.createElement('div');
+		child.id = 'harmonies'+j;
+		child.className = 'harmonies';
+
+		var label = document.createElement('label');
+		//label.id = 'harmonies'+j;
+		label.className = 'hmy-label';
+		label.innerHTML = 'C'+(5-j)+': ';	// really, this all needs to be octave generalized
+		child.appendChild(label); */
 
 // playHarmony(harmony, octave)
 // harmony - indexes into harmonyformulas for a harmony coding
@@ -121,6 +144,24 @@ function playHarmony(harmony, octave)
 	}
 
 	playChord(chord);
+	recordChord(chord);
+}
+
+// selectHarmony(harmony, octave)
+// harmony - indexes into harmonyformulas for a harmony coding
+// octave - defines the octave (octave 4 starts with middle C)
+//
+// Decodes the harmony chord based on the harmony formula,
+// the global key gKey and the global major/minor scale gScale
+// then plays the chord.
+function selectHarmony(harmony, octave)
+{
+	// so the harmony is described as
+	// C4-I or F#4-ii or Dm3-I
+	// although I am pretty sure this is wrong
+	var name = disp[gKey]+octave+'-'+harmonynames[harmony];
+	document.getElementById("recording").innerHTML = name;
+	playHarmony(harmony, octave);
 }
 
 function startup() {
@@ -170,7 +211,7 @@ function startup() {
 		for (var i = 0; i < len; i++) {
 			var elem = document.createElement('button');
 			elem.innerHTML = harmonynames[i];
-			elem.setAttribute('onclick','playHarmony('+i+', '+(1-j)+');');
+			elem.setAttribute('onclick','selectHarmony('+i+', '+(1-j)+');');
 			child.appendChild(elem);
 		}
 		parent.appendChild(child);
