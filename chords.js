@@ -24,9 +24,10 @@
 // add https://github.com/gleitz/midi-js-soundfonts/tree/master/FluidR3_GM as a submodule
 //    unless mudcube will merge the dev changes into master
 // convert chgChord and chgKey to supply root as an integer index into chordformulas
-// all these globals (and functions) should be encapsulated into a singleton object
+// all these globals (and functions) should be encapsulated into a singleton object (and maybe a chord object as well)
 // collapse the paired arrays --> 2-dimensional, notes 3
 // split out the decoding of a harmony chord from the setting of the globals
+// harmonies are order-specific and need to be built from base (0th) note up through the pattern
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -246,7 +247,7 @@ function startup() {
 		for (var i = 0; i < len; i++) {
 			var elem = document.createElement('button');
 			elem.innerHTML = harmonynames[i];
-			elem.setAttribute('onclick','selectHarmony('+i+', '+(j+3)+');');
+			elem.setAttribute('onclick','selectHarmony('+i+', '+(5-j)+');');
 			child.appendChild(elem);
 		}
 		parent.appendChild(child);
