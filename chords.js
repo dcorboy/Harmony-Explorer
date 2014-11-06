@@ -28,6 +28,7 @@
 // collapse the paired arrays --> 2-dimensional, notes 3
 // split out the decoding of a harmony chord from the setting of the globals
 // harmonies are order-specific and need to be built from base (0th) note up through the pattern
+// chord map node should be dynamic
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -194,7 +195,7 @@ function selectHarmony(harmony, octave) {
 	// although I am pretty sure this is wrong
 
 	var name = disp[gKey]+(gScale ? 'm' : '')+octave+'-'+harmonynames[harmony];
-	document.getElementById("recording").innerHTML = name;
+	document.getElementById("harmonyoutput").innerHTML = name;
 	// maybe record
 	changeHarmonyChord(harmony, octave);
 	playHarmonyChord();

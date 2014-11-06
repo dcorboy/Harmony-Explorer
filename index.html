@@ -22,7 +22,7 @@
 			<select id="chord" onchange="chgChord(this.form.root.value,this.form.chord.value);" size="10" name="chord"></select>
 		</form>
 	</div>
-	<div id = "chordoutput">Output here...</div>
+	<div id = "chordoutput">Chord Description</div>
 	<button id="play" onclick="playChord(gChord);" >Play Chord</button>
 
 	<div style="clear: both;"></div>
@@ -36,6 +36,16 @@
 		<div id="harmonybuttons">
 		</div>
 	</div>
+
+	<div id="harmonyoutput">Harmony Description</div>
+
+	<img src="chord-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
+
+	<map name="hgraphmap">
+		<area shape="rect" coords="11,225,121,335" onclick="alert('Chord I');" alt="Chord I">
+		<area shape="rect" coords="250,187,360,280" onclick="alert('Chord V');" alt="Chord V">
+		<area shape="rect" coords="468,187,578,280" onclick="alert('Chord IV');" alt="Chord IV">
+	</map>
 
 	<div id="recording">Chord Description</div>
 
