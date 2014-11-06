@@ -220,3 +220,4 @@ pip-log.txt
 #############
 # Ignore everything in the soundfont directories for now
 soundfont/
+/*.ai
