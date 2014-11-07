@@ -23,18 +23,18 @@
 // FIXME
 // add https://github.com/gleitz/midi-js-soundfonts/tree/master/FluidR3_GM as a submodule
 //    unless mudcube will merge the dev changes into master
-// convert chgChord and chgKey to supply root as an integer index into chordformulas
 // all these globals (and functions) should be encapsulated into a singleton object (and maybe a chord object as well)
 // collapse the paired arrays --> 2-dimensional, notes 3
 // split out the decoding of a harmony chord from the setting of the globals
 // harmonies are order-specific and need to be built from base (0th) note up through the pattern
-// chord map node should be dynamic
+// handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
+// node graph should be canvas elements
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
-var harmonynames = ['I','ii','iii','IV','V','vi','vii','5/5'];
+
 // harmonyformulas represents the harmony encodings
 //   e.g., ['0,2,4','1,3,5','2,4,6', ...
 //     note: h4 is '3,5,7', not '3,5,0'
@@ -42,8 +42,12 @@ var harmonynames = ['I','ii','iii','IV','V','vi','vii','5/5'];
 //     so 5/5 is '1,#3,5'
 //     5/4 is '1,3,5,b7'
 //     etc.
-var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','1,#3,5'];
+var harmonynames = ['I','ii','iii','IV','V','vi','vii','V/vi','V/V','V7/IV','V/ii','V/iii'];
+var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','2,#4,6','1,#3,5','0,2,4,b7','5,#7,9','6,#8,#10'];
 var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and minor scales
+var harmonychordmap = [[11,225,121,335], [468,280,578,373], [680,225,790,335], [468,187,578,280],
+						[250,187,360,280],[327,56,437,166],[250,280,360,373],[230,104,300,174],
+						[347,385,417,455],[557,104,627,174],[557,385,627,455],[710,76,780,146]];
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
@@ -209,6 +213,7 @@ function startup() {
 	var len = notes.length;
 	var chord;
 
+	// create two sets of note selection controls
 	for (var i = 0; i < len; i++) {
 		var elem = document.createElement('option')
 		elem.value = i;
@@ -219,6 +224,7 @@ function startup() {
 	parent.selectedIndex = "0";
 	parent2.selectedIndex = "0";
 
+	// create the chord selection control
 	parent = document.getElementById('chord');
 	len = chordnames.length;
 	for (var i = 0; i < len; i++) {
@@ -232,25 +238,42 @@ function startup() {
 		parent.appendChild(elem);
 	}
 
+	// create the harmony chord buttons
 	parent = document.getElementById('harmonybuttons');
-	for (var j = 0; j < 3; j++) {		// three rows of harmony buttons, starting at C3
+	for (var i = 0; i < 3; i++) {		// three rows of harmony buttons, starting at C3
 		var child = document.createElement('div');
-		child.id = 'harmonies'+j;
+		child.id = 'harmonies'+i;
 		child.className = 'harmonies';
 
 		var label = document.createElement('label');
-		//label.id = 'harmonies'+j;
+		//label.id = 'harmonies'+i;
 		label.className = 'hmy-label';
-		label.innerHTML = 'C'+(5-j)+': ';	// really, this all needs to be octave generalized
+		label.innerHTML = 'C'+(5-i)+': ';	// really, this all needs to be octave generalized
 		child.appendChild(label);
 
 		len = harmonynames.length;
-		for (var i = 0; i < len; i++) {
+		for (var j = 0; j < len; j++) {
 			var elem = document.createElement('button');
-			elem.innerHTML = harmonynames[i];
-			elem.setAttribute('onclick','selectHarmony('+i+', '+(5-j)+');');
+			elem.innerHTML = harmonynames[j];
+			elem.setAttribute('onclick','selectHarmony('+j+', '+(5-i)+');');
 			child.appendChild(elem);
 		}
+		parent.appendChild(child);
+	}
+
+	// create the harmony chord board
+	parent2 = document.getElementById('harmonychordgraph');
+	parent = document.createElement('map');
+	parent.name = "hgraphmap";
+	parent2.parentNode.insertBefore(parent, parent2);	// create a map node and add it before the harmony chord graph
+
+	len = harmonychordmap.length;
+	for (var i = 0; i < len; i++) {
+		var child = document.createElement('area');
+		child.shape = 'rect';
+		child.coords = '11,225,121,335';
+		child.coords = harmonychordmap[i][0]+','+harmonychordmap[i][1]+','+harmonychordmap[i][2]+','+harmonychordmap[i][3];
+		child.setAttribute('onclick','selectHarmony('+i+', '+4+');');
 		parent.appendChild(child);
 	}
 
