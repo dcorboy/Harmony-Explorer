@@ -287,7 +287,7 @@ function init() {
 	// load and initialize the MIDI.js plugin
 
 	MIDI.loadPlugin({
-		soundfontUrl: "./soundfont/",
+		soundfontUrl: "./midi-js-soundfonts/FluidR3_GM/",
 		instrument: "acoustic_grand_piano",
 		callback: function() {
 			startup();
