@@ -4,8 +4,8 @@
 // Copyright 2014 Dave Corboy <dave@corboy.com>
 //
 // This file is part of Harmony-Explorer.
-// Harmony-Explorer does some interesting things that I will summarize
-// at some point FIXME
+// Harmony-Explorer lets you explore the harmonies of musical keys
+// on a visual directed graph.
 //
 // Harmony-Explorer is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 // along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
 // FIXME
-// add https://github.com/gleitz/midi-js-soundfonts/tree/master/FluidR3_GM as a submodule
-//    unless mudcube will merge the dev changes into master
 // all these globals (and functions) should be encapsulated into a singleton object (and maybe a chord object as well)
 // collapse the paired arrays --> 2-dimensional, notes 3
 // split out the decoding of a harmony chord from the setting of the globals
