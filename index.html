@@ -9,39 +9,63 @@
 	<script src="./MIDI.js/inc/base64binary.js" type="text/javascript"></script>
 
 	<script src="./chords.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="chords.css">
 	
 </head>
 <body>
 	<script type="text/javascript">
 		window.onload = init();
 	</script>
+	<div class="section">
+		<div id="chordblock" class="block">
+			<div id="chordinputs">
+				<form name = "inputs">
+					<div class="holder keyselect">
+						<div class="topbar blue">
+							<h1>Key</h1>
+						</div>
+						<select class="option" id="chordroot" onchange="chgChord(this.form.root.value,this.form.chord.value);" size="10" name="root"></select>
+					</div>
+					<div class="holder chordselect">
+						<div class="topbar blue">
+							<h1>Chord</h1>
+						</div>
+						<select class="option" id="chord" onchange="chgChord(this.form.root.value,this.form.chord.value);" size="10" name="chord"></select>
+					</div>
+				</form>
+			</div>
+			<div id="chordinfo" class="holder">
+				<div id = "chordoutput" class="output">Chord Description</div>
+				<button id="play" onclick="playChord(gChord);" >Play Chord</button>
+			</div>
+		</div>
+		
+		<div id="harmonyblock" class="block">
+			<form name = "inputs">
+				<div class="holder keyselect">
+					<div class="topbar blue">
+						<h1>Key</h1>
+					</div>
+					<select class="option" id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked === true ? 0 : 1);" size="10" name="root"></select>
+				</div>
+				<div class="holder">
+					<input id="modemajor" type="radio" onclick="chgKey(this.form.root.value,0);" value="major" name="r1" checked>Major
+					<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,1);" value="minor" name="r1">Minor
+					<div id="harmonyoutput" class="output">Harmony Description</div>
+				</div>
+			</form>
+			<div id="harmonybuttons" class="holder"></div>
 
-	<div id="chordinputs">
-		<form name = "inputs">
-			<select id="chordroot" onchange="chgChord(this.form.root.value,this.form.chord.value);" size="10" name="root"></select>
-			<select id="chord" onchange="chgChord(this.form.root.value,this.form.chord.value);" size="10" name="chord"></select>
-		</form>
-	</div>
-	<div id = "chordoutput">Chord Description</div>
-	<button id="play" onclick="playChord(gChord);" >Play Chord</button>
-
-	<div style="clear: both;"></div>
-	
-	<div id="harmonyinputs">
-		<form name = "inputs">
-			<select id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked === true ? 0 : 1);" size="10" name="root"></select>
-			<input id="modemajor" type="radio" onclick="chgKey(this.form.root.value,0);" value="major" name="r1" checked>Major
-			<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,1);" value="minor" name="r1">Minor
-		</form>
-		<div id="harmonybuttons">
 		</div>
 	</div>
 
-	<div id="harmonyoutput">Harmony Description</div>
+	<div style="clear:both"></div>
 
-	<img id="harmonychordgraph" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
+	<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
 
-	<div id="recording">Chord Description</div>
+	<div style="clear:both"></div>
+
+	<div id="recording">Recording Section TBD</div>
 
 	<noscript>
 		<div align="center">

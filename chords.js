@@ -29,6 +29,8 @@
 // harmonies are order-specific and need to be built from base (0th) note up through the pattern
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
+// VI in image should be vi
+// IV back and forth to vi?
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
