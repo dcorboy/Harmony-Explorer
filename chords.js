@@ -31,6 +31,7 @@
 // node graph should be canvas elements
 // VI in image should be vi
 // IV back and forth to vi?
+// I <--> V also
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -121,7 +122,7 @@ function chgKey(root, scale) {
 function changeKey(root, scale) {
 	gKey = root;
 	gScale = scale;
-	SetHarmonyChord();
+	setHarmonyChord();
 }
 
 function recordChord(chord) {
@@ -169,14 +170,14 @@ function setHarmonyChord() {
 
 		if (a) n = parseInt(str.slice(1));
 		else n = parseInt(str);
-		console.log('formula extraction: ', n, a);
+		// console.log('formula extraction: ', n, a);
 
 		var idx = n%7;
 		var r = (n/7) >> 0;
-		console.log('index extraction: ', idx, r);
+		// console.log('index extraction: ', idx, r);
 
 		var note = ((gHarmonyOctave + 1) * 12) + gKey + scales[gScale][idx] + (r * 12) + a;
-		console.log('note: ', note);
+		// console.log('note: ', note);
 		
 		gHarmonyChord.push(note);
 	}
