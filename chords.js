@@ -209,8 +209,7 @@ function selectHarmony(harmony, octave) {
 function startup() {
 	// set up the UI and whatnot
 
-	var parent = document.getElementById('chordroot');
-	var parent2 = document.getElementById('keyroot');
+	var parent = document.getElementById('keyroot');
 	var len = notes.length;
 	var chord;
 
@@ -220,10 +219,8 @@ function startup() {
 		elem.value = i;
 		elem.innerHTML = notes[i];
 		parent.appendChild(elem);
-		parent2.appendChild(elem.cloneNode(true));
 	}
 	parent.selectedIndex = "0";
-	parent2.selectedIndex = "0";
 
 	// create the chord selection control
 	parent = document.getElementById('chord');
@@ -263,10 +260,10 @@ function startup() {
 	}
 
 	// create the harmony chord board
-	parent2 = document.getElementById('harmonychordgraph');
+	var graphnode = document.getElementById('harmonychordgraph');
 	parent = document.createElement('map');
 	parent.name = "hgraphmap";
-	parent2.parentNode.insertBefore(parent, parent2);	// create a map node and add it before the harmony chord graph
+	graphnode.parentNode.insertBefore(parent, graphnode);	// create a map node and add it before the harmony chord graph
 
 	len = harmonychordmap.length;
 	for (var i = 0; i < len; i++) {
