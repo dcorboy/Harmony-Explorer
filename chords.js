@@ -52,13 +52,18 @@ var harmonychordmap = [[11,225,121,335], [468,280,578,373], [680,225,790,335], [
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
-// these will be the private members
-var gChord = [];		// array of MIDI note numbers representing current chord
-var gKey = 0;			// root note of current key where C=0 and B=11
-var gScale = 0;			// index into scales for current mode (0=major, 1=minor)
-var gHarmony = 0;		// index into harmony 
-var gHarmonyChord = [];	// structure like gChord, but for the harmonies section
-var gHarmonyOctave = 0;	// octave number (middle C starts octave 4)
+var gChord = {
+	key: 0,			// root note of current key where C=0 and B=11
+	scale: 0,			// index into scales for current mode (0=major, 1=minor)
+	harmony: 0,		// index into harmony 
+	harmonyChord: [],	// structure like gChord, but for the harmonies section
+	harmonyOctave: 0,	// octave number (middle C starts octave 4)
+	chord: [],			// array of MIDI note numbers representing current chord
+
+    fullName : function(c) {
+       return this.key + " " + this.scale;
+    }
+};
 
 // playMIDIChord (chord)
 // chord - array of MIDI note values
@@ -74,12 +79,12 @@ function playMIDIChord(chord) {
 
 // plays the current chord
 function playChord() {
-	playMIDIChord(gChord);
+	playMIDIChord(gChord.chord);
 }
 
 // plays the current harmony chord
 function playHarmonyChord() {
-	playMIDIChord(gHarmonyChord);
+	playMIDIChord(gChord.harmonyChord);
 }
 
 // chgChord (root, chord)
@@ -96,12 +101,12 @@ function changeChord (root, chord) {
 	var chordformula = chord.split(',');
 	var output = '';
 	
-	gChord.length = 0;	// reset chord array
+	gChord.chord.length = 0;	// reset chord array
 
 	for (var i=0; i<chordformula.length; i++) {
 		var note = root + parseInt(chordformula[i]);
 		output += (disp[note%12] + ' '); 
-		gChord.push(note+60);	// FIXME adjust for octave later
+		gChord.chord.push(note+60);	// FIXME adjust for octave later
 	}
 	document.getElementById("chordoutput").innerHTML = output;
 }
@@ -118,8 +123,8 @@ function chgKey(root, scale) {
 }
 // int version
 function changeKey(root, scale) {
-	gKey = root;
-	gScale = scale;
+	gChord.key = root;
+	gChord.scale = scale;
 	setHarmonyChord();
 }
 
@@ -148,18 +153,18 @@ function recordChord(chord) {
 // octave - defines the octave above/below middle C
 //
 // Decodes the harmony chord based on the harmony formula,
-// the global key gKey and the global major/minor scale index gScale
+// the global key gChord.key and the global major/minor scale index gChord.scale
 // then plays the chord.
 function playHarmonyChord() {
-	playMIDIChord(gHarmonyChord);
+	playMIDIChord(gChord.harmonyChord);
 }
 
-//sets gHarmonyChord from all the other member vars
+//sets gChord.harmonyChord from all the other member vars
 function setHarmonyChord() {
 // harmony, octave
-	var harmonyformula = harmonyformulas[gHarmony].split(',');
+	var harmonyformula = harmonyformulas[gChord.harmony].split(',');
 	
-	gHarmonyChord.length = 0;	// reset chord array
+	gChord.harmonyChord.length = 0;	// reset chord array
 
 	for (var i=0; i<harmonyformula.length; i++) {
 		var n;
@@ -174,16 +179,16 @@ function setHarmonyChord() {
 		var r = (n/7) >> 0;
 		// console.log('index extraction: ', idx, r);
 
-		var note = ((gHarmonyOctave + 1) * 12) + gKey + scales[gScale][idx] + (r * 12) + a;
+		var note = ((gChord.harmonyOctave + 1) * 12) + gChord.key + scales[gChord.scale][idx] + (r * 12) + a;
 		// console.log('note: ', note);
 		
-		gHarmonyChord.push(note);
+		gChord.harmonyChord.push(note);
 	}
 }
 
 function changeHarmonyChord(harmony, octave) {
-	gHarmony = harmony;
-	gHarmonyOctave = octave;
+	gChord.harmony = harmony;
+	gChord.harmonyOctave = octave;
 	setHarmonyChord();
 }
 
@@ -192,14 +197,14 @@ function changeHarmonyChord(harmony, octave) {
 // octave - defines the octave (octave 4 starts with middle C)
 //
 // Decodes the harmony chord based on the harmony formula,
-// the global key gKey and the global major/minor scale index gScale
+// the global key gChord.key and the global major/minor scale index gChord.scale
 // then plays the chord. //FIXME split out nameHarmony f()?
 function selectHarmony(harmony, octave) {
 	// so the harmony is described as
 	// C4-I or F#4-ii or Dm3-I
 	// although I am pretty sure this is wrong
 
-	var name = disp[gKey]+(gScale ? 'm' : '')+octave+'-'+harmonynames[harmony];
+	var name = disp[gChord.key]+(gChord.scale ? 'm' : '')+octave+'-'+harmonynames[harmony];
 	document.getElementById("harmonyoutput").innerHTML = name;
 	// maybe record
 	changeHarmonyChord(harmony, octave);
