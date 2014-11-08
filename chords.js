@@ -21,7 +21,6 @@
 // along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
 // FIXME
-// all these globals (and functions) should be encapsulated into a singleton object (and maybe a chord object as well)
 // collapse the paired arrays --> 2-dimensional, notes 3
 // split out the decoding of a harmony chord from the setting of the globals
 // harmonies are order-specific and need to be built from base (0th) note up through the pattern
@@ -30,6 +29,7 @@
 // VI in image should be vi
 // IV back and forth to vi?
 // I <--> V also
+// Convert gChord to an object prototype
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -53,79 +53,127 @@ var harmonychordmap = [[11,225,121,335], [468,280,578,373], [680,225,790,335], [
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
 
 var gChord = {
-	key: 0,			// root note of current key where C=0 and B=11
+	name: '',			// chord name
+	key: 0,				// root note of current key where C=0 and B=11
 	scale: 0,			// index into scales for current mode (0=major, 1=minor)
-	harmony: 0,		// index into harmony 
-	harmonyChord: [],	// structure like gChord, but for the harmonies section
+	harmony: 0,			// index into harmony 
 	harmonyOctave: 0,	// octave number (middle C starts octave 4)
 	chord: [],			// array of MIDI note numbers representing current chord
 
     fullName : function(c) {
        return this.key + " " + this.scale;
-    }
+    },
+
+	// changeChord (root, chord_fmla)
+	// root - root note where C=0 and B=11
+	// chord_fmla - a chord formula as semitones from the root 
+	//
+	// Sets the global chord to the chord defined by the root note
+	// and the chord formula
+	changeChord : function  (root, chord_fmla) {
+		var chordformula = chord_fmla.split(',');
+		var output = '';
+		
+		gChord.chord.length = 0;	// reset chord array
+
+		for (var i=0; i<chordformula.length; i++) {
+			var note = root + parseInt(chordformula[i]);
+			output += (disp[note%12] + ' '); 
+			gChord.chord.push(note+60);	// FIXME adjust for octave later
+		}
+		document.getElementById("chordoutput").innerHTML = output;
+	},
+
+	//sets chord from all the other member vars
+	// harmony - indexes into harmonyformulas for a harmony coding
+	//   ['0,2,4','1,3,5','2,4,6', ...
+	//     note: h4 is '3,5,7', not '3,5,0'
+	//   Past the basic harmonies, we need to encode # and b
+	//     so 5/5 is '1,#3,5'
+	//     5/4 is '1,3,5,b7'
+	// octave - defines the octave above/below middle C
+	//
+	// Decodes the harmony chord based on the harmony formulas,
+	// the key, scale and octave
+	setHarmonyChord : function() {
+		var harmonyformula = harmonyformulas[this.harmony].split(',');
+		
+		this.chord.length = 0;	// reset chord array
+
+		for (var i=0; i<harmonyformula.length; i++) {
+			var n;
+			var str = harmonyformula[i];
+			var a = (str.charAt(0) == 'b') ? -1 : ((str.charAt(0) == '#') ? 1 : 0);	// set a to +1 for '#' and -1 for 'b'
+
+			if (a) n = parseInt(str.slice(1));
+			else n = parseInt(str);
+			// console.log('formula extraction: ', n, a);
+
+			var idx = n%7;
+			var r = (n/7) >> 0;
+			// console.log('index extraction: ', idx, r);
+
+			var note = ((this.harmonyOctave + 1) * 12) + this.key + scales[this.scale][idx] + (r * 12) + a;
+			// console.log('note: ', note);
+			
+			this.chord.push(note);
+		}
+	},
+
+	// changeKey (root, major)
+	// root - string representation of a root note where C=0 and B=11
+	// scale - index into scales indicating major or minor key (0=major, 1=minor)
+	//
+	// Sets the global key to the root note
+	// and sets the global scale to indicate either major or minor intervals.
+	changeKey : function(key, scale) {
+		this.key = key;
+		this.scale = scale;
+		gChord.setHarmonyChord();	//FIXME kinda makes the object useless beyond the encapsulation
+	},
+
+	// changeHarmony(harmony, octave)
+	// harmony - indexes into harmonyformulas for a harmony coding
+	//   ['0,2,4','1,3,5','2,4,6', ...
+	//     note: h4 is '3,5,7', not '3,5,0'
+	//   Past the basic harmonies, we need to encode # and b
+	//     so 5/5 is '1,#3,5'
+	//     5/4 is '1,3,5,b7'
+	// octave - defines the octave above/below middle C
+	//
+	// Decodes the harmony chord based on the harmony formula,
+	// the global key gChord.key and the global major/minor scale index gChord.scale
+	// then plays the chord.
+	changeHarmony : function(harmony, octave) {
+		this.harmony = harmony;
+		this.harmonyOctave = octave;
+		gChord.setHarmonyChord();
+	},
+
+	// play()
+	// Plays the current chord
+	// Basically a pass-through to MIDI.js.
+	play : function () {
+		var delay = 0;
+		var velocity = 127; // how hard the note hits
+		MIDI.setVolume(0, 127);
+
+		MIDI.chordOn(0, this.chord, velocity, delay);
+	}
+
 };
 
-// playMIDIChord (chord)
-// chord - array of MIDI note values
-//
-// Basically a pass-through to MIDI.js.
-function playMIDIChord(chord) {
-	var delay = 0;
-	var velocity = 127; // how hard the note hits
-	MIDI.setVolume(0, 127);
-
-	MIDI.chordOn(0, chord, velocity, delay);
-}
-
-// plays the current chord
 function playChord() {
-	playMIDIChord(gChord.chord);
+	gChord.play();
 }
 
-// plays the current harmony chord
-function playHarmonyChord() {
-	playMIDIChord(gChord.harmonyChord);
+function chgChord(root, chord) {
+	gChord.changeChord (parseInt(root), chord)
 }
 
-// chgChord (root, chord)
-// root - string representation of a root note where C=0 and B=11
-// chord - a chord formula as semitones from the root 
-//
-// Sets the global chord to the chord defined by the root note
-// and the chord formula FIXME don't pass an element here.
-function chgChord (root, chord) {
-	changeChord (parseInt(root), chord)
-}
-// int version
-function changeChord (root, chord) {
-	var chordformula = chord.split(',');
-	var output = '';
-	
-	gChord.chord.length = 0;	// reset chord array
-
-	for (var i=0; i<chordformula.length; i++) {
-		var note = root + parseInt(chordformula[i]);
-		output += (disp[note%12] + ' '); 
-		gChord.chord.push(note+60);	// FIXME adjust for octave later
-	}
-	document.getElementById("chordoutput").innerHTML = output;
-}
-
-// chgKey (root, major)
-// root - string representation of a root note where C=0 and B=11
-// scale - index into scales indicating major or minor key (0=major, 1=minor)
-//
-// Sets the global key to the root note
-// and sets the global scale to indicate either major or minor intervals.
 function chgKey(root, scale) {
 	var type = typeof root;
-	changeKey(parseInt(root), scale);
-}
-// int version
-function changeKey(root, scale) {
-	gChord.key = root;
-	gChord.scale = scale;
-	setHarmonyChord();
+	gChord.changeKey(parseInt(root), scale);
 }
 
 function recordChord(chord) {
@@ -143,72 +191,17 @@ function recordChord(chord) {
 		label.innerHTML = 'C'+(5-j)+': ';	// really, this all needs to be octave generalized
 		child.appendChild(label); */
 
-// playHarmony(harmony, octave)
-// harmony - indexes into harmonyformulas for a harmony coding
-//   ['0,2,4','1,3,5','2,4,6', ...
-//     note: h4 is '3,5,7', not '3,5,0'
-//   Past the basic harmonies, we need to encode # and b
-//     so 5/5 is '1,#3,5'
-//     5/4 is '1,3,5,b7'
-// octave - defines the octave above/below middle C
-//
-// Decodes the harmony chord based on the harmony formula,
-// the global key gChord.key and the global major/minor scale index gChord.scale
-// then plays the chord.
-function playHarmonyChord() {
-	playMIDIChord(gChord.harmonyChord);
-}
-
-//sets gChord.harmonyChord from all the other member vars
-function setHarmonyChord() {
-// harmony, octave
-	var harmonyformula = harmonyformulas[gChord.harmony].split(',');
-	
-	gChord.harmonyChord.length = 0;	// reset chord array
-
-	for (var i=0; i<harmonyformula.length; i++) {
-		var n;
-		var str = harmonyformula[i];
-		var a = (str.charAt(0) == 'b') ? -1 : ((str.charAt(0) == '#') ? 1 : 0);	// set a to +1 for '#' and -1 for 'b'
-
-		if (a) n = parseInt(str.slice(1));
-		else n = parseInt(str);
-		// console.log('formula extraction: ', n, a);
-
-		var idx = n%7;
-		var r = (n/7) >> 0;
-		// console.log('index extraction: ', idx, r);
-
-		var note = ((gChord.harmonyOctave + 1) * 12) + gChord.key + scales[gChord.scale][idx] + (r * 12) + a;
-		// console.log('note: ', note);
-		
-		gChord.harmonyChord.push(note);
-	}
-}
-
-function changeHarmonyChord(harmony, octave) {
-	gChord.harmony = harmony;
-	gChord.harmonyOctave = octave;
-	setHarmonyChord();
-}
-
 // selectHarmony(harmony, octave)
 // harmony - indexes into harmonyformulas for a harmony coding
 // octave - defines the octave (octave 4 starts with middle C)
 //
-// Decodes the harmony chord based on the harmony formula,
-// the global key gChord.key and the global major/minor scale index gChord.scale
-// then plays the chord. //FIXME split out nameHarmony f()?
+// Changes the chord harmony and plays the chord.
 function selectHarmony(harmony, octave) {
-	// so the harmony is described as
-	// C4-I or F#4-ii or Dm3-I
-	// although I am pretty sure this is wrong
-
 	var name = disp[gChord.key]+(gChord.scale ? 'm' : '')+octave+'-'+harmonynames[harmony];
 	document.getElementById("harmonyoutput").innerHTML = name;
 	// maybe record
-	changeHarmonyChord(harmony, octave);
-	playHarmonyChord();
+	gChord.changeHarmony(harmony, octave);
+	gChord.play();
 }
 
 function startup() {
@@ -282,8 +275,8 @@ function startup() {
 
 	document.getElementById("modemajor").checked = true;
 	chgChord('0', chord);	// C Major
-	chgKey('0', 0);		// C Major
-	playChord();
+	selectHarmony(0, 4)		// C Major
+	gChord.play();
 }
 
 function init() {

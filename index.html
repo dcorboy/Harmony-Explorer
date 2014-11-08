@@ -30,7 +30,7 @@
 					<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,1);" value="minor" name="r1">Minor
 					<div id="chordoutput" class="output">Chord Description</div>
 					<div id="harmonyoutput" class="output">Harmony Description</div>
-					<button id="play" type="button" onclick="selectHarmony(0, 4);" >Play Chord</button>
+					<button id="play" type="button" onclick="playChord();" >Play Chord</button>
 				</div>
 			</form>
 			<div id="harmonybuttons" class="holder"></div>
@@ -43,7 +43,7 @@
 						<div class="topbar blue">
 							<h1>Chord</h1>
 						</div>
-						<select class="option" id="chord" onchange="chgChord('0',this.form.chord.value);selectHarmony(0, 4);" size="11" name="chord"></select>
+						<select class="option" id="chord" onchange="chgChord('0',this.form.chord.value);" size="11" name="chord"></select>
 					</div>
 				</form>
 			</div>
