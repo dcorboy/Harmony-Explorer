@@ -16,37 +16,58 @@
 	<script type="text/javascript">
 		window.onload = init();
 	</script>
-	<div id="controls" class="section">
-		<div id="harmonyblock" class="block">
-			<div class="inner">
-				<input id="modemajor" type="radio" onclick="chgScale(0);" value="major" name="r1" checked>Major
-				<input id="modeminor" type="radio" onclick="chgScale(1);" value="minor" name="r1">Minor
-				<div id="chordoutput" class="output">Chord Description</div>
-				<div id="harmonyoutput" class="output">Harmony Description</div>
-				<button id="play" type="button" onclick="playChord();" >Play Chord</button>
-			</div>
-			<div id="keyselect" class="selectbox inner">
-				<div class="topbar blue">
-					<h1>Key</h1>
-				</div>
-				<select class="option" id="keyroot" onchange="chgKey(this.value);" size="6" name="root"></select>
-			</div>
-		</div>
-		<div id="chordblock" class="block">
-			<div id="chordselect" class="selectbox inner">
-				<div class="topbar blue">
-					<h1>Chord</h1>
-				</div>
-				<select class="option" id="chord" onchange="chgChord(this.value);" size="14" name="chord"></select>
-			</div>
-		</div>
-	</div>
+	<div id="container">
+		<table id="maincontrols" class="section">
+			<tr>
+				<td id="keyblock" class="border">
+					<div id="keyselect" class="selectbox inner">
+						<div class="topbar blue">
+							<h1>Key</h1>
+						</div>
+						<select class="option" id="keyroot" onchange="chgKey(this.value);" size="10" name="root"></select>
+					</div>
+				</td>
+				<td id="recordingblock" class="inner fillcell border">
+					Recording
+				</td>
+				<td id="chordblock" class="border">
+					<div id="chordselect" class="selectbox inner">
+						<div class="topbar blue">
+							<h1>Chord</h1>
+						</div>
+						<select class="option" id="chord" onchange="chgChord(this.value);" size="10" name="chord"></select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="harmonymode" class="inner border">
+					<div id="harmonycontrols">
+						<label><input id="modemajor" type="radio" onclick="chgScale(0);" value="major" name="r1" checked />Major</label>
+						<label><input id="modeminor" type="radio" onclick="chgScale(1);" value="minor" name="r1" />Minor</label>
+					</div>
+				</td>
+				<td id="recinfoblock" class="inner border">
+					<div id="chordoutput" class="output">Chord Description</div>
+					<div id="harmonyoutput" class="output">Harmony Description</div>
+					<button id="play" type="button" onclick="playChord();" >Play Chord</button>
+				</td>
+				<td id="rightblock" class="inner border">Right Cell</td>
+			</tr>
+			<tr>
+				<td id="harmonybuttons" class="inner border" colspan="3"></td>
+			</tr>
 
-	<div id="harmonybuttons"></div>
+		</table>
+		<div id="graphblock" class="section inner border">
+			<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
+		</div>
+	<div>
+
+
 
 	<div style="clear:both"></div>
 
-	<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
+
 
 	<div style="clear:both"></div>
 

@@ -187,20 +187,57 @@ function updateChordName() {
 	document.getElementById("chordoutput").innerHTML = gChord.notes;
 }
 
-// ui mode 0 is harmony block without bottom border // FIXME
+// ui mode 0 is everything outlined except for chord controls
 // ui mode 1 is full section
 function updateUIMode(ui) {
+	var colors = ["slateblue", "olivedrab"];
+	var blockstyle = null;
+
+	blockstyle = document.getElementById("keyblock").style;
+	blockstyle.borderTopColor = blockstyle.borderLeftColor = colors[ui];
+	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
+
+	blockstyle = document.getElementById("recordingblock").style;
+	blockstyle.borderTopColor = colors[ui];
+	blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
+
+	blockstyle = document.getElementById("chordblock").style;
+	blockstyle.borderTopColor = blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
+
+	blockstyle = document.getElementById("harmonymode").style;
+	blockstyle.borderLeftColor = ui ? "transparent" : colors[ui];
+	blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
+
+ 	blockstyle = document.getElementById("recinfoblock").style;
+	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
+	blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
+
+	blockstyle = document.getElementById("rightblock").style;
+	blockstyle.borderBottomColor = colors[ui];
+	blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
+
+	blockstyle = document.getElementById("harmonybuttons").style;
+	blockstyle.borderLeftColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
+
+	blockstyle = document.getElementById("graphblock").style;
+	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
+}
+
+/* function updateUIMode(ui) {
 	var harmonyblock = document.getElementById("harmonyblock");
-	var controlblock = document.getElementById("controls");
+	var recordingblock = document.getElementById("recordingblock");
+	var maincontrolblock = document.getElementById("maincontrols");
+	
+	block.style.borderBottomColor = block.style.borderLeftColor = ui ? "transparent" : colors[ui];
 
 	if (ui == 0) {
 		harmonyblock.style.border = "1px solid slateblue";
-		controlblock.style.border = "none";
+		maincontrolblock.style.border = "none";
 	} else {
 		harmonyblock.style.border = "none";
-		controlblock.style.border = "1px solid olivedrab";
+		maincontrolblock.style.border = "1px solid olivedrab";
 	}
-}
+} */
 
 function chgKey(root) {
 	gChord.changeKey(parseInt(root));
