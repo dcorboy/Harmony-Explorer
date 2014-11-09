@@ -218,6 +218,7 @@ pip-log.txt
 #############
 ## My Stuff
 #############
-# Ignore everything in the soundfont directories for now
-soundfont/
+# Ignore the source doc for the chordboard
 /*.ai
+# Ignore test files
+/test*.*
