@@ -142,20 +142,25 @@ var gChord = {
 		gChord.setHarmonyChord();	//FIXME kinda makes the object useless beyond the encapsulation
 	},
 
-	// changeHarmony(harmony, octave)
+	// changeHarmony(harmony)
 	// harmony - indexes into harmonyformulas for a harmony coding
 	//   ['0,2,4','1,3,5','2,4,6', ...
 	//     note: h4 is '3,5,7', not '3,5,0'
 	//   Past the basic harmonies, we need to encode # and b
 	//     so 5/5 is '1,#3,5'
 	//     5/4 is '1,3,5,b7'
-	// octave - defines the octave above/below middle C
 	//
-	// Decodes the harmony chord based on the harmony formula,
-	// the global key gChord.key and the global major/minor scale index gChord.scale
-	// then plays the chord.
-	changeHarmony : function(harmony, octave) {
+	// Changes harmony selection and sets the chord
+	changeHarmony : function(harmony) {
 		this.harmony = harmony;
+		gChord.setHarmonyChord();
+	},
+
+	// changeOctave(octave)
+	// octave - defines the octave where middle C = 4
+	//
+	// Changes octave selection and sets the chord
+	changeOctave : function(octave) {
 		this.harmonyOctave = octave;
 		gChord.setHarmonyChord();
 	},
@@ -182,9 +187,19 @@ function updateChordName() {
 	document.getElementById("chordoutput").innerHTML = gChord.notes;
 }
 
-function chgChord(chord) {
-	gChord.changeChord (chord);
-	updateChordName();
+// ui mode 0 is harmony block without bottom border // FIXME
+// ui mode 1 is full section
+function updateUIMode(ui) {
+	var harmonyblock = document.getElementById("harmonyblock");
+	var controlblock = document.getElementById("controls");
+
+	if (ui == 0) {
+		harmonyblock.style.border = "1px solid slateblue";
+		controlblock.style.border = "none";
+	} else {
+		harmonyblock.style.border = "none";
+		controlblock.style.border = "1px solid olivedrab";
+	}
 }
 
 function chgKey(root) {
@@ -192,9 +207,35 @@ function chgKey(root) {
 	updateChordName();
 }
 
+function chgOctave(octave) {
+	gChord.changeOctave(octave);
+	updateChordName();
+}
+
+function chgChord(chord) {
+	gChord.changeChord (chord);
+	updateUIMode(1);
+	updateChordName();
+}
+
 function chgScale(scale) {
 	gChord.changeScale(scale);
+	updateUIMode(0);
 	updateChordName();
+}
+
+// selectHarmony(harmony, octave)
+// harmony - indexes into harmonyformulas for a harmony coding
+// octave - defines the octave (octave 4 starts with middle C)
+//
+// Changes the chord harmony and plays the chord.
+function selectHarmony(harmony, octave) {
+	// maybe record
+	gChord.changeHarmony(harmony);
+	gChord.changeOctave(octave);
+	updateChordName();
+	updateUIMode(0);
+	gChord.play();
 }
 
 function recordChord(chord) {
@@ -211,18 +252,6 @@ function recordChord(chord) {
 		label.className = 'hmy-label';
 		label.innerHTML = 'C'+(5-j)+': ';	// really, this all needs to be octave generalized
 		child.appendChild(label); */
-
-// selectHarmony(harmony, octave)
-// harmony - indexes into harmonyformulas for a harmony coding
-// octave - defines the octave (octave 4 starts with middle C)
-//
-// Changes the chord harmony and plays the chord.
-function selectHarmony(harmony, octave) {
-	// maybe record
-	gChord.changeHarmony(harmony, octave);
-	updateChordName();
-	gChord.play();
-}
 
 function startup() {
 	// set up the UI and whatnot
@@ -295,7 +324,7 @@ function startup() {
 
 	document.getElementById("modemajor").checked = true;
 	chgChord('0', chord);	// C Major
-	selectHarmony(0, 4)		// C Major
+	chgOctave(4);	// Middle C octave
 	gChord.play();
 }
 

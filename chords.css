@@ -13,6 +13,7 @@
 body {
 	background-color: black;
 	color: white;
+	padding: 20px;
 }
 
 label {
@@ -32,19 +33,19 @@ label {
 }
 
 .section {
-	display: inline-block;
-	border: 1px solid yellow;
+	display: table;
 	background-color: #202020;
+//	border: 1px solid yellow;
 }
 
 .block {
-	float: left;
- 	border: 1px solid orange;
+	display: table-cell;
+// 	border: 1px solid orange;
 }
 
 .inner {
-	border: 1px solid red;
 	padding: 20px;
+//	border: 1px solid red;
 }
 
 .parent{
