@@ -18,36 +18,31 @@
 	</script>
 	<div class="section">
 		<div id="harmonyblock" class="block">
-			<form name = "rename_later">
-				<div class="holder">
-					<input id="modemajor" type="radio" onclick="chgKey(this.form.root.value,0);" value="major" name="r1" checked>Major
-					<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,1);" value="minor" name="r1">Minor
-					<div id="chordoutput" class="output">Chord Description</div>
-					<div id="harmonyoutput" class="output">Harmony Description</div>
-					<button id="play" type="button" onclick="playChord();" >Play Chord</button>
+			<div class="inner">
+				<input id="modemajor" type="radio" onclick="chgScale(0);" value="major" name="r1" checked>Major
+				<input id="modeminor" type="radio" onclick="chgScale(1);" value="minor" name="r1">Minor
+				<div id="chordoutput" class="output">Chord Description</div>
+				<div id="harmonyoutput" class="output">Harmony Description</div>
+				<button id="play" type="button" onclick="playChord();" >Play Chord</button>
+			</div>
+			<div id="keyselect" class="selectbox inner">
+				<div class="topbar blue">
+					<h1>Key</h1>
 				</div>
-				<div class="holder keyselect">
-					<div class="topbar blue">
-						<h1>Key</h1>
-					</div>
-					<select class="option" id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked === true ? 0 : 1);" size="6" name="root"></select>
-				</div>
-			</form>
+				<select class="option" id="keyroot" onchange="chgKey(this.value);" size="6" name="root"></select>
+			</div>
 		</div>
-		
 		<div id="chordblock" class="block">
-			<div id="chordinputs">
-				<div class="holder chordselect">
-					<div class="topbar blue">
-						<h1>Chord</h1>
-					</div>
-					<select class="option" id="chord" onchange="chgChord(this.value);" size="11" name="chord"></select>
+			<div id="chordselect" class="selectbox inner">
+				<div class="topbar blue">
+					<h1>Chord</h1>
 				</div>
+				<select class="option" id="chord" onchange="chgChord(this.value);" size="11" name="chord"></select>
 			</div>
 		</div>
 	</div>
 
-	<div id="harmonybuttons" class="holder"></div>
+	<div id="harmonybuttons"></div>
 
 	<div style="clear:both"></div>
 

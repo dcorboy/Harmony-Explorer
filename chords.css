@@ -18,38 +18,56 @@ body {
 label {
 	display: block;
 }
+
 .harmonies label {
 	display: inline;
 }
 
-.keyselect {
+#keyselect {
 	width: 120px;
-	margin: 0 20px 20px 0;
 }
 
-.chordselect {
+#chordselect {
 	width: 200px;
-	padding-left: 20px;
-	border-left: 5px solid white;
 }
 
-.holder {
-	float: left;
-	overflow: hidden;
-/*	border: 1px solid red;*/
+.section {
+	display: inline-block;
+	border: 1px solid yellow;
+	background-color: #202020;
 }
 
 .block {
 	float: left;
-/* 	border: 1px solid orange; */
+ 	border: 1px solid orange;
 }
 
-.section {
-	float: left;
-	border: 5px solid white;
-	background-color: #202020;
+.inner {
+	border: 1px solid red;
 	padding: 20px;
 }
+
+.parent{
+    display:-moz-box;
+    display:-webkit-box;
+    display:box;
+    -moz-box-orient: horizontal;
+    -webkit-box-orient: horizontal;
+    box-orient: horizontal;
+    width:100%;
+}
+
+.parent div{
+    background:red;
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    border:2px solid green;
+}
+.parent div + div{
+    margin-left:10px;
+}
+
 
 .center {
     margin-left: auto;
@@ -62,8 +80,8 @@ label {
 	font-size: 30px;
 }
 
-#harmonyblock {
-	margin-right: 20px;
+.selectbox select {
+	width: 100%;
 }
 
 .topbar {
@@ -86,10 +104,6 @@ label {
 	font-size: 21px;
 	text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
 	letter-spacing: -1px;
-}
-
-.holder select {
-	width: 100%;
 }
 
 .option {

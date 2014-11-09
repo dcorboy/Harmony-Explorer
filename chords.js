@@ -124,14 +124,20 @@ var gChord = {
 		}
 	},
 
-	// changeKey (root, major)
+	// changeKey (root)
 	// root - string representation of a root note where C=0 and B=11
-	// scale - index into scales indicating major or minor key (0=major, 1=minor)
 	//
-	// Sets the global key to the root note
-	// and sets the global scale to indicate either major or minor intervals.
+	// Sets key to the root note
 	changeKey : function(key, scale) {
 		this.key = key;
+		gChord.setHarmonyChord();	//FIXME kinda makes the object useless beyond the encapsulation
+	},
+
+	// changeScale (major)
+	// scale - index into scales indicating major or minor key (0=major, 1=minor)
+	//
+	// Sets scale to indicate either major or minor intervals.
+	changeScale : function(scale) {
 		this.scale = scale;
 		gChord.setHarmonyChord();	//FIXME kinda makes the object useless beyond the encapsulation
 	},
@@ -181,8 +187,13 @@ function chgChord(chord) {
 	updateChordName();
 }
 
-function chgKey(root, scale) {
-	gChord.changeKey(parseInt(root), scale);
+function chgKey(root) {
+	gChord.changeKey(parseInt(root));
+	updateChordName();
+}
+
+function chgScale(scale) {
+	gChord.changeScale(scale);
 	updateChordName();
 }
 
@@ -220,7 +231,7 @@ function startup() {
 	var len = notes.length;
 	var chord;
 
-	// create two sets of note selection controls
+	// create note selection control
 	for (var i = 0; i < len; i++) {
 		var elem = document.createElement('option')
 		elem.value = i;
