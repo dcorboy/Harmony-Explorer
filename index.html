@@ -18,13 +18,7 @@
 	</script>
 	<div class="section">
 		<div id="harmonyblock" class="block">
-			<form name = "inputs">
-				<div class="holder keyselect">
-					<div class="topbar blue">
-						<h1>Key</h1>
-					</div>
-					<select class="option" id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked === true ? 0 : 1);" size="6" name="root"></select>
-				</div>
+			<form name = "rename_later">
 				<div class="holder">
 					<input id="modemajor" type="radio" onclick="chgKey(this.form.root.value,0);" value="major" name="r1" checked>Major
 					<input id="modeminor" type="radio" onclick="chgKey(this.form.root.value,1);" value="minor" name="r1">Minor
@@ -32,23 +26,28 @@
 					<div id="harmonyoutput" class="output">Harmony Description</div>
 					<button id="play" type="button" onclick="playChord();" >Play Chord</button>
 				</div>
+				<div class="holder keyselect">
+					<div class="topbar blue">
+						<h1>Key</h1>
+					</div>
+					<select class="option" id="keyroot" onchange="chgKey(this.form.root.value,this.form.r1[0].checked === true ? 0 : 1);" size="6" name="root"></select>
+				</div>
 			</form>
-			<div id="harmonybuttons" class="holder"></div>
 		</div>
 		
 		<div id="chordblock" class="block">
 			<div id="chordinputs">
-				<form name="inputs">
-					<div class="holder chordselect">
-						<div class="topbar blue">
-							<h1>Chord</h1>
-						</div>
-						<select class="option" id="chord" onchange="chgChord(this.form.chord.value);" size="11" name="chord"></select>
+				<div class="holder chordselect">
+					<div class="topbar blue">
+						<h1>Chord</h1>
 					</div>
-				</form>
+					<select class="option" id="chord" onchange="chgChord(this.value);" size="11" name="chord"></select>
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<div id="harmonybuttons" class="holder"></div>
 
 	<div style="clear:both"></div>
 
