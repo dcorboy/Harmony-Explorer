@@ -22,7 +22,6 @@
 
 // FIXME
 // collapse the paired arrays --> 2-dimensional, notes 3
-// split out the decoding of a harmony chord from the setting of the globals
 // harmonies are order-specific and need to be built from base (0th) note up through the pattern
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
@@ -264,12 +263,20 @@ function recordChord(chord) {
 	var child = document.createElement('div');
 	child.className = 'chord-rec';
 	child.innerHTML = gChord.name;
+	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);
+}
 
-	// var inner = document.createElement('span');
-	// inner.className = 'chord-rec-inner';
-	// inner.innerHTML = gChord.name;
-	// child.appendChild(inner);
+function playRecording() {
+	var recnodes = document.getElementById('recordingblock').childNodes;
+	var str='';
+
+	MIDI.setVolume(0, 127);
+
+	for (var i = 0; i < recnodes.length; i++) {
+		str=recnodes[i].innerHTML;
+		MIDI.chordOn(0, recnodes[i].chord, 127, i);
+	}
 }
 
 function startup() {
