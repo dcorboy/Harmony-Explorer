@@ -20,18 +20,18 @@
 		<table id="maincontrols" class="section">
 			<tr>
 				<td id="keyblock" class="border">
-					<div id="keyselect" class="selectbox inner">
+					<div id="keyselect" class="selectbox pad">
 						<div class="topbar blue">
 							<h1>Key</h1>
 						</div>
 						<select class="option" id="keyroot" onchange="chgKey(this.value);" size="10" name="root"></select>
 					</div>
 				</td>
-				<td id="recordingblock" class="inner fillcell border">
+				<td id="recordingblock" class="pad fillcell border">
 					Recording
 				</td>
 				<td id="chordblock" class="border">
-					<div id="chordselect" class="selectbox inner">
+					<div id="chordselect" class="selectbox pad">
 						<div class="topbar blue">
 							<h1>Chord</h1>
 						</div>
@@ -40,25 +40,26 @@
 				</td>
 			</tr>
 			<tr>
-				<td id="harmonymode" class="inner border">
+				<td id="harmonymode" class="shortpad border">
 					<div id="harmonycontrols">
 						<label><input id="modemajor" type="radio" onclick="chgScale(0);" value="major" name="r1" checked />Major</label>
 						<label><input id="modeminor" type="radio" onclick="chgScale(1);" value="minor" name="r1" />Minor</label>
 					</div>
 				</td>
-				<td id="recinfoblock" class="inner border">
-					<div id="chordoutput" class="output">Chord Description</div>
-					<div id="harmonyoutput" class="output">Harmony Description</div>
+				<td id="recinfoblock" class="shortpad border">
 					<button id="play" type="button" onclick="playChord();" >Play Chord</button>
 				</td>
-				<td id="rightblock" class="inner border">Right Cell</td>
+				<td id="rightblock" class="shortpad border">
+					<div id="chordoutput" class="output">Chord Description</div>
+					<div id="harmonyoutput" class="output">Harmony Description</div>
+				</td>
 			</tr>
 			<tr>
-				<td id="harmonybuttons" class="inner border" colspan="3"></td>
+				<td id="harmonybuttons" class="pad border" colspan="3"></td>
 			</tr>
 
 		</table>
-		<div id="graphblock" class="section inner border">
+		<div id="graphblock" class="section pad border">
 			<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
 		</div>
 	<div>

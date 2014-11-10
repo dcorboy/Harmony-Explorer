@@ -59,9 +59,12 @@ td {
 	width: 100%;
 }
 
-.inner {
+.pad {
 	padding: 20px;
-//	border: 1px solid red;
+}
+
+.shortpad {
+	padding: 5px 20px;
 }
 
 .parent{
@@ -93,7 +96,11 @@ td {
 }
 
 .output {
-	font-size: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    line-height: 93%;
+	text-align: center;
 }
 
 .selectbox select {

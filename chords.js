@@ -188,7 +188,7 @@ function updateChordName() {
 }
 
 // ui mode 0 is everything outlined except for chord controls
-// ui mode 1 is full section
+// ui mode 1 adds chord controls and removes harmony mode and lower harmony section
 function updateUIMode(ui) {
 	var colors = ["slateblue", "olivedrab"];
 	var blockstyle = null;
@@ -203,6 +203,7 @@ function updateUIMode(ui) {
 
 	blockstyle = document.getElementById("chordblock").style;
 	blockstyle.borderTopColor = blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
+	blockstyle.borderBottomColor = ui ? "transparent" : colors[ui];
 
 	blockstyle = document.getElementById("harmonymode").style;
 	blockstyle.borderLeftColor = ui ? "transparent" : colors[ui];
@@ -210,11 +211,10 @@ function updateUIMode(ui) {
 
  	blockstyle = document.getElementById("recinfoblock").style;
 	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
-	blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
 
 	blockstyle = document.getElementById("rightblock").style;
-	blockstyle.borderBottomColor = colors[ui];
-	blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
+	blockstyle.borderRightColor = colors[ui];
+	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
 
 	blockstyle = document.getElementById("harmonybuttons").style;
 	blockstyle.borderLeftColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
@@ -362,7 +362,7 @@ function startup() {
 	document.getElementById("modemajor").checked = true;
 	chgChord('0', chord);	// C Major
 	chgOctave(4);	// Middle C octave
-	gChord.play();
+//	gChord.play();
 }
 
 function init() {
