@@ -220,22 +220,6 @@ function updateUIMode(ui) {
 	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
 }
 
-/* function updateUIMode(ui) {
-	var harmonyblock = document.getElementById("harmonyblock");
-	var recordingblock = document.getElementById("recordingblock");
-	var maincontrolblock = document.getElementById("maincontrols");
-	
-	block.style.borderBottomColor = block.style.borderLeftColor = ui ? "transparent" : colors[ui];
-
-	if (ui == 0) {
-		harmonyblock.style.border = "1px solid slateblue";
-		maincontrolblock.style.border = "none";
-	} else {
-		harmonyblock.style.border = "none";
-		maincontrolblock.style.border = "1px solid olivedrab";
-	}
-} */
-
 function chgKey(root) {
 	gChord.changeKey(parseInt(root));
 	updateChordName();
@@ -276,19 +260,17 @@ function selectHarmony(harmony, event) {
 }
 
 function recordChord(chord) {
-	var parent = document.getElementById('recording');
+	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
+	child.className = 'chord-rec';
+	child.innerHTML = gChord.name;
+	parent.appendChild(child);
+
+	// var inner = document.createElement('span');
+	// inner.className = 'chord-rec-inner';
+	// inner.innerHTML = gChord.name;
+	// child.appendChild(inner);
 }
-
-/* 		var child = document.createElement('div');
-		child.id = 'harmonies'+j;
-		child.className = 'harmonies';
-
-		var label = document.createElement('label');
-		//label.id = 'harmonies'+j;
-		label.className = 'hmy-label';
-		label.innerHTML = 'C'+(5-j)+': ';	// really, this all needs to be octave generalized
-		child.appendChild(label); */
 
 function startup() {
 	// set up the UI and whatnot

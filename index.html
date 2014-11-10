@@ -27,9 +27,7 @@
 						<select class="option" id="keyroot" onchange="chgKey(this.value);" size="10" name="root"></select>
 					</div>
 				</td>
-				<td id="recordingblock" class="pad fillcell border">
-					Recording
-				</td>
+				<td id="recordingblock" class="pad fillcell border"></td>
 				<td id="chordblock" class="border">
 					<div id="chordselect" class="selectbox pad">
 						<div class="topbar blue">
@@ -48,6 +46,7 @@
 				</td>
 				<td id="recinfoblock" class="shortpad border">
 					<button id="play" type="button" onclick="playChord();" >Play Chord</button>
+					<button id="record" type="button" onclick="recordChord();" >Record Chord</button>
 				</td>
 				<td id="rightblock" class="shortpad border">
 					<div id="chordoutput" class="output">Chord Description</div>
@@ -62,13 +61,6 @@
 
 
 
-	<div style="clear:both"></div>
-
-
-
-	<div style="clear:both"></div>
-
-	<div id="recording">Recording Section TBD</div>
 
 	<noscript>
 		<div align="center">

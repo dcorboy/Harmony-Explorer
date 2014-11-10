@@ -37,7 +37,7 @@ table {
 }
 
 #chordselect {
-	width: 200px;
+	width: 225px;
 }
 
 .border {
@@ -67,43 +67,32 @@ td {
 	padding: 5px 20px;
 }
 
-.parent{
-    display:-moz-box;
-    display:-webkit-box;
-    display:box;
-    -moz-box-orient: horizontal;
-    -webkit-box-orient: horizontal;
-    box-orient: horizontal;
-    width:100%;
-}
-
-.parent div{
-    background:red;
-    -moz-box-flex: 1;
-    -webkit-box-flex: 1;
-    box-flex: 1;
-    border:2px solid green;
-}
-.parent div + div{
-    margin-left:10px;
-}
-
-
 .center {
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
+	  
+.chord-rec {
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+	overflow: hidden;
+	border: 3px solid white;
+	margin: 2px;
+	text-align: center;
+}
 
 .output {
     font-size: 22px;
     font-weight: bold;
-    letter-spacing: 4px;
-    line-height: 93%;
+    letter-spacing: 3px;
+    line-height: 100%;
 	text-align: center;
 }
 #harmonyoutput {
-    font-size: 16px;
+    font-size: 15px;
+	letter-spacing: normal;
 }
 
 .selectbox select {
