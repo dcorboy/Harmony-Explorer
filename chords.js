@@ -216,9 +216,6 @@ function updateUIMode(ui) {
 	blockstyle.borderRightColor = colors[ui];
 	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
 
-	blockstyle = document.getElementById("harmonybuttons").style;
-	blockstyle.borderLeftColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
-
 	blockstyle = document.getElementById("graphblock").style;
 	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
 }
@@ -266,10 +263,13 @@ function chgScale(scale) {
 // octave - defines the octave (octave 4 starts with middle C)
 //
 // Changes the chord harmony and plays the chord.
-function selectHarmony(harmony, octave) {
-	// maybe record
+function selectHarmony(harmony, event) {
 	gChord.changeHarmony(harmony);
-	gChord.changeOctave(octave);
+
+	event = event || window.event;
+	var offset = event.shiftKey ? 1 : (event.ctrlKey ? -1 : 0);
+	gChord.changeOctave(4 + offset);	// FIXME UI octave needed
+
 	updateChordName();
 	updateUIMode(0);
 	gChord.play();
@@ -320,29 +320,6 @@ function startup() {
 		parent.appendChild(elem);
 	}
 
-	// create the harmony chord buttons
-	parent = document.getElementById('harmonybuttons');
-	for (var i = 0; i < 3; i++) {		// three rows of harmony buttons, starting at C3
-		var child = document.createElement('div');
-		child.id = 'harmonies'+i;
-		child.className = 'harmonies';
-
-		var label = document.createElement('label');
-		//label.id = 'harmonies'+i;
-		label.className = 'hmy-label';
-		label.innerHTML = 'C'+(5-i)+': ';	// really, this all needs to be octave generalized
-		child.appendChild(label);
-
-		len = harmonynames.length;
-		for (var j = 0; j < len; j++) {
-			var elem = document.createElement('button');
-			elem.innerHTML = harmonynames[j];
-			elem.setAttribute('onclick','selectHarmony('+j+', '+(5-i)+');');
-			child.appendChild(elem);
-		}
-		parent.appendChild(child);
-	}
-
 	// create the harmony chord board
 	var graphnode = document.getElementById('harmonychordgraph');
 	parent = document.createElement('map');
@@ -355,7 +332,7 @@ function startup() {
 		child.shape = 'rect';
 		child.coords = '11,225,121,335';
 		child.coords = harmonychordmap[i][0]+','+harmonychordmap[i][1]+','+harmonychordmap[i][2]+','+harmonychordmap[i][3];
-		child.setAttribute('onclick','selectHarmony('+i+', '+4+');');
+		child.setAttribute('onclick','selectHarmony('+i+', event);');
 		parent.appendChild(child);
 	}
 
