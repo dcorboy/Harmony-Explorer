@@ -1,27 +1,56 @@
 # Harmony-Explorer
 
-Harmony-Explorer lets you explore the harmonies of musical keys on a visual directed graph.
-More complex chords can be added by building them in the left panel.
-Additional harmony octaves can be reached using the harmony buttons in the right panel.
-MIDI supported by [MIDI.js](https://github.com/mudcube/MIDI.js) submodule.
+Harmony-Explorer is a JavaScript application that lets you explore harmonies
+and chords using a visual directed graph.
+
+## Motivation
+
+Composing a song starts with some basic parts, among them are chord progressions. I can't
+remember all the harmonies of the different keys, making it difficult to try different keys
+and chords.
+
+With Harmony-Explorer, you can simply click around the seven main harmonies of any key to
+experiment with different progressions. Extended harmonies can also be reached using the
+chord graph and more complex chords can selected through the UI.
+
+## Installation
+
+MIDI is supported by [MIDI.js](https://github.com/mudcube/MIDI.js) submodule.
+
 Soundfonts supported by [midi-js-soundfonts](https://github.com/gleitz/midi-js-soundfonts) submodule.
 
+To properly install these submodules, on version 1.6.5 of Git and later, you can simply use:
+
+``` bash
+git clone --recursive https://github.com/dcorboy/Harmony-Explorer.git
+```
+
+For existing repos or older versions of Git, use
+
+``` bash
+cd MIDI.js
+git submodule update --init
+cd ../midi-js-soundfonts
+git submodule update --init
+```
+
+## Usage
+
+Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).
+
+The **Shift** key will raise the chord an octave while the **Ctrl** key will lower the chord an octave.
+
+Choose a different root note from the **Key** selection box on the top-left and either **Major** or
+**Minor** from the radio buttons below it.
+
+More complex variations of the root note can be selected from the **Chord** selection box on the top-right.
+
+Chord name and notes are displayed under the **Chord** selection box.
+	
 ## In Development
 
 * Ability to record, edit and play back short chord progressions
-* Support for the additional instruments
-
-## To Do
-
-* all these globals (and functions) should be encapsulated into a singleton object (and maybe a chord object as well)
-* collapse the paired arrays --> 2-dimensional, notes 3
-* split out the decoding of a harmony chord from the setting of the globals
-* harmonies are order-specific and need to be built from base (0th) note up through the pattern
-* handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
-* node graph should be canvas elements
-* VI in image should be vi
-* IV back and forth to vi?
-* I <--> V also
+* Support for some additional instruments
 
 ## License
 

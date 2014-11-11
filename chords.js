@@ -1,11 +1,11 @@
 // chords.js
-// JavaScript functionality for creating a chord & harmony explorer.
+// JavaScript functionality for creating a harmony & chord explorer.
 //
 // Copyright 2014 Dave Corboy <dave@corboy.com>
 //
 // This file is part of Harmony-Explorer.
-// Harmony-Explorer lets you explore the harmonies of musical keys
-// on a visual directed graph.
+// Harmony-Explorer is a JavaScript application that lets you explore harmonies
+// and chords using a visual directed graph.
 //
 // Harmony-Explorer is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ var harmonychordmap = [[11,225,121,335], [468,280,578,373], [680,225,790,335], [
 						[250,187,360,280],[327,56,437,166],[250,280,360,373],[230,104,300,174],
 						[347,385,417,455],[557,104,627,174],[557,385,627,455],[710,76,780,146]];
 
-MIDI.USE_XHR = false;	// allows MIDI.js to run from file:
+MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
 var gChord = {
 	name: '',			// chord name
