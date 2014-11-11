@@ -293,7 +293,7 @@ function selectHarmony(harmony, event) {
 function recordChord(chord) {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
-	child.className = 'chord-rec';
+	child.className = 'blue tile chord-rec';
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);

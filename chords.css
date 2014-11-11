@@ -24,12 +24,18 @@ table {
     border-collapse: collapse;
 }
 
-.harmonies label {
-	display: inline;
+h1 {
+	background: url(http://noisepng.com/100-90-4-monochrome.png);
+	text-align: center;
+	margin: 0px 0px 0px 0px;
+	color: #fff;
+	font-size: 21px;
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+	letter-spacing: -1px;
 }
 
 #container {
-	display: inline-block;
+	margin: 0 auto;
 }
 
 #keyselect {
@@ -83,6 +89,15 @@ td {
 	text-align: center;
 }
 
+.button {
+	padding: 10px;
+	display: inline;
+}
+
+td.buttons {
+	vertical-align: middle;
+}
+
 .output {
     font-size: 22px;
     font-weight: bold;
@@ -111,14 +126,15 @@ td {
 	border-top-right-radius: 5px;
 	-webkit-background-clip: padding-box;
 }
-.topbar h1 {
-	background: url(http://noisepng.com/100-90-4-monochrome.png);
-	text-align: center;
-	margin: 0px 0px 0px 0px;
-	color: #fff;
-	font-size: 21px;
-	text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
-	letter-spacing: -1px;
+
+.tile {
+	border: 1px solid rgba(0,0,0,0.2);
+	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5), 
+				inset 0px -3px 15px -1px rgba(0,0,0,0.2);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-background-clip: padding-box;
 }
 
 .option {
