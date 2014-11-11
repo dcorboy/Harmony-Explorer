@@ -22,13 +22,14 @@
 
 // FIXME
 // collapse the paired arrays --> 2-dimensional, notes 3
-// harmonies are order-specific and need to be built from base (0th) note up through the pattern
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
 // VI in image should be vi
 // IV back and forth to vi?
 // I <--> V also
 // Convert gChord to an object prototype
+// stop using gChord within the member functions!
+// make it so that selecting the existing chord from the chord select while in harmony mode does the right thing
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -53,27 +54,22 @@ MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if pu
 
 var gChord = {
 	name: '',			// chord name
-	notes: '',			// chord notes
+	notes: '',			// chord note names
 	key: 0,				// root note of current key where C=0 and B=11
 	scale: 0,			// index into scales for current mode (0=major, 1=minor)
-	harmony: 0,			// index into harmony 
-	harmonyOctave: 0,	// octave number (middle C starts octave 4)
+	chordtype: 0,		// positive values index into harmony names/formulas, negative values index into chord names/formulas(-1)
+	octave: 0,			// octave number (middle C starts octave 4)
 	chord: [],			// array of MIDI note numbers representing current chord
 
-    fullName : function(c) {
-       return this.key + " " + this.scale;
-    },
-
-	// changeChord (root, chord_fmla)
-	// root - root note where C=0 and B=11
-	// chord - index into the chordformulas as semitones from the root 
+	// setExtChord(chord)
+	// chord - index into the chordformula array for a chord encoding
 	//
-	// Sets the global chord to the chord defined by the root note
-	// and the chord formula
-	changeChord : function  (chord) {
+	// Decodes the extended chord based on the chord formulas,
+	// the key, scale and octave
+	setExtChord : function (chord) {
 		var chordformula = chordformulas[chord].split(',');
 
-		this.name = disp[this.key]+(this.scale ? 'm' : '')+this.harmonyOctave+' '+chordnames[chord];	// set chord name		
+		this.name = disp[this.key]+this.octave+' '+chordnames[chord];	// set chord name		
 		this.chord.length = 0;	// reset chord array
 		this.notes = '';
 
@@ -84,21 +80,20 @@ var gChord = {
 		}
 	},
 
-	//sets chord from all the other member vars
+	// setHarmonyChord(harmony)
 	// harmony - indexes into harmonyformulas for a harmony coding
 	//   ['0,2,4','1,3,5','2,4,6', ...
 	//     note: h4 is '3,5,7', not '3,5,0'
 	//   Past the basic harmonies, we need to encode # and b
 	//     so 5/5 is '1,#3,5'
 	//     5/4 is '1,3,5,b7'
-	// octave - defines the octave above/below middle C
 	//
 	// Decodes the harmony chord based on the harmony formulas,
 	// the key, scale and octave
-	setHarmonyChord : function() {
-		var harmonyformula = harmonyformulas[this.harmony].split(',');
+	setHarmonyChord : function(harmony) {
+		var harmonyformula = harmonyformulas[harmony].split(',');
 
-		this.name = disp[this.key]+(this.scale ? 'm' : '')+this.harmonyOctave+'-'+harmonynames[this.harmony];	// set chord name		
+		this.name = disp[this.key]+(this.scale ? 'm' : '')+this.octave+'-'+harmonynames[harmony];	// set chord name		
 		this.chord.length = 0;	// reset chord array
 		this.notes = '';
 
@@ -115,7 +110,7 @@ var gChord = {
 			var r = (n/7) >> 0;
 			// console.log('index extraction: ', idx, r);
 
-			var note = ((this.harmonyOctave + 1) * 12) + this.key + scales[this.scale][idx] + (r * 12) + a;
+			var note = ((this.octave + 1) * 12) + this.key + scales[this.scale][idx] + (r * 12) + a;
 			// console.log('note: ', note);
 
 			this.notes += (disp[note%12] + ' '); 			
@@ -123,22 +118,42 @@ var gChord = {
 		}
 	},
 
-	// changeKey (root)
+	// setChord()
+	//
+	// Determines how to set the current chord based on member variables
+	// positive values index into harmony names/formulas, negative values index into chord names/formulas(-1)
+	setChord : function() {
+		if (this.chordtype >= 0)
+			gChord.setHarmonyChord(this.chordtype);
+		else
+			gChord.setExtChord(-this.chordtype - 1);
+	},
+
+	// changeKey(root)
 	// root - string representation of a root note where C=0 and B=11
 	//
 	// Sets key to the root note
 	changeKey : function(key, scale) {
 		this.key = key;
-		gChord.setHarmonyChord();	//FIXME kinda makes the object useless beyond the encapsulation
+		gChord.setChord();	//FIXME kinda makes the object useless beyond the encapsulation
 	},
 
-	// changeScale (major)
+	// changeScale(scale)
 	// scale - index into scales indicating major or minor key (0=major, 1=minor)
 	//
 	// Sets scale to indicate either major or minor intervals.
 	changeScale : function(scale) {
 		this.scale = scale;
-		gChord.setHarmonyChord();	//FIXME kinda makes the object useless beyond the encapsulation
+		gChord.setChord();	//FIXME kinda makes the object useless beyond the encapsulation
+	},
+
+	// changeOctave(octave)
+	// octave - defines the octave where middle C = 4
+	//
+	// Changes octave selection and sets the chord
+	changeOctave : function(octave) {
+		this.octave = octave;
+		gChord.setChord();
 	},
 
 	// changeHarmony(harmony)
@@ -151,17 +166,17 @@ var gChord = {
 	//
 	// Changes harmony selection and sets the chord
 	changeHarmony : function(harmony) {
-		this.harmony = harmony;
-		gChord.setHarmonyChord();
+		this.chordtype = harmony;
+		gChord.setChord();
 	},
 
-	// changeOctave(octave)
-	// octave - defines the octave where middle C = 4
+	// changeChord(chord)
+	// chord - index into the chordformulas as semitones from the root 
 	//
-	// Changes octave selection and sets the chord
-	changeOctave : function(octave) {
-		this.harmonyOctave = octave;
-		gChord.setHarmonyChord();
+	// Sets the chordtype to indicate the (extended) chord
+	changeChord : function  (chord) {
+		this.chordtype = -1 - chord;	// by convention, negative numbers are extended chords
+		gChord.setChord();
 	},
 
 	// play()
@@ -177,17 +192,27 @@ var gChord = {
 
 };
 
+// View Layer Functions
+
+// playChord()
+//
+// Plays the current chord
 function playChord() {
 	gChord.play();
 }
 
+// updateChordName()
+//
+// Updates UI with current chord name
 function updateChordName() {
 	document.getElementById("harmonyoutput").innerHTML = gChord.name;
 	document.getElementById("chordoutput").innerHTML = gChord.notes;
 }
 
-// ui mode 0 is everything outlined except for chord controls
-// ui mode 1 adds chord controls and removes harmony mode and lower harmony section
+// updateUIMode(ui)
+// ui - UI mode where
+//   0 is everything outlined except for chord controls
+//   1 adds chord controls and removes harmony mode and lower harmony section
 function updateUIMode(ui) {
 	var colors = ["slateblue", "olivedrab"];
 	var blockstyle = null;
@@ -219,6 +244,8 @@ function updateUIMode(ui) {
 	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
 }
 
+// UI accessor functions
+
 function chgKey(root) {
 	gChord.changeKey(parseInt(root));
 	updateChordName();
@@ -236,6 +263,7 @@ function chgChord(chord) {
 }
 
 function chgScale(scale) {
+	gChord.changeHarmony(0);
 	gChord.changeScale(scale);
 	updateUIMode(0);
 	updateChordName();
@@ -245,7 +273,8 @@ function chgScale(scale) {
 // harmony - indexes into harmonyformulas for a harmony coding
 // octave - defines the octave (octave 4 starts with middle C)
 //
-// Changes the chord harmony and plays the chord.
+// Changes the harmony chord (adjusting octave based on modifier
+// then plays the chord.
 function selectHarmony(harmony, event) {
 	gChord.changeHarmony(harmony);
 
@@ -258,6 +287,9 @@ function selectHarmony(harmony, event) {
 	gChord.play();
 }
 
+// recordChord()
+//
+// Records the current chord in a visual DOM object element.
 function recordChord(chord) {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
@@ -267,6 +299,9 @@ function recordChord(chord) {
 	parent.appendChild(child);
 }
 
+// recordChord()
+//
+// Plays the chords encoded in the recorded DOM objects.
 function playRecording() {
 	var recnodes = document.getElementById('recordingblock').childNodes;
 	var str='';
@@ -279,6 +314,9 @@ function playRecording() {
 	}
 }
 
+// startup()
+//
+// Creates the dynamic UI elements and sets defaults
 function startup() {
 	// set up the UI and whatnot
 
@@ -331,8 +369,10 @@ function startup() {
 //	gChord.play();
 }
 
+// init()
+//
+// Load and initializes the MIDI.js plugin
 function init() {
-	// load and initialize the MIDI.js plugin
 
 	MIDI.loadPlugin({
 		soundfontUrl: "./midi-js-soundfonts/FluidR3_GM/",

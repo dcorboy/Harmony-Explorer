@@ -15,9 +15,9 @@ chord graph and more complex chords can selected through the UI.
 
 ## Installation
 
-MIDI is supported by [MIDI.js](https://github.com/mudcube/MIDI.js) submodule.
+MIDI is supported by the [MIDI.js](https://github.com/mudcube/MIDI.js) submodule.
 
-Soundfonts supported by [midi-js-soundfonts](https://github.com/gleitz/midi-js-soundfonts) submodule.
+Soundfonts are supported by the [midi-js-soundfonts](https://github.com/gleitz/midi-js-soundfonts) submodule.
 
 To properly install these submodules, on version 1.6.5 of Git and later, you can simply use:
 
