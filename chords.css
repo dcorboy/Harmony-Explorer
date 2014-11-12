@@ -114,7 +114,7 @@ td.buttons {
 	width: 100%;
 }
 
-.topbar {
+.header {
 	border: 1px solid rgba(0,0,0,0.2);
 	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5), 
 				inset 0px -3px 15px -1px rgba(0,0,0,0.2);
@@ -195,6 +195,69 @@ td.buttons {
 .option ul li:hover span {
 	color: rgba(0,0,0,0.3);
 }
+
+/* Keyboard */
+#upperkeys .keyupr {
+	background-color: white;
+	border: 1px solid #ddd;
+	display: inline-block;
+	height: 40px
+}
+
+#upperkeys .ul {
+	width: 11px;	/* 12px - 1 for border */
+	border-bottom-color: white;
+	border-right-width: 0;
+}
+
+#upperkeys .um {
+	width: 6px;
+	border-bottom-color: white;
+	border-left-width: 0;
+	border-right-width: 0;
+}
+
+#upperkeys .ur {
+	width: 12px;
+	border-bottom-color: white;
+	border-left-width: 0;
+	border-right-width: 0;
+}
+
+#upperkeys .ub {
+	width: 10px;	/* 12px -2px for borders */
+	background-color: black;
+	border: 1px solid #ddd;
+}
+
+#upperkeys .ufst {
+	width: 11px;	/* ul */
+	border-bottom-color: white;
+	border-right-width: 0;
+}
+
+#upperkeys .ulst {
+	width: 16px;	/* full key - 2px for borders */
+	border-bottom-color: white;
+}
+
+#lowerkeys .keylwr {
+	height: 20px;
+	background-color: white;
+	border: 1px solid #ddd;
+	border-top-width: 0;
+	display: inline-block;
+}
+
+#lowerkeys  .lk {
+	width: 17px;	/* 18px - 1px for borders */
+	border-right-width: 0;
+}
+
+#lowerkeys  .llst {
+	width: 16px;	/* full key - 2px for borders */
+}
+
 /* Colors */
 
 .orange {

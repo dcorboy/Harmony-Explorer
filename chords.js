@@ -357,10 +357,48 @@ function startup() {
 	for (var i = 0; i < len; i++) {
 		var child = document.createElement('area');
 		child.shape = 'rect';
-		child.coords = '11,225,121,335';
 		child.coords = harmonychordmap[i][0]+','+harmonychordmap[i][1]+','+harmonychordmap[i][2]+','+harmonychordmap[i][3];
 		child.setAttribute('onclick','selectHarmony('+i+', event);');
 		parent.appendChild(child);
+	}
+
+	// create the keyboard
+	// ul -1 = 0 && +1 = 1
+	// ur -1 = 1 && +1 = 0
+	// um -1 = 1 && +1 = 1
+	// ub 0 = 1
+	// lwr 0 = 0
+	parent = document.getElementById('keyboard');
+	var scale = [0,1,0,1,0,0,1,0,1,0,1,0];
+	var upper = document.getElementById('upperkeys');
+	var lower = document.getElementById('lowerkeys');
+
+	// parent.appendChild(upper);
+	// parent.appendChild(lower);
+
+	for (var i = 21; i <= 108; i++) {
+		var note = i % 12;
+		var cls = 'keyupr ';
+
+		if (i == 21) cls += 'ufst';
+		else if (i == 108) cls += 'ulst';
+		else if (scale[i % 12]) cls += 'ub';	// black key
+		else if (scale[(i-1) % 12] && scale[(i+1) % 12]) cls += 'um';	// upper middle white
+		else if (scale[(i-1) % 12] && !scale[(i+1) % 12]) cls += 'ur';	// upper right white
+		else cls += 'ul';	// upper left middle
+
+		var upperkey = document.createElement('div');
+		upperkey.className = cls;
+		upperkey.id = 'keyupr'+i;
+		upper.appendChild(upperkey);
+
+		if (!scale[i % 12]) {	// white key here
+			var lowerkey = document.createElement('div');
+			if (i == 108) lowerkey.className = 'keylwr llst';
+			else lowerkey.className = 'keylwr lk';
+			lowerkey.id = 'keylwr'+i;
+			lower.appendChild(lowerkey);
+		}
 	}
 
 	document.getElementById("modemajor").checked = true;
