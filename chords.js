@@ -29,7 +29,6 @@
 // I <--> V also
 // Convert gChord to an object prototype
 // stop using gChord within the member functions!
-// make it so that selecting the existing chord from the chord select while in harmony mode does the right thing
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -269,6 +268,12 @@ function chgScale(scale) {
 	updateChordName();
 }
 
+function chgHarmony(harmony) {
+	gChord.changeHarmony(harmony);
+	updateUIMode(0);
+	updateChordName();
+}
+
 // selectHarmony(harmony, octave)
 // harmony - indexes into harmonyformulas for a harmony coding
 // octave - defines the octave (octave 4 starts with middle C)
@@ -285,9 +290,20 @@ function selectHarmony(harmony, event) {
 	updateChordName();
 	updateUIMode(0);
 	gChord.play();
+	
 }
 
-// recordChord()
+// selectNote(note)
+// note - note value to play
+//
+// Plays a note for now
+function selectNote(note) {
+
+	MIDI.setVolume(0, 127);
+	MIDI.noteOn(0, note, 127, 0);
+}
+
+// recordChord(chord)
 //
 // Records the current chord in a visual DOM object element.
 function recordChord(chord) {
@@ -299,7 +315,7 @@ function recordChord(chord) {
 	parent.appendChild(child);
 }
 
-// recordChord()
+// playRecording()
 //
 // Plays the chords encoded in the recorded DOM objects.
 function playRecording() {
@@ -380,8 +396,8 @@ function startup() {
 		var note = i % 12;
 		var cls = 'keyupr ';
 
-		if (i == 21) cls += 'ufst';
-		else if (i == 108) cls += 'ulst';
+		if (i == 21) cls += 'ufst';		// first key
+		else if (i == 108) cls += 'ulst';	// last key
 		else if (scale[i % 12]) cls += 'ub';	// black key
 		else if (scale[(i-1) % 12] && scale[(i+1) % 12]) cls += 'um';	// upper middle white
 		else if (scale[(i-1) % 12] && !scale[(i+1) % 12]) cls += 'ur';	// upper right white
@@ -390,6 +406,8 @@ function startup() {
 		var upperkey = document.createElement('div');
 		upperkey.className = cls;
 		upperkey.id = 'keyupr'+i;
+		upperkey.note = i;
+		upperkey.setAttribute('onclick','selectNote(this.note);');
 		upper.appendChild(upperkey);
 
 		if (!scale[i % 12]) {	// white key here
@@ -397,12 +415,14 @@ function startup() {
 			if (i == 108) lowerkey.className = 'keylwr llst';
 			else lowerkey.className = 'keylwr lk';
 			lowerkey.id = 'keylwr'+i;
+			lowerkey.note = i;
+			lowerkey.setAttribute('onclick','selectNote(this.note);');
 			lower.appendChild(lowerkey);
 		}
 	}
 
 	document.getElementById("modemajor").checked = true;
-	chgChord('0', chord);	// C Major
+	chgHarmony(0);	// C Major-I
 	chgOctave(4);	// Middle C octave
 //	gChord.play();
 }

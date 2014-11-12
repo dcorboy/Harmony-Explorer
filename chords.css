@@ -47,7 +47,7 @@ h1 {
 }
 
 .border {
-	border: 1px solid transparent;
+	border: 3px solid transparent;
 }
 
 .section {
@@ -197,6 +197,12 @@ td.buttons {
 }
 
 /* Keyboard */
+
+#keyboard {
+	text-align: center;
+	padding: 10px 0;
+}
+
 #upperkeys .keyupr {
 	background-color: white;
 	border: 1px solid #ddd;
