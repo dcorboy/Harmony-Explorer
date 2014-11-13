@@ -29,6 +29,8 @@
 // I <--> V also
 // Convert gChord to an object prototype
 // stop using gChord within the member functions!
+// needs a better handling of chord 'types' (harmony vs. chord.. and user-defined)
+//   -- needs get function for type or some way to color the chord properly
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -53,11 +55,11 @@ var harmonies = [
 				['V','4,6,8',[250,187,360,280]],
 				['vi','5,7,9',[327,56,437,166]],
 				['vii','6,8,10',[250,280,360,373]],
-				['V/vi','2,#4,6',[230,104,300,174]],
-				['V/V','1,#3,5',[347,385,417,455]],
-				['V7/IV','0,2,4,b7',[557,104,627,174]],
 				['V/ii','5,#7,9',[557,385,627,455]],
-				['V/iii','6,#8,#10',[710,76,780,146]]];
+				['V/iii','6,#8,#10',[710,76,780,146]],
+				['V7/IV','0,2,4,b7',[557,104,627,174]],
+				['V/V','1,#3,5',[347,385,417,455]],
+				['V/vi','2,#4,6',[230,104,300,174]]];
 				
 var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and minor scales
 
@@ -316,7 +318,8 @@ function selectNote(note) {
 function recordChord(chord) {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
-	child.className = 'blue tile chord-rec';
+
+	child.className = 'tile chord-rec color'+(gChord.chordtype >= 0 ? gChord.chordtype : ((-gChord.chordtype) - 1));	//FIXME handling chord type
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);
