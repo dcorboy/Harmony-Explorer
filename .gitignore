@@ -222,3 +222,5 @@ pip-log.txt
 /*.ai
 # Ignore test files
 /test*.*
+# Ignore historical directory
+/historical

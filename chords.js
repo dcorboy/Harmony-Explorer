@@ -21,7 +21,7 @@
 // along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
 // FIXME
-// collapse the paired arrays --> 2-dimensional, notes 3
+// collapse the notes stuff into a multi-dimensional array
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
 // VI in image should be vi
@@ -35,19 +35,31 @@ var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
 
-// harmonyformulas represents the harmony encodings
+// harmonyformulas represents the harmony names[0], encodings[1] and graphmap[2]
+// encodings[0]: 'name'
+// encodings[1]:
 //   e.g., ['0,2,4','1,3,5','2,4,6', ...
 //     note: h4 is '3,5,7', not '3,5,0'
 //   Past the basic harmonies, we need to encode # and b
 //     so 5/5 is '1,#3,5'
 //     5/4 is '1,3,5,b7'
 //     etc.
-var harmonynames = ['I','ii','iii','IV','V','vi','vii','V/vi','V/V','V7/IV','V/ii','V/iii'];
-var harmonyformulas = ['0,2,4','1,3,5','2,4,6','3,5,7','4,6,8','5,7,9','6,8,10','2,#4,6','1,#3,5','0,2,4,b7','5,#7,9','6,#8,#10'];
+// encodings[3]: [x0, y0, x1, y1]
+var harmonies = [
+				['I','0,2,4',[11,225,121,335]],
+				['ii','1,3,5',[468,280,578,373]],
+				['iii','2,4,6',[680,225,790,335]],
+				['IV','3,5,7',[468,187,578,280]],
+				['V','4,6,8',[250,187,360,280]],
+				['vi','5,7,9',[327,56,437,166]],
+				['vii','6,8,10',[250,280,360,373]],
+				['V/vi','2,#4,6',[230,104,300,174]],
+				['V/V','1,#3,5',[347,385,417,455]],
+				['V7/IV','0,2,4,b7',[557,104,627,174]],
+				['V/ii','5,#7,9',[557,385,627,455]],
+				['V/iii','6,#8,#10',[710,76,780,146]]];
+				
 var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and minor scales
-var harmonychordmap = [[11,225,121,335], [468,280,578,373], [680,225,790,335], [468,187,578,280],
-						[250,187,360,280],[327,56,437,166],[250,280,360,373],[230,104,300,174],
-						[347,385,417,455],[557,104,627,174],[557,385,627,455],[710,76,780,146]];
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
@@ -80,7 +92,7 @@ var gChord = {
 	},
 
 	// setHarmonyChord(harmony)
-	// harmony - indexes into harmonyformulas for a harmony coding
+	// harmony - indexes into harmonies[harmony][1] for a harmony coding
 	//   ['0,2,4','1,3,5','2,4,6', ...
 	//     note: h4 is '3,5,7', not '3,5,0'
 	//   Past the basic harmonies, we need to encode # and b
@@ -90,9 +102,9 @@ var gChord = {
 	// Decodes the harmony chord based on the harmony formulas,
 	// the key, scale and octave
 	setHarmonyChord : function(harmony) {
-		var harmonyformula = harmonyformulas[harmony].split(',');
+		var harmonyformula = harmonies[harmony][1].split(',');
 
-		this.name = disp[this.key]+(this.scale ? 'm' : '')+this.octave+'-'+harmonynames[harmony];	// set chord name		
+		this.name = disp[this.key]+(this.scale ? 'm' : '')+this.octave+'-'+harmonies[harmony][0];	// set chord name		
 		this.chord.length = 0;	// reset chord array
 		this.notes = '';
 
@@ -156,12 +168,7 @@ var gChord = {
 	},
 
 	// changeHarmony(harmony)
-	// harmony - indexes into harmonyformulas for a harmony coding
-	//   ['0,2,4','1,3,5','2,4,6', ...
-	//     note: h4 is '3,5,7', not '3,5,0'
-	//   Past the basic harmonies, we need to encode # and b
-	//     so 5/5 is '1,#3,5'
-	//     5/4 is '1,3,5,b7'
+	// harmony - indexes into harmonies[harmony][1] for a harmony coding
 	//
 	// Changes harmony selection and sets the chord
 	changeHarmony : function(harmony) {
@@ -275,7 +282,7 @@ function chgHarmony(harmony) {
 }
 
 // selectHarmony(harmony, octave)
-// harmony - indexes into harmonyformulas for a harmony coding
+// harmony - indexes into harmonies[harmony][1] for a harmony coding
 // octave - defines the octave (octave 4 starts with middle C)
 //
 // Changes the harmony chord (adjusting octave based on modifier
@@ -369,11 +376,11 @@ function startup() {
 	parent.name = "hgraphmap";
 	graphnode.parentNode.insertBefore(parent, graphnode);	// create a map node and add it before the harmony chord graph
 
-	len = harmonychordmap.length;
+	len = harmonies.length;
 	for (var i = 0; i < len; i++) {
 		var child = document.createElement('area');
 		child.shape = 'rect';
-		child.coords = harmonychordmap[i][0]+','+harmonychordmap[i][1]+','+harmonychordmap[i][2]+','+harmonychordmap[i][3];
+		child.coords = harmonies[i][2][0]+','+harmonies[i][2][1]+','+harmonies[i][2][2]+','+harmonies[i][2][3];
 		child.setAttribute('onclick','selectHarmony('+i+', event);');
 		parent.appendChild(child);
 	}
