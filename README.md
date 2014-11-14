@@ -50,10 +50,17 @@ Choose a different root note from the **Key** selection box on the top-left and 
 More complex variations of the root note can be selected from the **Chord** selection box on the top-right.
 
 Chord name and notes are displayed under the **Chord** selection box.
+
+### Recording
+
+* To record the current chord, click the **Record** button
+* To play back the recorded chords, click the **Play** button
+* To clear the current recording, click the **Clear** button
 	
 ## In Development
 
-* Ability to record, edit and play back short chord progressions
+* Ability to create a chord on the keyboard
+* Better recording/editing capabilities
 * Support for some additional instruments
 
 ## License

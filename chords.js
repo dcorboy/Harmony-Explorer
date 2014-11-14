@@ -28,7 +28,6 @@
 // stop using gChord within the member functions!
 // needs a better handling of chord 'types' (harmony vs. chord.. and user-defined)
 //   -- needs get function for type or some way to color the chord properly
-// Make the keyboard hightlight the current chord
 // Allow the keyboard to create a new chord
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
@@ -389,6 +388,17 @@ function playRecording() {
 	for (var i = 0; i < recnodes.length; i++) {
 		str=recnodes[i].innerHTML;
 		MIDI.chordOn(0, recnodes[i].chord, 127, i);
+	}
+}
+
+// clearRecording()
+//
+// Removes all recording nodes from the DOM
+function clearRecording() {
+	var recnodes = document.getElementById('recordingblock');
+
+	while( recnodes.hasChildNodes() ){
+		recnodes.removeChild(recnodes.lastChild);
 	}
 }
 
