@@ -251,22 +251,72 @@ function updateUIMode(ui) {
 	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
 }
 
+// clearAllKeys()
+//
+// Clears all highlighted keys on the keyboard
+function clearAllKeys() {
+	var upper = document.getElementById('upperkeys').childNodes;
+	var lower = document.getElementById('lowerkeys').childNodes;
+	var keyclass = '';
+
+	for (var i = 0; i < upper.length; i++) {
+		keyclass = upper[i].className;
+		keyclass = keyclass.replace(/\bhlt\b/ig, "");
+		upper[i].className = keyclass;
+	}
+
+	for (var i = 0; i < lower.length; i++) {
+		keyclass = lower[i].className;
+		keyclass = keyclass.replace(/\bhlt\b/ig, "");
+		lower[i].className = keyclass;
+	}
+}
+
+// updateChordKeys()
+//
+// Displays the current chord on the keyboard
+function updateChordKeys() {
+	var chord = gChord.chord;
+	var keyclass = '';
+
+	clearAllKeys();
+
+	for (var i = 0; i < chord.length; i++) {
+
+		var key = document.getElementById('keyupr'+chord[i]);
+		if (key) {
+			keyclass = key.className;
+			key.className = keyclass + ' hlt';
+		}
+
+		key = document.getElementById('keylwr'+chord[i]);
+		if (key) {
+			keyclass = key.className;
+			key.className = keyclass + ' hlt';
+		}
+
+	}
+}
+
 // UI accessor functions
 
 function chgKey(root) {
 	gChord.changeKey(parseInt(root));
 	updateChordName();
+	updateChordKeys();
 }
 
 function chgOctave(octave) {
 	gChord.changeOctave(octave);
 	updateChordName();
+	updateChordKeys();
 }
 
 function chgChord(chord) {
 	gChord.changeChord (chord);
 	updateUIMode(1);
 	updateChordName();
+	updateChordKeys();
 }
 
 function chgScale(scale) {
@@ -274,12 +324,14 @@ function chgScale(scale) {
 	gChord.changeScale(scale);
 	updateUIMode(0);
 	updateChordName();
+	updateChordKeys();
 }
 
 function chgHarmony(harmony) {
 	gChord.changeHarmony(harmony);
 	updateUIMode(0);
 	updateChordName();
+	updateChordKeys();
 }
 
 // selectHarmony(harmony, octave)
@@ -296,6 +348,7 @@ function selectHarmony(harmony, event) {
 	gChord.changeOctave(4 + offset);	// FIXME UI octave needed
 
 	updateChordName();
+	updateChordKeys();
 	updateUIMode(0);
 	gChord.play();
 	

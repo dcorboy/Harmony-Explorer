@@ -272,6 +272,11 @@ td.buttons {
 	width: 16px;	/* full key - 2px for borders */
 }
 
+#keyboard .hlt {
+	background-color: #8e8ef5;
+	border-color:  #8e8ef5;
+}
+
 /* Colors */
 
 .blue {
