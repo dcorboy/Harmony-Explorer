@@ -13,6 +13,10 @@ With Harmony-Explorer, you can simply click around the seven main harmonies of a
 experiment with different progressions. Extended harmonies can also be reached using the
 chord graph and more complex chords can selected through the UI.
 
+## Screenshot
+
+![Alt text](screenshot.png?raw=true "Harmony-Explorer screenshot")
+
 ## Installation
 
 MIDI is supported by the [MIDI.js](https://github.com/mudcube/MIDI.js) submodule.

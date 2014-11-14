@@ -24,13 +24,12 @@
 // collapse the notes stuff into a multi-dimensional array
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
-// VI in image should be vi
-// IV back and forth to vi?
-// I <--> V also
 // Convert gChord to an object prototype
 // stop using gChord within the member functions!
 // needs a better handling of chord 'types' (harmony vs. chord.. and user-defined)
 //   -- needs get function for type or some way to color the chord properly
+// Make the keyboard hightlight the current chord
+// Allow the keyboard to create a new chord
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
