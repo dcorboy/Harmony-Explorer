@@ -221,7 +221,7 @@ function updateChordName() {
 //   0 is everything outlined except for chord controls
 //   1 adds chord controls and removes harmony mode and lower harmony section
 function updateUIMode(ui) {
-	var colors = ["slateblue", "olivedrab"];
+	var colors = ["#7675E8", "#A8BA38"];
 	var blockstyle = null;
 
 	blockstyle = document.getElementById("keyblock").style;
@@ -371,7 +371,7 @@ function recordChord(chord) {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
 
-	child.className = 'tile chord-rec color'+(gChord.chordtype >= 0 ? gChord.chordtype : ((-gChord.chordtype) - 1));	//FIXME handling chord type
+	child.className = 'tile uiheading chord-rec color'+(gChord.chordtype >= 0 ? gChord.chordtype : ((-gChord.chordtype) - 1));	//FIXME handling chord type
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);
