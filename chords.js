@@ -25,10 +25,17 @@
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
 // Convert gChord to an object prototype
-// stop using gChord within the member functions!
 // needs a better handling of chord 'types' (harmony vs. chord.. and user-defined)
 //   -- needs get function for type or some way to color the chord properly
 // Allow the keyboard to create a new chord
+// Create addclass/removeclass functions and set the UI borders through styles
+// Choose different UI highlighting model
+// encapsulate keyboard as object
+// octave setting
+// tile UI sizeToContent
+// tempo setting?
+// examples/instructions
+
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -62,6 +69,21 @@ var harmonies = [
 var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and minor scales
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
+
+/* --
+function cat(name) {
+	this.name = name;
+	this.talk = function() {
+		alert( this.name + " say meeow!" )
+	}
+} 
+
+cat1 = new cat("felix")
+cat1.talk() //alerts "felix says meeow!"
+
+cat2 = new cat("ginger")
+cat2.talk() //alerts "ginger says meeow!"
+-- */
 
 var gChord = {
 	name: '',			// chord name
@@ -135,9 +157,9 @@ var gChord = {
 	// positive values index into harmony names/formulas, negative values index into chord names/formulas(-1)
 	setChord : function() {
 		if (this.chordtype >= 0)
-			gChord.setHarmonyChord(this.chordtype);
+			this.setHarmonyChord(this.chordtype);
 		else
-			gChord.setExtChord(-this.chordtype - 1);
+			this.setExtChord(-this.chordtype - 1);
 	},
 
 	// changeKey(root)
@@ -146,7 +168,7 @@ var gChord = {
 	// Sets key to the root note
 	changeKey : function(key, scale) {
 		this.key = key;
-		gChord.setChord();	//FIXME kinda makes the object useless beyond the encapsulation
+		this.setChord();
 	},
 
 	// changeScale(scale)
@@ -155,7 +177,7 @@ var gChord = {
 	// Sets scale to indicate either major or minor intervals.
 	changeScale : function(scale) {
 		this.scale = scale;
-		gChord.setChord();	//FIXME kinda makes the object useless beyond the encapsulation
+		this.setChord();
 	},
 
 	// changeOctave(octave)
@@ -164,7 +186,7 @@ var gChord = {
 	// Changes octave selection and sets the chord
 	changeOctave : function(octave) {
 		this.octave = octave;
-		gChord.setChord();
+		this.setChord();
 	},
 
 	// changeHarmony(harmony)
@@ -173,7 +195,7 @@ var gChord = {
 	// Changes harmony selection and sets the chord
 	changeHarmony : function(harmony) {
 		this.chordtype = harmony;
-		gChord.setChord();
+		this.setChord();
 	},
 
 	// changeChord(chord)
@@ -182,7 +204,7 @@ var gChord = {
 	// Sets the chordtype to indicate the (extended) chord
 	changeChord : function  (chord) {
 		this.chordtype = -1 - chord;	// by convention, negative numbers are extended chords
-		gChord.setChord();
+		this.setChord();
 	},
 
 	// play()
@@ -250,24 +272,23 @@ function updateUIMode(ui) {
 	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
 }
 
-// clearAllKeys()
+// removeStyle()
+// id - id of element under which class style should be removed
+// style - style to be removed
 //
-// Clears all highlighted keys on the keyboard
-function clearAllKeys() {
-	var upper = document.getElementById('upperkeys').childNodes;
-	var lower = document.getElementById('lowerkeys').childNodes;
-	var keyclass = '';
+// Removes style selector from all child nodes of id
+function removeStyle(id, style) {
+	var childclass = '';
+	var parent = document.getElementById(id);
 
-	for (var i = 0; i < upper.length; i++) {
-		keyclass = upper[i].className;
-		keyclass = keyclass.replace(/\bhlt\b/ig, "");
-		upper[i].className = keyclass;
-	}
-
-	for (var i = 0; i < lower.length; i++) {
-		keyclass = lower[i].className;
-		keyclass = keyclass.replace(/\bhlt\b/ig, "");
-		lower[i].className = keyclass;
+	if (parent) {
+		var childnodes = parent.childNodes;
+		var regex = new RegExp('\\b'+style+'\\b','ig');
+		for (var i = 0; i < childnodes.length; i++) {
+			childclass = childnodes[i].className;
+			childclass = childclass.replace(regex, '');
+			childnodes[i].className = childclass;
+		}
 	}
 }
 
@@ -278,7 +299,8 @@ function updateChordKeys() {
 	var chord = gChord.chord;
 	var keyclass = '';
 
-	clearAllKeys();
+	removeStyle('upperkeys', 'hlt');
+	removeStyle('lowerkeys', 'hlt');
 
 	for (var i = 0; i < chord.length; i++) {
 
@@ -299,21 +321,8 @@ function updateChordKeys() {
 
 // UI accessor functions
 
-function chgKey(root) {
-	gChord.changeKey(parseInt(root));
-	updateChordName();
-	updateChordKeys();
-}
-
 function chgOctave(octave) {
 	gChord.changeOctave(octave);
-	updateChordName();
-	updateChordKeys();
-}
-
-function chgChord(chord) {
-	gChord.changeChord (chord);
-	updateUIMode(1);
 	updateChordName();
 	updateChordKeys();
 }
@@ -363,6 +372,35 @@ function selectNote(note) {
 	MIDI.noteOn(0, note, 127, 0);
 }
 
+// selectKey(optionnode)
+// optionnode - node of select control that was clicked
+//
+// Handles selection UI update and selection
+function selectKey(optionnode) {
+
+	removeStyle(optionnode.parentNode.id, 'selected');
+	optionnode.className += 'selected';
+
+	gChord.changeKey(optionnode.value);
+	updateChordName();
+	updateChordKeys();
+}
+
+// selectChord(optionnode)
+// optionnode - node of select control that was clicked
+//
+// Handles selection UI update and selection
+function selectChord(optionnode) {
+
+	removeStyle(optionnode.parentNode.id, 'selected');
+	optionnode.className += 'selected';
+
+	gChord.changeChord (optionnode.value);
+	updateUIMode(1);
+	updateChordName();
+	updateChordKeys();
+}
+
 // recordChord(chord)
 //
 // Records the current chord in a visual DOM object element.
@@ -402,34 +440,43 @@ function clearRecording() {
 	}
 }
 
+function test(str) {
+	alert(str);
+}
+
 // startup()
 //
 // Creates the dynamic UI elements and sets defaults
 function startup() {
 	// set up the UI and whatnot
 
-	var parent = document.getElementById('keyroot');
+	var parent = null;
 	var len = notes.length;
 	var chord;
 
-	// create note selection control
+	// create root note selection control
+	parent = document.getElementById('keyroot');
 	for (var i = 0; i < len; i++) {
-		var elem = document.createElement('option')
+		var elem = document.createElement('div')
 		elem.value = i;
 		elem.innerHTML = notes[i];
+		elem.setAttribute('onclick','selectKey(this);');
+		if (i == 0) {
+			elem.className = 'selected';
+		}
 		parent.appendChild(elem);
 	}
-	parent.selectedIndex = "0";
 
 	// create the chord selection control
 	parent = document.getElementById('chord');
 	len = chordnames.length;
 	for (var i = 0; i < len; i++) {
-		var elem = document.createElement('option')
+		var elem = document.createElement('div')
 		elem.value = i;
 		elem.innerHTML = chordnames[i];
+		elem.setAttribute('onclick','selectChord(this);');
 		if (i == 0) {
-			elem.selected = "selected";
+			elem.className = 'selected';
 			chord = elem.value;
 		}
 		parent.appendChild(elem);

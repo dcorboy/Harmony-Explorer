@@ -119,12 +119,7 @@ td.buttons {
 	letter-spacing: normal;
 }
 
-.selectbox select {
-	width: 100%;
-}
-
 .header {
-	border: 1px solid rgba(0,0,0,0.2);
 	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5), 
 				inset 0px -3px 15px -1px rgba(0,0,0,0.2);
 	-webkit-border-top-left-radius: 5px;
@@ -151,13 +146,36 @@ td.buttons {
 	box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.2);
 	margin: 0;
 	padding: 0;
+	width: 100%;
 }
+
+.optionctnr {
+	box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.2);
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	overflow: scroll;
+	height: 300px;
+}
+
+.optionctnr .selected {	/* gradient white -> light color0, legacy bg is mid color, same as color0 */
+	background: rgb(118,117,232);
+	/* background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmN2Y3ZjciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+); */
+	background: -moz-linear-gradient(top,  #fff 0%, rgba(142,143,245,1) 100%); /* fixme use hex colors */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(142,143,245,1)));
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(142,143,245,1) 100%);
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(142,143,245,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(142,143,245,1) 100%);
+	background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(142,143,245,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#8e8ef5',GradientType=0 );
+}
+
 .option ul {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
-.option option { 
+.optionctnr div { 
 	margin: 0;
 	padding: 2px 0px;
 	text-align: center;

@@ -51,7 +51,7 @@ More complex variations of the root note can be selected from the **Chord** sele
 
 Chord name and notes are displayed under the **Chord** selection box.
 
-### Recording
+#### Recording
 
 * To record the current chord, click the **Record** button
 * To play back the recorded chords, click the **Play** button
