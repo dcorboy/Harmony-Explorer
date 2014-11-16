@@ -68,33 +68,39 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
-var gChord = {
-	name: '',			// chord name
-	notes: '',			// chord note names
-	key: 0,				// root note of current key where C=0 and B=11
-	scale: 0,			// index into scales for current mode (0=major, 1=minor)
-	chordtype: 0,		// positive values index into harmony names/formulas, negative values index into chord names/formulas(-1)
-	octave: 0,			// octave number (middle C starts octave 4)
-	chord: [],			// array of MIDI note numbers representing current chord
+var gChord = new Chord();
+
+function Chord() {
+	var self = this;
+	var key = 0;			// root note of current key where C=0 and B=11
+	var scale = 0;			// index into scales for current mode (0=major; 1=minor)
+	var chordtype = 0;		// positive values index into harmony names/formulas; negative values index into chord names/formulas(-1)
+	var octave = 0;			// octave number (middle C starts octave 4)
+
+	this.chord = [];		// array of MIDI note numbers representing current chord
+	this.name = '';			// chord name
+	this.notes = '';		// chord note names
+
+	// Private Members
 
 	// setExtChord(chord)
 	// chord - index into the chordformula array for a chord encoding
 	//
 	// Decodes the extended chord based on the chord formulas,
 	// the key, scale and octave
-	setExtChord : function (chord) {
+	function setExtChord(chord) {
 		var chordformula = chordformulas[chord].split(',');
 
-		this.name = disp[this.key]+this.octave+' '+chordnames[chord];	// set chord name		
-		this.chord.length = 0;	// reset chord array
-		this.notes = '';
+		self.name = disp[key]+octave+' '+chordnames[chord];	// set chord name		
+		self.chord.length = 0;	// reset chord array
+		self.notes = '';
 
 		for (var i=0; i<chordformula.length; i++) {
-			var note = this.key + parseInt(chordformula[i]);
-			this.notes += (disp[note%12] + ' '); 
-			this.chord.push(note+60);	// FIXME adjust for octave later
+			var note = key + parseInt(chordformula[i]);
+			self.notes += (disp[note%12] + ' '); 
+			self.chord.push(note+60);	// FIXME adjust for octave later
 		}
-	},
+	}
 
 	// setHarmonyChord(harmony)
 	// harmony - indexes into harmonies[harmony][1] for a harmony coding
@@ -106,12 +112,12 @@ var gChord = {
 	//
 	// Decodes the harmony chord based on the harmony formulas,
 	// the key, scale and octave
-	setHarmonyChord : function(harmony) {
+	function setHarmonyChord(harmony) {
 		var harmonyformula = harmonies[harmony][1].split(',');
 
-		this.name = disp[this.key]+(this.scale ? 'm' : '')+this.octave+'-'+harmonies[harmony][0];	// set chord name		
-		this.chord.length = 0;	// reset chord array
-		this.notes = '';
+		self.name = disp[key]+(scale ? 'm' : '')+octave+'-'+harmonies[harmony][0];	// set chord name		
+		self.chord.length = 0;	// reset chord array
+		self.notes = '';
 
 		for (var i=0; i<harmonyformula.length; i++) {
 			var n;
@@ -126,80 +132,80 @@ var gChord = {
 			var r = (n/7) >> 0;
 			// console.log('index extraction: ', idx, r);
 
-			var note = ((this.octave + 1) * 12) + this.key + scales[this.scale][idx] + (r * 12) + a;
+			var note = ((octave + 1) * 12) + key + scales[scale][idx] + (r * 12) + a;
 			// console.log('note: ', note);
 
-			this.notes += (disp[note%12] + ' '); 			
-			this.chord.push(note);
+			self.notes += (disp[note%12] + ' '); 			
+			self.chord.push(note);
 		}
-	},
+	}
 
 	// setChord()
 	//
 	// Determines how to set the current chord based on member variables
 	// positive values index into harmony names/formulas, negative values index into chord names/formulas(-1)
-	setChord : function() {
-		if (this.chordtype >= 0)
-			this.setHarmonyChord(this.chordtype);
+	function setChord() {
+		if (chordtype >= 0)
+			setHarmonyChord(chordtype);
 		else
-			this.setExtChord(-this.chordtype - 1);
-	},
+			setExtChord(-chordtype - 1);
+	};
 
-	// changeKey(root)
-	// root - string representation of a root note where C=0 and B=11
+	// changeKey(newroot)
+	// newroot - string representation of a root note where C=0 and B=11
 	//
 	// Sets key to the root note
-	changeKey : function(key, scale) {
-		this.key = key;
-		this.setChord();
-	},
+	this.changeKey = function(newkey) {
+		key = newkey;
+		setChord();
+	};
 
-	// changeScale(scale)
-	// scale - index into scales indicating major or minor key (0=major, 1=minor)
+	// changeScale(newscale)
+	// newscale - index into scales indicating major or minor key (0=major, 1=minor)
 	//
 	// Sets scale to indicate either major or minor intervals.
-	changeScale : function(scale) {
-		this.scale = scale;
-		this.setChord();
-	},
+	this.changeScale = function(newscale) {
+		scale = newscale;
+		setChord();
+	};
 
-	// changeOctave(octave)
-	// octave - defines the octave where middle C = 4
+	// changeOctave(newoctave)
+	// newoctave - defines the octave where middle C = 4
 	//
 	// Changes octave selection and sets the chord
-	changeOctave : function(octave) {
-		this.octave = octave;
-		this.setChord();
-	},
+	this.changeOctave = function(newoctave) {
+		octave = newoctave;
+		setChord();
+	};
 
 	// changeHarmony(harmony)
 	// harmony - indexes into harmonies[harmony][1] for a harmony coding
 	//
 	// Changes harmony selection and sets the chord
-	changeHarmony : function(harmony) {
-		this.chordtype = harmony;
-		this.setChord();
-	},
+	this.changeHarmony = function(harmony) {
+		chordtype = harmony;
+		setChord();
+	};
 
 	// changeChord(chord)
 	// chord - index into the chordformulas as semitones from the root 
 	//
 	// Sets the chordtype to indicate the (extended) chord
-	changeChord : function  (chord) {
-		this.chordtype = -1 - chord;	// by convention, negative numbers are extended chords
-		this.setChord();
-	},
+	this.changeChord = function(chord) {
+		chordtype = -1 - chord;	// by convention, negative numbers are extended chords
+		setChord();
+	};
 
 	// play()
 	// Plays the current chord
 	// Basically a pass-through to MIDI.js
-	play : function () {
+	this.play = function () {
 		var delay = 0;
 		var velocity = 127; // how hard the note hits
 		MIDI.setVolume(0, 127);
 
 		MIDI.chordOn(0, this.chord, velocity, delay);
-	}
+	};
 
 };
 
