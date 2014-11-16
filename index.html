@@ -16,7 +16,7 @@
 	<script type="text/javascript">
 		window.onload = init();
 	</script>
-	<div id="container">
+	<div id="container" class="border">
 		<div id="topbar" class="section">
 			<div id="label" class="color0 header">
 				<h1 class="uiheading">Harmony-Explorer</h1>
@@ -28,7 +28,7 @@
 		</div>
 		<table id="maincontrols" class="section">
 			<tr>
-				<td id="keyblock" class="border">
+				<td id="keyblock">
 					<div id="keyselect" class="pad">
 						<div class="color0 header">
 							<h1 class="uiheading">Key</h1>
@@ -37,8 +37,8 @@
 					</div>
 				</td>
 				<td id="recordingblock" class="pad fillcell border"></td>
-				<td id="chordblock" class="border">
-					<div id="chordselect" class="pad">
+				<td id="chordblock">
+					<div id="chordselect" class="pad dim1">
 						<div class="color0 header">
 							<h1 class="uiheading">Chord</h1>
 						</div>
@@ -47,25 +47,27 @@
 				</td>
 			</tr>
 			<tr>
-				<td id="harmonymode" class="shortpad border">
-					<div id="harmonycontrols">
+				<td id="harmonymode" class="shortpad">
+					<div id="harmonycontrols" class="shortpad border dim0">
 						<label><input id="modemajor" type="radio" onclick="chgScale(0);" value="major" name="r1" checked />Major</label>
 						<label><input id="modeminor" type="radio" onclick="chgScale(1);" value="minor" name="r1" />Minor</label>
 					</div>
 				</td>
-				<td id="recinfoblock" class="shortpad border buttons">
+				<td id="recinfoblock" class="shortpad buttons">
 					<div id="play" class="color0 tile button uiheading" onclick="playChord();" >Play Chord</div>
 					<div id="record" class="color0 tile button uiheading" onclick="recordChord();" >Record Chord</div>
 					<div id="record" class="color0 tile button uiheading" onclick="playRecording();" >Play</div>
 					<div id="clear" class="color0 tile button uiheading" onclick="clearRecording();" >Clear</div>
 				</td>
-				<td id="rightblock" class="shortpad border">
-					<div id="chordoutput" class="output">Chord Description</div>
-					<div id="harmonyoutput" class="output">Harmony Description</div>
+				<td id="rightblock" class="shortpad">
+					<div id="harmonycontrols" class="shortpad border">
+						<div id="chordoutput" class="output">Chord Description</div>
+						<div id="harmonyoutput" class="output">Harmony Description</div>
+					</div>
 				</td>
 			</tr>
 		</table>
-		<div id="graphblock" class="section shortpad border">
+		<div id="graphblock" class="section shortpad dim0">
 			<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
 		</div>
 	<div>

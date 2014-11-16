@@ -45,20 +45,23 @@ table {
 td {
 	vertical-align: top;
 	padding: 0;
-//	border: 1px solid red;
 }
 
 td.buttons {
 	vertical-align: middle;
 }
 
+.dim  {
+	filter: alpha(opacity=40);
+	opacity: 0.4;
+}
+
 .border {
-	border: 3px solid transparent;
+	border:	1px solid #7675E8;
 }
 
 .section {
-	background-color: #202020;
-/* 	border: 1px solid yellow; */
+	background: #202020 url("http://subtlepatterns.com/patterns/zwartevilt.png") repeat scroll 0 0
 }
 
 .fillcell {
@@ -110,7 +113,7 @@ td.buttons {
     font-size: 22px;
     font-weight: bold;
     letter-spacing: 3px;
-    line-height: 100%;
+    line-height: 140%;
 	text-align: center;
 }
 
@@ -156,6 +159,7 @@ td.buttons {
 	width: 100%;
 	overflow: scroll;
 	height: 300px;
+	cursor: pointer;
 }
 
 .optionctnr .selected {	/* gradient white -> light color0, legacy bg is mid color, same as color0 */

@@ -28,8 +28,6 @@
 // needs a better handling of chord 'types' (harmony vs. chord.. and user-defined)
 //   -- needs get function for type or some way to color the chord properly
 // Allow the keyboard to create a new chord
-// Create addclass/removeclass functions and set the UI borders through styles
-// Choose different UI highlighting model
 // encapsulate keyboard as object
 // octave setting
 // tile UI sizeToContent
@@ -209,7 +207,7 @@ var gChord = {
 
 	// play()
 	// Plays the current chord
-	// Basically a pass-through to MIDI.js.
+	// Basically a pass-through to MIDI.js
 	play : function () {
 		var delay = 0;
 		var velocity = 127; // how hard the note hits
@@ -237,39 +235,34 @@ function updateChordName() {
 	document.getElementById("chordoutput").innerHTML = gChord.notes;
 }
 
+function hasClass(ele,cls) {
+    return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+
+function addClass(ele,cls) {
+    if (!hasClass(ele,cls)) ele.className += " "+cls;
+}
+
+function removeClass(ele,cls) {
+    if (hasClass(ele,cls)) {
+        var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+        ele.className=ele.className.replace(reg,' ');
+    }
+}
+
 // updateUIMode(ui)
 // ui - UI mode where
 //   0 is everything outlined except for chord controls
 //   1 adds chord controls and removes harmony mode and lower harmony section
 function updateUIMode(ui) {
-	var colors = ["#7675E8", "#A8BA38"];
-	var blockstyle = null;
 
-	blockstyle = document.getElementById("keyblock").style;
-	blockstyle.borderTopColor = blockstyle.borderLeftColor = colors[ui];
-	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
-
-	blockstyle = document.getElementById("recordingblock").style;
-	blockstyle.borderTopColor = colors[ui];
-	blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
-
-	blockstyle = document.getElementById("chordblock").style;
-	blockstyle.borderTopColor = blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
-	blockstyle.borderBottomColor = ui ? "transparent" : colors[ui];
-
-	blockstyle = document.getElementById("harmonymode").style;
-	blockstyle.borderLeftColor = ui ? "transparent" : colors[ui];
-	blockstyle.borderRightColor = ui ? colors[ui] : "transparent";
-
- 	blockstyle = document.getElementById("recinfoblock").style;
-	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
-
-	blockstyle = document.getElementById("rightblock").style;
-	blockstyle.borderRightColor = colors[ui];
-	blockstyle.borderBottomColor = ui ? colors[ui] : "transparent";
-
-	blockstyle = document.getElementById("graphblock").style;
-	blockstyle.borderLeftColor = blockstyle.borderBottomColor = blockstyle.borderRightColor = ui ? "transparent" : colors[ui];
+	for (var i = 0; i < 2; i++) {
+		var dimmers = document.getElementsByClassName('dim'+i);
+		for (var j = 0; j < dimmers.length; j++) {
+			if (i == ui) removeClass(dimmers[j],'dim');
+			else addClass(dimmers[j],'dim');
+		}
+	}
 }
 
 // removeStyle()
@@ -427,6 +420,10 @@ function playRecording() {
 		str=recnodes[i].innerHTML;
 		MIDI.chordOn(0, recnodes[i].chord, 127, i);
 	}
+/* 	for (var i = 0; i < recnodes.length; i++) {
+		str=recnodes[i].innerHTML;
+		MIDI.chordOn(0, recnodes[i].chord, 127, (i*.5));
+	} */
 }
 
 // clearRecording()
