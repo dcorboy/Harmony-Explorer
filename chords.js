@@ -68,21 +68,6 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
-/* --
-function cat(name) {
-	this.name = name;
-	this.talk = function() {
-		alert( this.name + " say meeow!" )
-	}
-} 
-
-cat1 = new cat("felix")
-cat1.talk() //alerts "felix says meeow!"
-
-cat2 = new cat("ginger")
-cat2.talk() //alerts "ginger says meeow!"
--- */
-
 var gChord = {
 	name: '',			// chord name
 	notes: '',			// chord note names
@@ -252,15 +237,19 @@ function removeClass(ele,cls) {
 
 // updateUIMode(ui)
 // ui - UI mode where
-//   0 is everything outlined except for chord controls
-//   1 adds chord controls and removes harmony mode and lower harmony section
+//   0 is harmony mode (chord select dimmed)
+//   1 is chord mode (chord graph and scale radio buttons dimmed)
 function updateUIMode(ui) {
 
+	var dimmers = document.getElementsByClassName('dimmer');
+	for (var i = 0; i < dimmers.length; i++) {
+		removeClass(dimmers[i],'dim');
+	}
+
 	for (var i = 0; i < 2; i++) {
-		var dimmers = document.getElementsByClassName('dim'+i);
-		for (var j = 0; j < dimmers.length; j++) {
-			if (i == ui) removeClass(dimmers[j],'dim');
-			else addClass(dimmers[j],'dim');
+		var modedimmers = document.getElementsByClassName('dim'+i);
+		for (var j = 0; j < modedimmers.length; j++) {
+			if (i == ui) addClass(modedimmers[j],'dim');
 		}
 	}
 }
