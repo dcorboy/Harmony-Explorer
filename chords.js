@@ -372,7 +372,7 @@ function selectNote(note) {
 function selectKey(optionnode) {
 
 	removeStyle(optionnode.parentNode.id, 'selected');
-	optionnode.className += 'selected';
+	optionnode.className += ' selected';
 
 	gChord.changeKey(optionnode.value);
 	updateChordName();
@@ -386,7 +386,7 @@ function selectKey(optionnode) {
 function selectChord(optionnode) {
 
 	removeStyle(optionnode.parentNode.id, 'selected');
-	optionnode.className += 'selected';
+	optionnode.className += ' selected';
 
 	gChord.changeChord (optionnode.value);
 	updateUIMode(1);
@@ -458,8 +458,9 @@ function startup() {
 		elem.value = i;
 		elem.innerHTML = notes[i];
 		elem.setAttribute('onclick','selectKey(this);');
+		elem.className = 'option';
 		if (i == 0) {
-			elem.className = 'selected';
+			elem.className += ' selected';
 		}
 		parent.appendChild(elem);
 	}
@@ -472,8 +473,9 @@ function startup() {
 		elem.value = i;
 		elem.innerHTML = chordnames[i];
 		elem.setAttribute('onclick','selectChord(this);');
+		elem.className = 'option';
 		if (i == 0) {
-			elem.className = 'selected';
+			elem.className += ' selected';
 			chord = elem.value;
 		}
 		parent.appendChild(elem);
