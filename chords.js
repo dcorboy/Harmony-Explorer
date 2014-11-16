@@ -24,9 +24,6 @@
 // collapse the notes stuff into a multi-dimensional array
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
-// Convert gChord to an object prototype
-// needs a better handling of chord 'types' (harmony vs. chord.. and user-defined)
-//   -- needs get function for type or some way to color the chord properly
 // Allow the keyboard to create a new chord
 // encapsulate keyboard as object
 // octave setting
@@ -49,7 +46,7 @@ var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,1
 //     so 5/5 is '1,#3,5'
 //     5/4 is '1,3,5,b7'
 //     etc.
-// encodings[3]: [x0, y0, x1, y1]
+// encodings[3]: [x0, y0, x1, y1] of the hitbox on the graph image
 var harmonies = [
 				['I','0,2,4',[11,225,121,335]],
 				['ii','1,3,5',[468,280,578,373]],
@@ -74,8 +71,9 @@ function Chord() {
 	var self = this;
 	var key = 0;			// root note of current key where C=0 and B=11
 	var scale = 0;			// index into scales for current mode (0=major; 1=minor)
-	var chordtype = 0;		// positive values index into harmony names/formulas; negative values index into chord names/formulas(-1)
+	var chordtype = 0;		// chord index for current chord type
 	var octave = 0;			// octave number (middle C starts octave 4)
+	var type = 0;			// chord type 0=harmony, 1=extended-chord
 
 	this.chord = [];		// array of MIDI note numbers representing current chord
 	this.name = '';			// chord name
@@ -142,14 +140,26 @@ function Chord() {
 
 	// setChord()
 	//
-	// Determines how to set the current chord based on member variables
-	// positive values index into harmony names/formulas, negative values index into chord names/formulas(-1)
+	// Determines how to set the chord based on current type
+	//   0 - harmony chords, index into harmony names/formulas
+	//   1 - extended chords, index into chord names/formulas(-1)
 	function setChord() {
-		if (chordtype >= 0)
-			setHarmonyChord(chordtype);
-		else
-			setExtChord(-chordtype - 1);
+		switch(type) {
+			case 1:
+				setExtChord(chordtype);
+//				setExtChord(chordtype[1]);
+				break;
+			default:
+				setHarmonyChord(chordtype);
+//				setHarmonyChord(chordtype[0]);
+		}
 	};
+
+	// Public Members
+
+	// Accessors
+	this.getType = function() { return type; }
+	this.getChordType = function() { return chordtype; }
 
 	// changeKey(newroot)
 	// newroot - string representation of a root note where C=0 and B=11
@@ -183,6 +193,7 @@ function Chord() {
 	//
 	// Changes harmony selection and sets the chord
 	this.changeHarmony = function(harmony) {
+		type = 0;
 		chordtype = harmony;
 		setChord();
 	};
@@ -192,7 +203,8 @@ function Chord() {
 	//
 	// Sets the chordtype to indicate the (extended) chord
 	this.changeChord = function(chord) {
-		chordtype = -1 - chord;	// by convention, negative numbers are extended chords
+		type = 1;
+		chordtype = chord;	// by convention, negative numbers are extended chords
 		setChord();
 	};
 
@@ -396,7 +408,7 @@ function recordChord(chord) {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
 
-	child.className = 'tile uiheading chord-rec color'+(gChord.chordtype >= 0 ? gChord.chordtype : ((-gChord.chordtype) - 1));	//FIXME handling chord type
+	child.className = 'tile uiheading chord-rec color'+gChord.getChordType();
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);
