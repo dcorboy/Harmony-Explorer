@@ -3,7 +3,6 @@
 /* Copyright 2015 Dave Corboy <dave@corboy.com>
 /*
 /* some styling from: http://cssdeck.com/labs/pure-css-list-box-in-multiple-colors
-/* but mine is more semantic :)
 /* This file is part of Harmony Explorer, licensed under the GNU General Public License */
 
 * {
@@ -37,6 +36,16 @@ table {
 
 #caption {
 	text-align: center;
+}
+
+#options {
+	float: right;
+	font-weight: bolder;
+	font-size: 24px;
+	line-height: 145%;
+    margin-right: 10px;
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.8);
+	cursor: pointer;
 }
 
 #keyselect {

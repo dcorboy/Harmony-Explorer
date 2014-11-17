@@ -24,7 +24,6 @@
 // collapse the notes stuff into a multi-dimensional array
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
-// Allow the keyboard to create a new chord
 // encapsulate keyboard as object
 // octave setting
 // tile UI sizeToContent

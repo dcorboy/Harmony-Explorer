@@ -51,6 +51,9 @@ More complex variations of the root note can be selected from the **Chord** sele
 
 Chord name and notes are displayed under the **Chord** selection box.
 
+Clicking the keyboard with the **Shift** key pressed will add notes to the current chord. Clicking without shift will
+start a new custom chord.
+
 #### Recording
 
 * To record the current chord, click the **Record** button
@@ -59,7 +62,6 @@ Chord name and notes are displayed under the **Chord** selection box.
 	
 ## In Development
 
-* Ability to create a chord on the keyboard
 * Better recording/editing capabilities
 * Support for some additional instruments
 
