@@ -18,8 +18,9 @@
 	</script>
 	<div id="container" class="border">
 		<div id="topbar" class="section">
-			<div id="label" class="color0 header">
-				<h1 class="uiheading">Harmony-Explorer</h1>
+			<div id="caption" class="color0 header">
+				<h1 class="uiheading">Harmony-Explorer </h1>
+				<span>v0.2</span>
 			</div>
 			<div id="keyboard">
 				<div id="upperkeys"></div>
@@ -29,7 +30,7 @@
 		<table id="maincontrols" class="section">
 			<tr>
 				<td id="keyblock">
-					<div id="keyselect" class="pad">
+					<div id="keyselect" class="pad dimmer dim2">
 						<div class="color0 header">
 							<h1 class="uiheading">Key</h1>
 						</div>
@@ -38,7 +39,7 @@
 				</td>
 				<td id="recordingblock" class="pad fillcell border"></td>
 				<td id="chordblock">
-					<div id="chordselect" class="pad dimmer dim0">
+					<div id="chordselect" class="pad dimmer dim0 dim2">
 						<div class="color0 header">
 							<h1 class="uiheading">Chord</h1>
 						</div>
@@ -48,7 +49,7 @@
 			</tr>
 			<tr>
 				<td id="harmonymode" class="shortpad">
-					<div id="harmonycontrols" class="shortpad border dimmer dim1">
+					<div id="harmonycontrols" class="shortpad border dimmer dim1 dim2">
 						<label><input id="modemajor" type="radio" onclick="chgScale(0);" value="major" name="r1" checked />Major</label>
 						<label><input id="modeminor" type="radio" onclick="chgScale(1);" value="minor" name="r1" />Minor</label>
 					</div>
@@ -67,7 +68,7 @@
 				</td>
 			</tr>
 		</table>
-		<div id="graphblock" class="section shortpad dimmer dim1">
+		<div id="graphblock" class="section shortpad dimmer dim1 dim2">
 			<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
 		</div>
 	<div>

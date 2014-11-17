@@ -32,6 +32,11 @@ table {
 	font-size: 24px;
 	font-weight: bold;
 	margin-bottom: 5px;
+	display: inline;
+}
+
+#caption {
+	text-align: center;
 }
 
 #keyselect {

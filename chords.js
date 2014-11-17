@@ -65,21 +65,26 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
-var gChord = new Chord();
+var gChord = new Chord(updateUIMode, updateChordName);
 
-function Chord() {
+function Chord(modecallback, infocallback) {
 	var self = this;
+	var modechangecallback = modecallback;
+	var infochangecallback = infocallback;
 	var key = 0;			// root note of current key where C=0 and B=11
 	var scale = 0;			// index into scales for current mode (0=major; 1=minor)
-	var chordtype = 0;		// chord index for current chord type
+	var chordtype = 0;		// chord index for current chord mode
 	var octave = 0;			// octave number (middle C starts octave 4)
-	var type = 0;			// chord type 0=harmony, 1=extended-chord
+	var mode = -1;			// chord mode 0=harmony, 1=extended chord, 2=custom user chord
 
 	this.chord = [];		// array of MIDI note numbers representing current chord
 	this.name = '';			// chord name
 	this.notes = '';		// chord note names
 
-	// Private Members
+
+	///////////////////////
+	//  Private Members  //
+	///////////////////////
 
 	// setExtChord(chord)
 	// chord - index into the chordformula array for a chord encoding
@@ -138,13 +143,30 @@ function Chord() {
 		}
 	}
 
+	// setCustomChord()
+	//
+	// Just sets the chord name
+	function setCustomChord() {
+		self.notes = '';
+
+		self.name = "Custom";	// set chord name
+
+		for (var i=0; i<self.chord.length; i++) {
+			var note = self.chord[i];
+			self.notes += (disp[note%12] + ' '); 
+		}
+	}
+
 	// setChord()
 	//
-	// Determines how to set the chord based on current type
+	// Determines how to set the chord based on current mode
 	//   0 - harmony chords, index into harmony names/formulas
 	//   1 - extended chords, index into chord names/formulas(-1)
 	function setChord() {
-		switch(type) {
+		switch(mode) {
+			case 2:
+				setCustomChord();
+				break;
 			case 1:
 				setExtChord(chordtype);
 //				setExtChord(chordtype[1]);
@@ -153,12 +175,26 @@ function Chord() {
 				setHarmonyChord(chordtype);
 //				setHarmonyChord(chordtype[0]);
 		}
-	};
+		infochangecallback(self.name, self.notes);
+	}
 
-	// Public Members
+	// setMode(mode)
+	//
+	// Changes chord mode and calls the owner callback
+	function setMode(newmode) {
+
+		if (newmode != mode) {
+			mode = newmode;
+			modechangecallback(newmode);
+		}
+	}
+
+	//////////////////////
+	//  Public Members  // 
+	//////////////////////
 
 	// Accessors
-	this.getType = function() { return type; }
+	this.getType = function() { return mode; }
 	this.getChordType = function() { return chordtype; }
 
 	// changeKey(newroot)
@@ -167,6 +203,7 @@ function Chord() {
 	// Sets key to the root note
 	this.changeKey = function(newkey) {
 		key = newkey;
+		if (mode == 2) setMode(0);	// choosing a key will reset the custom chord mode
 		setChord();
 	};
 
@@ -176,6 +213,7 @@ function Chord() {
 	// Sets scale to indicate either major or minor intervals.
 	this.changeScale = function(newscale) {
 		scale = newscale;
+		setMode(0);
 		setChord();
 	};
 
@@ -185,6 +223,7 @@ function Chord() {
 	// Changes octave selection and sets the chord
 	this.changeOctave = function(newoctave) {
 		octave = newoctave;
+		if (mode == 2) setMode(0);	// choosing an octave will reset the custom chord mode
 		setChord();
 	};
 
@@ -193,7 +232,7 @@ function Chord() {
 	//
 	// Changes harmony selection and sets the chord
 	this.changeHarmony = function(harmony) {
-		type = 0;
+		setMode(0);
 		chordtype = harmony;
 		setChord();
 	};
@@ -203,8 +242,27 @@ function Chord() {
 	//
 	// Sets the chordtype to indicate the (extended) chord
 	this.changeChord = function(chord) {
-		type = 1;
+		setMode(1);
 		chordtype = chord;	// by convention, negative numbers are extended chords
+		setChord();
+	};
+
+	// clearCustomNotes()
+	//
+	// Sets the chordtype to indicate a custom chord and clears it
+	this.clearCustomNotes = function() {
+		setMode(2);
+		self.chord.length = 0;
+		setChord();
+	};
+
+	// addCustomNote(note)
+	// note - MIDI note to add to custom chord
+	//
+	// Sets the chordtype to indicate a custom chord and adds the note to the chord
+	this.addCustomNote = function(note) {
+		setMode(2);
+		self.chord.push(note);
 		setChord();
 	};
 
@@ -230,12 +288,12 @@ function playChord() {
 	gChord.play();
 }
 
-// updateChordName()
+// updateChordName(name, notes)
 //
-// Updates UI with current chord name
-function updateChordName() {
-	document.getElementById("harmonyoutput").innerHTML = gChord.name;
-	document.getElementById("chordoutput").innerHTML = gChord.notes;
+// Updates UI with current chord name and notes
+function updateChordName(name, notes) {
+	document.getElementById('harmonyoutput').innerHTML = name;
+	document.getElementById('chordoutput').innerHTML = notes;
 }
 
 function hasClass(ele,cls) {
@@ -264,11 +322,9 @@ function updateUIMode(ui) {
 		removeClass(dimmers[i],'dim');
 	}
 
-	for (var i = 0; i < 2; i++) {
-		var modedimmers = document.getElementsByClassName('dim'+i);
-		for (var j = 0; j < modedimmers.length; j++) {
-			if (i == ui) addClass(modedimmers[j],'dim');
-		}
+	var modedimmers = document.getElementsByClassName('dim'+ui);
+	for (var j = 0; j < modedimmers.length; j++) {
+		addClass(modedimmers[j],'dim');
 	}
 }
 
@@ -323,22 +379,17 @@ function updateChordKeys() {
 
 function chgOctave(octave) {
 	gChord.changeOctave(octave);
-	updateChordName();
 	updateChordKeys();
 }
 
 function chgScale(scale) {
 	gChord.changeHarmony(0);
 	gChord.changeScale(scale);
-	updateUIMode(0);
-	updateChordName();
 	updateChordKeys();
 }
 
 function chgHarmony(harmony) {
 	gChord.changeHarmony(harmony);
-	updateUIMode(0);
-	updateChordName();
 	updateChordKeys();
 }
 
@@ -355,9 +406,7 @@ function selectHarmony(harmony, event) {
 	var offset = event.shiftKey ? 1 : (event.ctrlKey ? -1 : 0);
 	gChord.changeOctave(4 + offset);	// FIXME UI octave needed
 
-	updateChordName();
 	updateChordKeys();
-	updateUIMode(0);
 	gChord.play();
 	
 }
@@ -366,7 +415,13 @@ function selectHarmony(harmony, event) {
 // note - note value to play
 //
 // Plays a note for now
-function selectNote(note) {
+function selectNote(note, event) {
+
+	event = event || window.event;
+	if (!event.shiftKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+
+	gChord.addCustomNote(note);
+	updateChordKeys();
 
 	MIDI.setVolume(0, 127);
 	MIDI.noteOn(0, note, 127, 0);
@@ -382,7 +437,6 @@ function selectKey(optionnode) {
 	optionnode.className += ' selected';
 
 	gChord.changeKey(optionnode.value);
-	updateChordName();
 	updateChordKeys();
 }
 
@@ -396,8 +450,6 @@ function selectChord(optionnode) {
 	optionnode.className += ' selected';
 
 	gChord.changeChord (optionnode.value);
-	updateUIMode(1);
-	updateChordName();
 	updateChordKeys();
 }
 
@@ -532,7 +584,7 @@ function startup() {
 		upperkey.className = cls;
 		upperkey.id = 'keyupr'+i;
 		upperkey.note = i;
-		upperkey.setAttribute('onclick','selectNote(this.note);');
+		upperkey.setAttribute('onclick','selectNote(this.note, event);');
 		upper.appendChild(upperkey);
 
 		if (!scale[i % 12]) {	// white key here
@@ -541,7 +593,7 @@ function startup() {
 			else lowerkey.className = 'keylwr lk';
 			lowerkey.id = 'keylwr'+i;
 			lowerkey.note = i;
-			lowerkey.setAttribute('onclick','selectNote(this.note);');
+			lowerkey.setAttribute('onclick','selectNote(this.note, event);');
 			lower.appendChild(lowerkey);
 		}
 	}
