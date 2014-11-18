@@ -20,6 +20,9 @@
 // If you did not receive a copy of the GNU General Public License
 // along with Harmony-Explorer, see <http://www.gnu.org/licenses/>.
 
+// Thanks to these folks for their code samples and guidance
+// https://kopepasah.com/tutorial/awesome-overlays-with-simple-css-javascript-html/
+
 // FIXME
 // collapse the notes stuff into a multi-dimensional array
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
@@ -495,8 +498,20 @@ function clearRecording() {
 	}
 }
 
-function test(str) {
-	alert(str);
+function selectOverlay(overlaynum) {
+	var overlay = document.getElementById('overlay'+overlaynum);
+	if (overlay) {
+		addClass(overlay, 'overlay-open');
+		addClass(document.getElementsByTagName("body")[0], 'overlay-view');
+	}
+}
+
+function dismissOverlay(overlaynum, event) {
+	var overlay = document.getElementById('overlay'+overlaynum);
+	if (overlay && (event.target == overlay)) {
+		removeClass(overlay, 'overlay-open');
+		removeClass(document.getElementsByTagName("body")[0], 'overlay-view');
+	}
 }
 
 // startup()

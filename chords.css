@@ -7,7 +7,40 @@
 
 * {
    font: 400 16px/1.6 'Arimo', Verdana, Helvetica, sans-serif;
-} 
+}
+
+.overlay {
+    overflow: scroll;
+    position: fixed;
+    top: 0;
+    bottom: 110%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 10000;
+    opacity: 0;
+    background: #4D4D4D;
+    transition: opacity 200ms linear, bottom 0s linear 200ms;
+}
+
+.overlay-open {
+	bottom: 0;
+	opacity: 1;
+	background-color: rgba(78,78,78,0.5);
+	transition: opacity 200ms linear, bottom 0s linear;
+}
+ 
+.overlay-view {
+	overflow: hidden;
+}
+
+.overlay-inner {
+	background: #FFF;
+	margin: 5rem auto;
+	padding: 4rem;
+	max-width: 700px;
+	color: #444;
+}
 
 body {
 	background-color: black;
