@@ -17,18 +17,21 @@
 		window.onload = init();
 	</script>
 	<div id="overlay0" class="overlay" onclick="dismissOverlay(0, event);">
-			<div class="overlay-inner">
-			<h2>This is some helpful information for you</h2>
-			<h4>That I will someday write</h4>
-			<p>Things that users may want<p>
-			<ul>
-				<li>Basic what-to-do</li>
-				<li>Load chord progression samples</li>
-				<li>Choose other instruments</li>
-				<li>Octave chooser?</li>
-				<li>Tempo?</li>
-				<li>Maybe those go in other overlays...</li>
-			</ul>
+		<div class="border overlay-inner">
+			<div id="caption" class="color0 header">
+				<h1 class="uiheading">Helpful Dialog</h1>
+			</div>
+			<div class="overlay-body">
+				<p>Things that users may want to see here:<p>
+				<ul>
+					<li>Basic what-to-do</li>
+					<li>Load chord progression samples</li>
+					<li>Choose other instruments</li>
+					<li>Octave chooser?</li>
+					<li>Tempo?</li>
+					<li>Maybe those go in other overlays...</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div id="container" class="border">

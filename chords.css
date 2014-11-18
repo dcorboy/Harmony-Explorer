@@ -26,7 +26,7 @@
 .overlay-open {
 	bottom: 0;
 	opacity: 1;
-	background-color: rgba(78,78,78,0.5);
+	background-color: rgba(0,0,0,0.6);
 	transition: opacity 200ms linear, bottom 0s linear;
 }
  
@@ -37,9 +37,12 @@
 .overlay-inner {
 	background: #FFF;
 	margin: 5rem auto;
-	padding: 4rem;
 	max-width: 700px;
 	color: #444;
+}
+
+.overlay-body {
+	padding: 1rem 2rem 2rem 2rem;
 }
 
 body {
