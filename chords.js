@@ -296,6 +296,7 @@ function playChord() {
 function updateChordName(name, notes) {
 	document.getElementById('harmonyoutput').innerHTML = name;
 	document.getElementById('chordoutput').innerHTML = notes;
+	updateChordKeys(gChord.chord);
 }
 
 function hasClass(ele,cls) {
@@ -353,8 +354,7 @@ function removeStyle(id, style) {
 // updateChordKeys()
 //
 // Displays the current chord on the keyboard
-function updateChordKeys() {
-	var chord = gChord.chord;
+function updateChordKeys(chord) {
 	var keyclass = '';
 
 	removeStyle('upperkeys', 'hlt');
@@ -381,18 +381,15 @@ function updateChordKeys() {
 
 function chgOctave(octave) {
 	gChord.changeOctave(octave);
-	updateChordKeys();
 }
 
 function chgScale(scale) {
 	gChord.changeHarmony(0);
 	gChord.changeScale(scale);
-	updateChordKeys();
 }
 
 function chgHarmony(harmony) {
 	gChord.changeHarmony(harmony);
-	updateChordKeys();
 }
 
 // selectHarmony(harmony, octave)
@@ -408,9 +405,7 @@ function selectHarmony(harmony, event) {
 	var offset = event.shiftKey ? 1 : (event.ctrlKey ? -1 : 0);
 	gChord.changeOctave(4 + offset);	// FIXME UI octave needed
 
-	updateChordKeys();
 	gChord.play();
-	
 }
 
 // selectNote(note)
@@ -423,7 +418,6 @@ function selectNote(note, event) {
 	if (!event.shiftKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
 
 	gChord.addCustomNote(note);
-	updateChordKeys();
 
 	MIDI.setVolume(0, 127);
 	MIDI.noteOn(0, note, 127, 0);
@@ -439,7 +433,6 @@ function selectKey(optionnode) {
 	optionnode.className += ' selected';
 
 	gChord.changeKey(optionnode.value);
-	updateChordKeys();
 }
 
 // selectChord(optionnode)
@@ -452,7 +445,6 @@ function selectChord(optionnode) {
 	optionnode.className += ' selected';
 
 	gChord.changeChord (optionnode.value);
-	updateChordKeys();
 }
 
 // recordChord(chord)
@@ -488,7 +480,8 @@ var pLastNode = null;
 
 // playRecording()
 //
-// Plays the chords encoded in the recorded DOM objects.
+// Plays the chords encoded in the recorded DOM objects
+// using a timed interval.
 function playRecording() {
 	pNodes = document.getElementById('recordingblock').childNodes;
 
@@ -509,14 +502,14 @@ function playRecordingCallback() {
 
 		window.clearInterval(pCallbackID);
 		pCallbackID = null;
-		console.log('callback done: '+pCurrent);
+		updateChordKeys(gChord.chord);
 	}
 	else {
-		console.log('callback run: '+pCurrent);
 		var thisNode = pNodes[pCurrent++];
 
 		if (pLastNode) removeClass(pLastNode, 'recordhlt');
 		addClass(thisNode, 'recordhlt');
+		updateChordKeys(thisNode.chord);
 
 		MIDI.chordOn(0, thisNode.chord, 127, 0);
 
