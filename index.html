@@ -18,8 +18,9 @@
 	</script>
 	<div id="overlay0" class="overlay" onclick="dismissOverlay(0, event);">
 		<div class="border overlay-inner">
-			<div id="caption" class="color0 header">
+			<div class="color0 header">
 				<h1 class="uiheading">Helpful Dialog</h1>
+				<span class="captionbutn" onclick="dismissOverlay(0, false);">&#x2612;</span>
 			</div>
 			<div class="overlay-body">
 				<p>Things that users may want to see here:<p>
@@ -36,10 +37,10 @@
 	</div>
 	<div id="container" class="border">
 		<div id="topbar" class="section">
-			<div id="caption" class="color0 header">
+			<div class="color0 header">
 				<h1 class="uiheading">Harmony-Explorer </h1>
 				<span>v0.2</span>
-				<span id="options" onclick="selectOverlay(0);">&#x24d8;</span>
+				<span class="captionbutn" onclick="selectOverlay(0);">&#x24d8;</span>
 			</div>
 			<div id="keyboard">
 				<div id="upperkeys"></div>
@@ -51,7 +52,7 @@
 				<td id="keyblock">
 					<div id="keyselect" class="pad dimmer dim2">
 						<div class="color0 header">
-							<h1 class="uiheading">Key</h1>
+							<h2 class="uiheading">Key</h2>
 						</div>
 						<div class="optionctnr" id="keyroot" name="root"></div>
 					</div>
@@ -60,7 +61,7 @@
 				<td id="chordblock">
 					<div id="chordselect" class="pad dimmer dim0 dim2">
 						<div class="color0 header">
-							<h1 class="uiheading">Chord</h1>
+							<h2 class="uiheading">Chord</h2>
 						</div>
 						<div class="optionctnr" id="chord" oname="chord"></div>
 					</div>

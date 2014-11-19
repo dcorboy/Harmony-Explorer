@@ -468,25 +468,6 @@ function recordChord(chord) {
 	parent.appendChild(child);
 }
 
-// playRecording()
-//
-// Plays the chords encoded in the recorded DOM objects.
-function playRecording() {
-	var recnodes = document.getElementById('recordingblock').childNodes;
-	var str='';
-
-	MIDI.setVolume(0, 127);
-
-	for (var i = 0; i < recnodes.length; i++) {
-		str=recnodes[i].innerHTML;
-		MIDI.chordOn(0, recnodes[i].chord, 127, i);
-	}
-/* 	for (var i = 0; i < recnodes.length; i++) {
-		str=recnodes[i].innerHTML;
-		MIDI.chordOn(0, recnodes[i].chord, 127, (i*.5));
-	} */
-}
-
 // clearRecording()
 //
 // Removes all recording nodes from the DOM
@@ -498,6 +479,36 @@ function clearRecording() {
 	}
 }
 
+// Player variables and functions
+var pNodes = null;
+var pCurrent = 0;
+var pCount = 0
+var pCallbackID = null;
+
+// playRecording()
+//
+// Plays the chords encoded in the recorded DOM objects.
+function playRecording() {
+	pNodes = document.getElementById('recordingblock').childNodes;
+
+	MIDI.setVolume(0, 127);
+
+	pCount = pNodes.length;
+	pCurrent = 0;
+
+	playRecordingCallback();	// play first note immediately
+	pCallbackID = window.setInterval(playRecordingCallback, 500);
+}
+
+function playRecordingCallback() {
+	MIDI.chordOn(0, pNodes[pCurrent++].chord, 127, 0);
+	if (true && (pCurrent >= pCount)) {
+		window.clearInterval(pCallbackID);
+		pCallbackID = null;
+	}
+}
+
+// Overlay (popup dialog) functions
 function selectOverlay(overlaynum) {
 	var overlay = document.getElementById('overlay'+overlaynum);
 	if (overlay) {
@@ -508,7 +519,7 @@ function selectOverlay(overlaynum) {
 
 function dismissOverlay(overlaynum, event) {
 	var overlay = document.getElementById('overlay'+overlaynum);
-	if (overlay && (event.target == overlay)) {
+	if (overlay && (!event || (event.target == overlay))) {
 		removeClass(overlay, 'overlay-open');
 		removeClass(document.getElementsByTagName("body")[0], 'overlay-view');
 	}
@@ -518,8 +529,6 @@ function dismissOverlay(overlaynum, event) {
 //
 // Creates the dynamic UI elements and sets defaults
 function startup() {
-	// set up the UI and whatnot
-
 	var parent = null;
 	var len = notes.length;
 	var chord;

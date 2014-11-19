@@ -38,10 +38,10 @@
 	background: #FFF;
 	margin: 5rem auto;
 	max-width: 700px;
-	color: #444;
 }
 
 .overlay-body {
+	color: #444;
 	padding: 1rem 2rem 2rem 2rem;
 }
 
@@ -63,25 +63,11 @@ table {
 	margin: 0 auto;
 }
 
-#topbar h1 {
+.header h1 {
 	font-size: 24px;
 	font-weight: bold;
 	margin-bottom: 5px;
 	display: inline;
-}
-
-#caption {
-	text-align: center;
-}
-
-#options {
-	float: right;
-	font-weight: bolder;
-	font-size: 24px;
-	line-height: 145%;
-    margin-right: 10px;
-	text-shadow: 1px 1px 0px rgba(0,0,0,0.8);
-	cursor: pointer;
 }
 
 #keyselect {
@@ -141,6 +127,16 @@ td.buttons {
 	letter-spacing: -1px;
 }
 
+.captionbutn {
+	float: right;
+	font-weight: bolder;
+	font-size: 24px;
+	line-height: 145%;
+    margin-right: 10px;
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.8);
+	cursor: pointer;
+}
+
 .chord-rec {
 	width: 100px;
 	height: 66px;
@@ -181,6 +177,7 @@ td.buttons {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	-webkit-background-clip: padding-box;
+	text-align: center;
 }
 
 .tile {
