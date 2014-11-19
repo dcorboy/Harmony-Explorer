@@ -462,7 +462,7 @@ function recordChord(chord) {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
 
-	child.className = 'tile uiheading chord-rec color'+gChord.getChordType();
+	child.className = 'tile uiheading recordtile color'+gChord.getChordType();
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);
@@ -484,6 +484,7 @@ var pNodes = null;
 var pCurrent = 0;
 var pCount = 0
 var pCallbackID = null;
+var pLastNode = null;
 
 // playRecording()
 //
@@ -494,17 +495,32 @@ function playRecording() {
 	MIDI.setVolume(0, 127);
 
 	pCount = pNodes.length;
-	pCurrent = 0;
+	if (pCount) {
+		pCurrent = 0;
 
-	playRecordingCallback();	// play first note immediately
-	pCallbackID = window.setInterval(playRecordingCallback, 500);
+		playRecordingCallback();	// play first note immediately
+		pCallbackID = window.setInterval(playRecordingCallback, 750);
+	}
 }
 
 function playRecordingCallback() {
-	MIDI.chordOn(0, pNodes[pCurrent++].chord, 127, 0);
-	if (true && (pCurrent >= pCount)) {
+	if (pCurrent >= pCount) {
+		if (pLastNode) removeClass(pLastNode, 'recordhlt');
+
 		window.clearInterval(pCallbackID);
 		pCallbackID = null;
+		console.log('callback done: '+pCurrent);
+	}
+	else {
+		console.log('callback run: '+pCurrent);
+		var thisNode = pNodes[pCurrent++];
+
+		if (pLastNode) removeClass(pLastNode, 'recordhlt');
+		addClass(thisNode, 'recordhlt');
+
+		MIDI.chordOn(0, thisNode.chord, 127, 0);
+
+		pLastNode = thisNode;
 	}
 }
 
