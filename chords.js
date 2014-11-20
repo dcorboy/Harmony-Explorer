@@ -31,7 +31,7 @@
 // octave setting
 // tile UI sizeToContent
 // tempo setting?
-// examples/instructions
+// examples
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
