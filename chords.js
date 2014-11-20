@@ -415,7 +415,7 @@ function selectHarmony(harmony, event) {
 function selectNote(note, event) {
 
 	event = event || window.event;
-	if (!event.shiftKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+	if (!event.shiftKey && !event.ctrlKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
 
 	gChord.addCustomNote(note);
 
@@ -447,10 +447,10 @@ function selectChord(optionnode) {
 	gChord.changeChord (optionnode.value);
 }
 
-// recordChord(chord)
+// addRecording()
 //
 // Records the current chord in a visual DOM object element.
-function recordChord(chord) {
+function addRecording() {
 	var parent = document.getElementById('recordingblock');
 	var child = document.createElement('div');
 
@@ -458,6 +458,29 @@ function recordChord(chord) {
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);
 	parent.appendChild(child);
+}
+
+// addRest()
+//
+// Records a rest in the recording.
+function addRest() {
+	var parent = document.getElementById('recordingblock');
+	var child = document.createElement('div');
+
+	child.className = 'tile uiheading recordtile';
+	child.innerHTML = 'Rest';
+	child.chord = [];
+	parent.appendChild(child);
+}
+
+// deleteRecording()
+//
+// Deletes the last recorded chord.
+function deleteRecording() {
+	var recnodes = document.getElementById('recordingblock');
+	var nodecount = recnodes.childNodes.length;
+
+	if (nodecount) recnodes.removeChild(recnodes.childNodes[nodecount - 1]); 
 }
 
 // clearRecording()

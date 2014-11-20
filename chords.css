@@ -87,7 +87,7 @@ td.buttons {
 	margin: 0px 0px 0px 0px;
 	color: #fff;
 	font-size: 21px;
-	text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+	text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
 	letter-spacing: -1px;
 }
 
@@ -102,7 +102,6 @@ td.buttons {
 }
 
 .tile {
-	border: 1px solid rgba(0,0,0,0.2);
 	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5), 
 				inset 0px -3px 15px -1px rgba(0,0,0,0.2);
 	-webkit-border-radius: 5px;
@@ -116,10 +115,10 @@ td.buttons {
 	height: 66px;
 	display: inline-block;
 	overflow: hidden;
-	margin: 2px;
 	text-align: center;
 	font-weight: bold;
 	font-size: 22px;
+	border: 3px solid black;
 }
 
 .recordhlt {
@@ -127,9 +126,12 @@ td.buttons {
 }
 
 .button {
-	padding: 5px 10px;
+	padding: 5px 10px 8px;
 	display: inline;
 	cursor: pointer;
+	font-size: 32px;
+	text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+	margin: 1px;
 }
 
 .output {
@@ -313,7 +315,7 @@ td.buttons {
 #upperkeys .ub {
 	width: 10px;	/* 12px -2px for borders */
 	background-color: black;
-	border: 1px solid #ddd;
+	border: 1px solid #aaa;
 }
 
 #upperkeys .ufst {
