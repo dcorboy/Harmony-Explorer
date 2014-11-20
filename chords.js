@@ -292,6 +292,7 @@ function Chord(modecallback, infocallback) {
 //
 // Plays the current chord
 function playChord() {
+	tryRecording();
 	gChord.play();
 }
 
@@ -405,6 +406,7 @@ function selectHarmony(harmony, event) {
 	var offset = event.shiftKey ? 1 : (event.ctrlKey ? -1 : 0);
 	gChord.changeOctave(4 + offset);	// FIXME UI octave needed
 
+	tryRecording();
 	gChord.play();
 }
 
@@ -447,6 +449,14 @@ function selectChord(optionnode) {
 	gChord.changeChord (optionnode.value);
 }
 
+// Player variables and functions (all private)
+var pNodes = null;
+var pCurrent = 0;
+var pCount = 0
+var pCallbackID = null;
+var pLastNode = null;
+var pRecording = false;
+
 // addRecording()
 //
 // Records the current chord in a visual DOM object element.
@@ -458,6 +468,25 @@ function addRecording() {
 	child.innerHTML = gChord.name;
 	child.chord = gChord.chord.slice(0);	// do not store the global object array
 	parent.appendChild(child);
+}
+
+// tryRecording()
+//
+// Checks if recording and if so, records the chord
+function tryRecording() {
+	if (pRecording) addRecording();
+}
+
+// toggleRecording(elem)
+// elem - clicked element (for visual state :-P)
+//
+// Checks if recording and if so, records the chord
+function toggleRecording(elem) {
+
+	if (pRecording) addClass(elem, 'dim');
+	else removeClass(elem, 'dim');
+
+	pRecording = !pRecording;
 }
 
 // addRest()
@@ -494,13 +523,6 @@ function clearRecording() {
 	}
 }
 
-// Player variables and functions
-var pNodes = null;
-var pCurrent = 0;
-var pCount = 0
-var pCallbackID = null;
-var pLastNode = null;
-
 // playRecording()
 //
 // Plays the chords encoded in the recorded DOM objects
@@ -515,7 +537,7 @@ function playRecording() {
 		pCurrent = 0;
 
 		playRecordingCallback();	// play first note immediately
-		pCallbackID = window.setInterval(playRecordingCallback, 750);
+		pCallbackID = window.setInterval(playRecordingCallback, 750);	// FIXME use tempo
 	}
 }
 
@@ -540,7 +562,10 @@ function playRecordingCallback() {
 	}
 }
 
+//
 // Overlay (popup dialog) functions
+//
+
 function selectOverlay(overlaynum) {
 	var overlay = document.getElementById('overlay'+overlaynum);
 	if (overlay) {
