@@ -32,6 +32,9 @@
 // tile UI sizeToContent
 // tempo setting?
 // examples/instructions
+// toggle notes with modifier keys (add/remove)
+// use codepoints for flat/sharp
+// decode arbitrary chords?
 
 
 var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
@@ -67,12 +70,12 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
-var gChord = new Chord(updateUIMode, updateChordName);
+var gChord = new Chord(updateUIMode, updateChordInfo);
 
 function Chord(modecallback, infocallback) {
-	var self = this;
-	var modechangecallback = modecallback;
-	var infochangecallback = infocallback;
+	var self = this;		// because ECMAScript
+	var modechangecallback = modecallback;	// called when internal mode changes
+	var infochangecallback = infocallback;	// called when chord info (name, notes) changes
 	var key = 0;			// root note of current key where C=0 and B=11
 	var scale = 0;			// index into scales for current mode (0=major; 1=minor)
 	var chordtype = 0;		// chord index for current chord mode
@@ -281,7 +284,9 @@ function Chord(modecallback, infocallback) {
 
 };
 
+//
 // View Layer Functions
+//
 
 // playChord()
 //
@@ -290,15 +295,18 @@ function playChord() {
 	gChord.play();
 }
 
-// updateChordName(name, notes)
+// updateChordInfo(name, notes)
 //
 // Updates UI with current chord name and notes
-function updateChordName(name, notes) {
+function updateChordInfo(name, notes) {
 	document.getElementById('harmonyoutput').innerHTML = name;
 	document.getElementById('chordoutput').innerHTML = notes;
 	updateChordKeys(gChord.chord);
 }
 
+// Class manipulation functions
+//
+//
 function hasClass(ele,cls) {
     return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 }
@@ -312,6 +320,26 @@ function removeClass(ele,cls) {
         var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
         ele.className=ele.className.replace(reg,' ');
     }
+}
+
+// removeClassFromChildren(id, cls)
+// id - id of element under which cls style should be removed
+// cls - class to be removed
+//
+// Removes cls from all child nodes of id
+function removeClassFromChildren(id, cls) {
+	var childclass = '';
+	var parent = document.getElementById(id);
+
+	if (parent) {
+		var childnodes = parent.childNodes;
+		var regex = new RegExp('\\b'+cls+'\\b','ig');
+		for (var i = 0; i < childnodes.length; i++) {
+			childclass = childnodes[i].className;
+			childclass = childclass.replace(regex, '');
+			childnodes[i].className = childclass;
+		}
+	}
 }
 
 // updateUIMode(ui)
@@ -331,49 +359,21 @@ function updateUIMode(ui) {
 	}
 }
 
-// removeStyle()
-// id - id of element under which class style should be removed
-// style - style to be removed
-//
-// Removes style selector from all child nodes of id
-function removeStyle(id, style) {
-	var childclass = '';
-	var parent = document.getElementById(id);
-
-	if (parent) {
-		var childnodes = parent.childNodes;
-		var regex = new RegExp('\\b'+style+'\\b','ig');
-		for (var i = 0; i < childnodes.length; i++) {
-			childclass = childnodes[i].className;
-			childclass = childclass.replace(regex, '');
-			childnodes[i].className = childclass;
-		}
-	}
-}
-
 // updateChordKeys()
 //
 // Displays the current chord on the keyboard
 function updateChordKeys(chord) {
-	var keyclass = '';
 
-	removeStyle('upperkeys', 'hlt');
-	removeStyle('lowerkeys', 'hlt');
+	removeClassFromChildren('upperkeys', 'hlt');
+	removeClassFromChildren('lowerkeys', 'hlt');
 
 	for (var i = 0; i < chord.length; i++) {
 
 		var key = document.getElementById('keyupr'+chord[i]);
-		if (key) {
-			keyclass = key.className;
-			key.className = keyclass + ' hlt';
-		}
+		if (key) addClass(key, 'hlt');
 
 		key = document.getElementById('keylwr'+chord[i]);
-		if (key) {
-			keyclass = key.className;
-			key.className = keyclass + ' hlt';
-		}
-
+		if (key) addClass(key, 'hlt');
 	}
 }
 
@@ -429,8 +429,8 @@ function selectNote(note, event) {
 // Handles selection UI update and selection
 function selectKey(optionnode) {
 
-	removeStyle(optionnode.parentNode.id, 'selected');
-	optionnode.className += ' selected';
+	removeClassFromChildren(optionnode.parentNode.id, 'selected');
+	addClass(optionnode, 'selected');
 
 	gChord.changeKey(optionnode.value);
 }
@@ -441,8 +441,8 @@ function selectKey(optionnode) {
 // Handles selection UI update and selection
 function selectChord(optionnode) {
 
-	removeStyle(optionnode.parentNode.id, 'selected');
-	optionnode.className += ' selected';
+	removeClassFromChildren(optionnode.parentNode.id, 'selected');
+	addClass(optionnode, 'selected');
 
 	gChord.changeChord (optionnode.value);
 }
@@ -456,7 +456,7 @@ function addRecording() {
 
 	child.className = 'tile uiheading recordtile color'+gChord.getChordType();
 	child.innerHTML = gChord.name;
-	child.chord = gChord.chord.slice(0);
+	child.chord = gChord.chord.slice(0);	// do not store the global object array
 	parent.appendChild(child);
 }
 
@@ -652,6 +652,22 @@ function startup() {
 			lower.appendChild(lowerkey);
 		}
 	}
+
+var keyDown = false;
+var setShiftDown = function(event){
+    if(event.keyCode === 16 || event.charCode === 16){
+        window.shiftDown = true;
+    }
+};
+
+var setShiftUp = function(event){
+    if(event.keyCode === 16 || event.charCode === 16){
+        window.shiftDown = false;
+    }
+};
+
+window.addEventListener? document.addEventListener('keydown', setShiftDown) : document.attachEvent('keydown', setShiftDown);
+window.addEventListener? document.addEventListener('keyup', setShiftUp) : document.attachEvent('keyup', setShiftUp);
 
 	document.getElementById("modemajor").checked = true;
 	chgHarmony(0);	// C Major-I
