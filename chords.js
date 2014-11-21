@@ -28,7 +28,6 @@
 // handle inversion - inverting the chord reverses (CEG = GEC) and creates the chord moving up through the chord
 // node graph should be canvas elements
 // encapsulate keyboard as object
-// octave setting
 // tile UI sizeToContent
 // tempo setting?
 // examples
@@ -106,7 +105,7 @@ function Chord(modecallback, infocallback) {
 		for (var i=0; i<chordformula.length; i++) {
 			var note = key + parseInt(chordformula[i]);
 			self.notes += (disp[note%12] + ' '); 
-			self.chord.push(note+60);	// FIXME adjust for octave later
+			self.chord.push(note+((octave + 1 ) * 12));
 		}
 	}
 
@@ -232,7 +231,7 @@ function Chord(modecallback, infocallback) {
 	//
 	// Changes octave selection and sets the chord
 	this.changeOctave = function(newoctave) {
-		if (newoctave != octave) {
+		if ((newoctave != octave) && (newoctave >= 0) && (newoctave <= 7)) {
 			octave = newoctave;
 			if (mode == 2) setMode(0);	// choosing an octave will reset the custom chord mode
 			setChord();
@@ -392,8 +391,8 @@ function updateChordKeys(chord) {
 
 // UI accessor functions
 
-function chgOctave(octave) {
-	gChord.changeOctave(octave);
+function chgOctave(offset) {
+	gChord.changeOctave(gChord.getOctave()+offset);
 }
 
 function chgScale(scale) {
@@ -401,22 +400,12 @@ function chgScale(scale) {
 	gChord.changeScale(scale);
 }
 
-function chgHarmony(harmony) {
-	gChord.changeHarmony(harmony);
-}
-
-// selectHarmony(harmony, octave)
+// selectHarmony(harmony)
 // harmony - indexes into harmonies[harmony][1] for a harmony coding
-// octave - defines the octave (octave 4 starts with middle C)
 //
-// Changes the harmony chord (adjusting octave based on modifier
-// then plays the chord.
-function selectHarmony(harmony, event) {
+// Changes the harmony chord
+function selectHarmony(harmony) {
 	gChord.changeHarmony(harmony);
-
-	event = event || window.event;
-	var offset = event.shiftKey ? 1 : (event.ctrlKey ? -1 : 0);
-	gChord.changeOctave(4 + offset);	// FIXME UI octave needed
 
 	tryRecording();
 	gChord.play();
@@ -691,7 +680,7 @@ function startup() {
 		var child = document.createElement('area');
 		child.shape = 'rect';
 		child.coords = harmonies[i][2][0]+','+harmonies[i][2][1]+','+harmonies[i][2][2]+','+harmonies[i][2][3];
-		child.setAttribute('onclick','selectHarmony('+i+', event);');
+		child.setAttribute('onclick','selectHarmony('+i+');');
 		parent.appendChild(child);
 	}
 
@@ -739,8 +728,8 @@ function startup() {
 	}
 
 	document.getElementById("modemajor").checked = true;
-	chgHarmony(0);	// C Major-I
-	chgOctave(4);	// Middle C octave
+	gChord.changeHarmony(0);	// C Major-I
+	gChord.changeOctave(4);	// Middle C octave
 //	gChord.play();
 }
 

@@ -52,7 +52,7 @@ Recording
 		<div id="topbar" class="section">
 			<div class="color0 header">
 				<h1 class="uiheading">Harmony-Explorer </h1>
-				<span>v0.4</span>
+				<span>v0.5</span>
 				<span class="captionbutn" onclick="selectOverlay(0);">&#x24d8;</span>
 			</div>
 			<div id="keyboard">
@@ -96,9 +96,9 @@ Recording
 					<div id="clear" class="color0 tile button" title="Clear entire recording" onclick="clearRecording();" >&#x274c;</div>
 					<div id="recordmode" class="color9 tile button dim" title="Toggle live record" onclick="toggleRecording(this);" >&#x26ab;</div>
 					<div id="octavectrl" class="fl-r">
-						<div id="octaveup" class="color3 tile button" title="Raise octave" onclick="playChord();" >&#x25b3;</div>
+						<div id="octaveup" class="color7 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>
 						<span id="octaveoutput" class="output" title="Current octave">O</span>
-						<div id="octavedown" class="color3 tile button" title="Lower octave" onclick="playChord();" >&#x25bd;</div>
+						<div id="octavedown" class="color7 tile button" title="Lower octave" onclick="chgOctave(-1);" >&#x25bd;</div>
 					</div>
 				</td>
 				<td id="rightblock" class="shortpad">
