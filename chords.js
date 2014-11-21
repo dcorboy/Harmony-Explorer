@@ -34,6 +34,9 @@
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
+// add codepoints to README
+// fix the issue using shift with keyboard
+// shift custom chords with octave setting?
 
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
@@ -418,8 +421,11 @@ function selectHarmony(harmony) {
 function selectNote(note, event) {
 
 	event = event || window.event;
-	if (!event.shiftKey && !event.ctrlKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+	// if (!event.shiftKey && !event.ctrlKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+	// event.stopPropagation() For IE: window.event.cancelBubble = true
 
+	if (!event.altKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+	
 	gChord.addCustomNote(note);
 
 	MIDI.setVolume(0, 127);
