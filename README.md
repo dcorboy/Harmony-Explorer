@@ -51,19 +51,21 @@ More complex variations of the root note can be selected from the **Chord** sele
 
 Chord name and notes are displayed under the **Chord** selection box.
 
-Clicking the keyboard with the **Shift** key pressed will add notes to the current chord. Clicking without shift will
+Clicking the keyboard with the **Shift** or **Ctrl** key pressed will add notes to the current chord. Clicking without modifiers will
 start a new custom chord.
 
 #### Recording
 
-* To record the current chord, click the **Record** button
+* To record the current chord, click the **Record** button (&#x2617; &#x266c;)
 * To play back the recorded chords, click the **Play** button
 * To clear the current recording, click the **Clear** button
 	
 ## In Development
 
-* Better recording/editing capabilities
 * Support for some additional instruments
+* Sample chord progressions
+* Octave control
+* Tempo control
 
 ## License
 

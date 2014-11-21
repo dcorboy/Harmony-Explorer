@@ -37,7 +37,7 @@
 // decode arbitrary chords?
 
 
-var notes = ['C','C# / Db','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
+var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
@@ -201,15 +201,18 @@ function Chord(modecallback, infocallback) {
 	// Accessors
 	this.getType = function() { return mode; }
 	this.getChordType = function() { return chordtype; }
+	this.getOctave = function() { return octave; }
 
 	// changeKey(newroot)
 	// newroot - string representation of a root note where C=0 and B=11
 	//
 	// Sets key to the root note
 	this.changeKey = function(newkey) {
-		key = newkey;
-		if (mode == 2) setMode(0);	// choosing a key will reset the custom chord mode
-		setChord();
+		if (newkey != key) {
+			key = newkey;
+			if (mode == 2) setMode(0);	// choosing a key will reset the custom chord mode
+			setChord();
+		}
 	};
 
 	// changeScale(newscale)
@@ -217,9 +220,11 @@ function Chord(modecallback, infocallback) {
 	//
 	// Sets scale to indicate either major or minor intervals.
 	this.changeScale = function(newscale) {
-		scale = newscale;
-		setMode(0);
-		setChord();
+		if (newscale != scale) {
+			scale = newscale;
+			setMode(0);
+			setChord();
+		}
 	};
 
 	// changeOctave(newoctave)
@@ -227,9 +232,11 @@ function Chord(modecallback, infocallback) {
 	//
 	// Changes octave selection and sets the chord
 	this.changeOctave = function(newoctave) {
-		octave = newoctave;
-		if (mode == 2) setMode(0);	// choosing an octave will reset the custom chord mode
-		setChord();
+		if (newoctave != octave) {
+			octave = newoctave;
+			if (mode == 2) setMode(0);	// choosing an octave will reset the custom chord mode
+			setChord();
+		}
 	};
 
 	// changeHarmony(harmony)
@@ -237,9 +244,11 @@ function Chord(modecallback, infocallback) {
 	//
 	// Changes harmony selection and sets the chord
 	this.changeHarmony = function(harmony) {
-		setMode(0);
-		chordtype = harmony;
-		setChord();
+		if ((harmony != chordtype) || (mode != 0)) {
+			setMode(0);
+			chordtype = harmony;
+			setChord();
+		}
 	};
 
 	// changeChord(chord)
@@ -247,9 +256,11 @@ function Chord(modecallback, infocallback) {
 	//
 	// Sets the chordtype to indicate the (extended) chord
 	this.changeChord = function(chord) {
-		setMode(1);
-		chordtype = chord;	// by convention, negative numbers are extended chords
-		setChord();
+		if ((chord != chordtype) || (mode != 1)) {
+			setMode(1);
+			chordtype = chord;	// by convention, negative numbers are extended chords
+			setChord();
+		}
 	};
 
 	// clearCustomNotes()
@@ -303,6 +314,7 @@ function updateChordInfo(name, notes) {
 	document.getElementById('harmonyoutput').innerHTML = name;
 	document.getElementById('chordoutput').innerHTML = notes;
 	updateChordKeys(gChord.chord);
+	document.getElementById('octaveoutput').innerHTML = gChord.getOctave();
 }
 
 // Class manipulation functions
@@ -582,6 +594,54 @@ function dismissOverlay(overlaynum, event) {
 	}
 }
 
+//
+// Keyboard Event Listener
+//
+// Listens for Shift and Ctrl keys and raises/lowers octave respectively
+
+var gKbdEvents = new KeyboardEventHandler();
+
+function KeyboardEventHandler() {
+	var self = this;		// because ECMAScript
+	var shiftDown = false;
+	var ctrlDown = false;
+
+	window.addEventListener ? document.addEventListener('keydown', keyDown) : document.attachEvent('keydown', keyDown);
+	window.addEventListener ? document.addEventListener('keyup', keyUp) : document.attachEvent('keyup', keyUp);
+
+	///////////////////////
+	//  Private Members  //
+	///////////////////////
+
+	function keyDown(event) {
+		if (!shiftDown && (event.keyCode == 16)) {
+			gChord.changeOctave(gChord.getOctave()+1);
+			//console.log('shift down: '+gChord.getOctave());
+			shiftDown = true;
+		}
+
+		if (!ctrlDown && (event.keyCode == 17)) {
+			gChord.changeOctave(gChord.getOctave()-1);
+			//console.log('ctrl down: '+gChord.getOctave());
+			ctrlDown = true;
+		}
+	}
+
+	function keyUp(event) {
+		if (shiftDown && event.keyCode == 16) {
+			gChord.changeOctave(gChord.getOctave()-1);
+			//console.log('shift up: '+gChord.getOctave());
+			shiftDown = false;
+		}
+
+		if (ctrlDown && event.keyCode == 17) {
+			gChord.changeOctave(gChord.getOctave()+1);
+			//console.log('ctrl up: '+gChord.getOctave());
+			ctrlDown = false;
+		}
+	}
+}
+
 // startup()
 //
 // Creates the dynamic UI elements and sets defaults
@@ -677,22 +737,6 @@ function startup() {
 			lower.appendChild(lowerkey);
 		}
 	}
-
-var keyDown = false;
-var setShiftDown = function(event){
-    if(event.keyCode === 16 || event.charCode === 16){
-        window.shiftDown = true;
-    }
-};
-
-var setShiftUp = function(event){
-    if(event.keyCode === 16 || event.charCode === 16){
-        window.shiftDown = false;
-    }
-};
-
-window.addEventListener? document.addEventListener('keydown', setShiftDown) : document.attachEvent('keydown', setShiftDown);
-window.addEventListener? document.addEventListener('keyup', setShiftUp) : document.attachEvent('keyup', setShiftUp);
 
 	document.getElementById("modemajor").checked = true;
 	chgHarmony(0);	// C Major-I
