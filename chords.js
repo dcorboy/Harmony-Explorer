@@ -34,10 +34,7 @@
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
-// add codepoints to README
-// fix the issue using shift with keyboard
 // shift custom chords with octave setting?
-
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -150,29 +147,37 @@ function Chord(modecallback, infocallback) {
 		}
 	}
 
-	// setCustomChord()
+	// setCustomChord(octavedelta)
+	// octavedelta - if known, the octave offset of the octave change
+
 	//
 	// Just sets the chord name
-	function setCustomChord() {
+	function setCustomChord(octavedelta) {
 		self.notes = '';
+		var shift = 0;
+
+		if (typeof octavedelta != 'undefined') shift = octavedelta;
 
 		self.name = "Custom";	// set chord name
 
 		for (var i=0; i<self.chord.length; i++) {
-			var note = self.chord[i];
+			var note = self.chord[i] + (shift * 12);
+			self.chord[i] = note;
 			self.notes += (disp[note%12] + ' '); 
 		}
 	}
 
-	// setChord()
+	// setChord(delta)
+	// octavedelta - if known, the octave offset of the octave change
 	//
 	// Determines how to set the chord based on current mode
 	//   0 - harmony chords, index into harmony names/formulas
 	//   1 - extended chords, index into chord names/formulas(-1)
-	function setChord() {
+	//   2 - custom chords defined on the keyboard
+	function setChord(octavedelta) {
 		switch(mode) {
 			case 2:
-				setCustomChord();
+				setCustomChord(octavedelta);
 				break;
 			case 1:
 				setExtChord(chordtype);
@@ -210,7 +215,7 @@ function Chord(modecallback, infocallback) {
 	//
 	// Sets key to the root note
 	this.changeKey = function(newkey) {
-		if (newkey != key) {
+		if ((newkey != key) || mode == 2) {
 			key = newkey;
 			if (mode == 2) setMode(0);	// choosing a key will reset the custom chord mode
 			setChord();
@@ -235,9 +240,10 @@ function Chord(modecallback, infocallback) {
 	// Changes octave selection and sets the chord
 	this.changeOctave = function(newoctave) {
 		if ((newoctave != octave) && (newoctave >= 0) && (newoctave <= 7)) {
+			var octavedelta = newoctave - octave;
 			octave = newoctave;
-			if (mode == 2) setMode(0);	// choosing an octave will reset the custom chord mode
-			setChord();
+			//if (mode == 2) setMode(0);	// choosing an octave will reset the custom chord mode
+			setChord(octavedelta);
 		}
 	};
 
