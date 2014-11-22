@@ -414,17 +414,16 @@ function selectHarmony(harmony) {
 	gChord.play();
 }
 
-// selectNote(note)
-// note - note value to play
+// selectNote(note, event)
+// note - note value selected
+// event - click event
 //
-// Plays a note for now
+// Modifies current chord by adding note
 function selectNote(note, event) {
 
 	event = event || window.event;
-	// if (!event.shiftKey && !event.ctrlKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
-	// event.stopPropagation() For IE: window.event.cancelBubble = true
-
-	if (!event.altKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+	//if (!event.shiftKey && !event.ctrlKey) gChord.clearCustomNotes();	// clear custom chord if shift key not down
+	if (!event.altKey) gChord.clearCustomNotes();	// clear custom chord if alt key not down
 	
 	gChord.addCustomNote(note);
 

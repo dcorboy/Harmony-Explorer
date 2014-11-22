@@ -40,6 +40,8 @@ git submodule update --init
 
 ## Usage
 
+Play the current chord with the &#x266c; button. Chord name and notes are displayed under the Chord selection box.
+
 Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).
 
 The **Shift** key will raise the chord an octave while the **Ctrl** key will lower the chord an octave.
@@ -49,22 +51,22 @@ Choose a different root note from the **Key** selection box on the top-left and 
 
 More complex variations of the root note can be selected from the **Chord** selection box on the top-right.
 
-Chord name and notes are displayed under the **Chord** selection box.
-
-Clicking the keyboard with the **Shift** or **Ctrl** key pressed will add notes to the current chord. Clicking without modifiers will
-start a new custom chord.
+Clicking the keyboard with the **Alt/Option** key pressed will add notes to the current chord. Clicking without
+**Alt/Option** will start a new custom chord.
 
 #### Recording
 
-* To record the current chord, click the **Record** button (&#x2617; &#x266c;)
-* To play back the recorded chords, click the **Play** button
-* To clear the current recording, click the **Clear** button
+* To record the current chord, click the &#x2617; &#x266c; button
+* To record a rest measure, click the &#x2617; &#x2300; button
+* To play back the recorded chords, click the &#x25b6 button
+* To delete the last recorded chord, click the &#x232b; button
+* To clear the current recording, click the &#x274c; button
+* Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.
 	
 ## In Development
 
 * Support for some additional instruments
 * Sample chord progressions
-* Octave control
 * Tempo control
 
 ## License
