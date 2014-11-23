@@ -34,7 +34,6 @@
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
-// shift custom chords with octave setting?
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -70,6 +69,7 @@ var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
 var gChord = new Chord(updateUIMode, updateChordInfo);
+var gRecorder = null;
 
 function Chord(modecallback, infocallback) {
 	var self = this;		// because ECMAScript
@@ -311,7 +311,7 @@ function Chord(modecallback, infocallback) {
 //
 // Plays the current chord
 function playChord() {
-	tryRecording();
+	gRecorder.tryRecording();
 	gChord.play();
 }
 
@@ -410,7 +410,7 @@ function chgScale(scale) {
 function selectHarmony(harmony) {
 	gChord.changeHarmony(harmony);
 
-	tryRecording();
+	gRecorder.tryRecording();
 	gChord.play();
 }
 
@@ -455,117 +455,131 @@ function selectChord(optionnode) {
 	gChord.changeChord (optionnode.value);
 }
 
-// Player variables and functions (all private)
-var pNodes = null;
-var pCurrent = 0;
-var pCount = 0
-var pCallbackID = null;
-var pLastNode = null;
-var pRecording = false;
 
-// addRecording()
 //
-// Records the current chord in a visual DOM object element.
-function addRecording() {
-	var parent = document.getElementById('recordingblock');
-	var child = document.createElement('div');
-
-	child.className = 'tile uiheading recordtile color'+gChord.getChordType();
-	child.innerHTML = gChord.name;
-	child.chord = gChord.chord.slice(0);	// do not store the global object array
-	parent.appendChild(child);
-}
-
-// tryRecording()
+// Recorder object
 //
-// Checks if recording and if so, records the chord
-function tryRecording() {
-	if (pRecording) addRecording();
-}
+// Handles recording and playback of recorded chords
 
-// toggleRecording(elem)
-// elem - clicked element (for visual state :-P)
-//
-// Checks if recording and if so, records the chord
-function toggleRecording(elem) {
+function Recorder(recordingnode) {
+	var self = this;		// because ECMAScript
+	var recNode = recordingnode;
+	// player variables
+	var isRecording = false;
+	var pCallbackID = null;
+	var pNodes = null;
+	var pCount = 0;
+	var pCurrent = null;
+	var pLast = null;
+	var pTempo = 750;	// play length of each chord
 
-	if (pRecording) addClass(elem, 'dim');
-	else removeClass(elem, 'dim');
+	///////////////////////
+	//  Private Member   //
+	///////////////////////
 
-	pRecording = !pRecording;
-}
+	function playRecordingCallback() {
+		if (pCurrent >= pCount) {
+			if (pLast) removeClass(pLast, 'recordhlt');
 
-// addRest()
-//
-// Records a rest in the recording.
-function addRest() {
-	var parent = document.getElementById('recordingblock');
-	var child = document.createElement('div');
+			window.clearInterval(pCallbackID);
+			pCallbackID = null;
+			updateChordKeys(gChord.chord);
+		}
+		else {
+			var thisNode = pNodes[pCurrent++];
 
-	child.className = 'tile uiheading recordtile';
-	child.innerHTML = 'Rest';
-	child.chord = [];
-	parent.appendChild(child);
-}
+			if (pLast) removeClass(pLast, 'recordhlt');
+			addClass(thisNode, 'recordhlt');
+			updateChordKeys(thisNode.chord);
 
-// deleteRecording()
-//
-// Deletes the last recorded chord.
-function deleteRecording() {
-	var recnodes = document.getElementById('recordingblock');
-	var nodecount = recnodes.childNodes.length;
+			MIDI.chordOn(0, thisNode.chord, 127, 0);
 
-	if (nodecount) recnodes.removeChild(recnodes.childNodes[nodecount - 1]); 
-}
-
-// clearRecording()
-//
-// Removes all recording nodes from the DOM
-function clearRecording() {
-	var recnodes = document.getElementById('recordingblock');
-
-	while( recnodes.hasChildNodes() ){
-		recnodes.removeChild(recnodes.lastChild);
+			pLast = thisNode;
+		}
 	}
-}
 
-// playRecording()
-//
-// Plays the chords encoded in the recorded DOM objects
-// using a timed interval.
-function playRecording() {
-	pNodes = document.getElementById('recordingblock').childNodes;
+	///////////////////////
+	//  Public Members   //
+	///////////////////////
 
-	MIDI.setVolume(0, 127);
+	// playRecording()
+	//
+	// Plays the chords encoded in the recorded DOM objects
+	// using a timed interval.
+	this.playRecording = function() {
+		pNodes = recNode.childNodes;
+		pCount = pNodes.length;
 
-	pCount = pNodes.length;
-	if (pCount) {
-		pCurrent = 0;
+		MIDI.setVolume(0, 127);
 
-		playRecordingCallback();	// play first note immediately
-		pCallbackID = window.setInterval(playRecordingCallback, 750);	// FIXME use tempo
-	}
-}
+		if (pCount) {
+			pCurrent = 0;
 
-function playRecordingCallback() {
-	if (pCurrent >= pCount) {
-		if (pLastNode) removeClass(pLastNode, 'recordhlt');
+			playRecordingCallback();	// play first note immediately
+			pCallbackID = window.setInterval(playRecordingCallback, pTempo);
+		}
+	};
+	
+	// addRecording()
+	//
+	// Records the current chord in a visual DOM object element.
+	this.addRecording = function() {
+		var newNode = document.createElement('div');
 
-		window.clearInterval(pCallbackID);
-		pCallbackID = null;
-		updateChordKeys(gChord.chord);
-	}
-	else {
-		var thisNode = pNodes[pCurrent++];
+		newNode.className = 'tile uiheading recordtile color'+gChord.getChordType();
+		newNode.innerHTML = gChord.name;
+		newNode.chord = gChord.chord.slice(0);	// do not store the global object array
+		recNode.appendChild(newNode);
+	};
 
-		if (pLastNode) removeClass(pLastNode, 'recordhlt');
-		addClass(thisNode, 'recordhlt');
-		updateChordKeys(thisNode.chord);
+	// tryRecording()
+	//
+	// Checks if recording and if so, records the chord
+	this.tryRecording = function() {
+		if (isRecording) self.addRecording();
+	};
 
-		MIDI.chordOn(0, thisNode.chord, 127, 0);
+	// toggleRecording(elem)
+	// elem - clicked element (for visual state :-P)
+	//
+	// Checks if recording and if so, records the chord
+	this.toggleRecording = function(elem) {
 
-		pLastNode = thisNode;
-	}
+		if (isRecording) addClass(elem, 'dim');
+		else removeClass(elem, 'dim');
+
+		isRecording = !isRecording;
+	};
+
+	// addRest()
+	//
+	// Records a rest in the recording.
+	this.addRest = function() {
+		var newNode = document.createElement('div');
+
+		newNode.className = 'tile uiheading recordtile';
+		newNode.innerHTML = 'Rest';
+		newNode.chord = [];
+		recNode.appendChild(newNode);
+	};
+
+	// deleteRecording()
+	//
+	// Deletes the last recorded chord.
+	this.deleteRecording = function() {
+		var nodecount = recNode.childNodes.length;
+
+		if (nodecount) recNode.removeChild(recNode.childNodes[nodecount - 1]); 
+	};
+
+	// clearRecording()
+	//
+	// Removes all recording nodes from the DOM
+	this.clearRecording = function() {
+		while(recNode.hasChildNodes() ){
+			recNode.removeChild(recNode.lastChild);
+		}
+	};
 }
 
 //
@@ -739,6 +753,7 @@ function startup() {
 	}
 
 	document.getElementById("modemajor").checked = true;
+	gRecorder = new Recorder(document.getElementById("recordingblock"));
 	gChord.changeHarmony(0);	// C Major-I
 	gChord.changeOctave(4);	// Middle C octave
 //	gChord.play();
