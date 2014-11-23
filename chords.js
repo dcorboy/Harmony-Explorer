@@ -349,17 +349,11 @@ function removeClass(ele,cls) {
 //
 // Removes cls from all child nodes of id
 function removeClassFromChildren(id, cls) {
-	var childclass = '';
 	var parent = document.getElementById(id);
 
 	if (parent) {
 		var childnodes = parent.childNodes;
-		var regex = new RegExp('\\b'+cls+'\\b','ig');
-		for (var i = 0; i < childnodes.length; i++) {
-			childclass = childnodes[i].className;
-			childclass = childclass.replace(regex, '');
-			childnodes[i].className = childclass;
-		}
+		for (var i = 0; i < childnodes.length; i++) removeClass(childnodes[i], cls);
 	}
 }
 
@@ -625,6 +619,12 @@ function KeyboardEventHandler() {
 			//console.log('ctrl down: '+gChord.getOctave());
 			ctrlDown = true;
 		}
+
+		// remove selections caused by shift/vtrl highlighting
+		if (document.selection)
+			document.selection.empty();
+		else if (window.getSelection)
+			window.getSelection().removeAllRanges();
 	}
 
 	function keyUp(event) {

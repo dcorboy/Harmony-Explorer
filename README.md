@@ -58,7 +58,7 @@ Clicking the keyboard with the **Alt/Option** key pressed will add notes to the 
 
 * To record the current chord, click the &#x2617; &#x266c; button
 * To record a rest measure, click the &#x2617; &#x2300; button
-* To play back the recorded chords, click the &#x25b6 button
+* To play back the recorded chords, click the &#x25b6; button
 * To delete the last recorded chord, click the &#x232b; button
 * To clear the current recording, click the &#x274c; button
 * Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.
