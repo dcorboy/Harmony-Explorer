@@ -35,6 +35,8 @@
 // use codepoints for flat/sharp
 // decode arbitrary chords?
 
+var aRecording = [750, [["C4-I", 1, [60, 64, 67]], ["C4-V", 5, [67, 71, 74]], ["C4-I", 1, [60, 64, 67]], ["Rest", 0, []], ["C4-I", 1, [60, 64, 67]], ["C4-V", 5, [67, 71, 74]], ["C4-I", 1, [60, 64, 67]], ["Rest", 0, []], ["C4-I", 1, [60, 64, 67]], ["C4-vi", 6, [69, 72, 76]], ["C4-V/vi", 12, [64, 68, 71]], ["C4-IV", 4, [65, 69, 72]], ["C4-I", 1, [60, 64, 67]], ["C4-V", 5, [67, 71, 74]], ["C4-I", 1, [60, 64, 67]]]];
+
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
@@ -434,7 +436,22 @@ function Recorder(recordingnode) {
 	};
 
 	this.loadRecording = function(index) {
-		console.log('Load');
+		var recording = aRecording;
+		var nodes = recording[1];
+		self.clearRecording();
+
+		pTempo = recording[0];
+
+		for (var i = 0; i < nodes.length; i++) {
+			var thisnode = nodes[i];
+			var newnode = document.createElement('div');
+
+			newnode.innerHTML = thisnode[0];
+			newnode.className = 'tile uiheading recordtile color' + thisnode[1];
+			newnode.chord = thisnode[2].slice(0);	// probably okay to use a ref to global here tho
+			recNode.appendChild(newnode);
+		}
+		console.log(aRecording);
 	}
 
 	// saveRecording()
