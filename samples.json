@@ -81,6 +81,18 @@ var JSONSamples = {
 					chord: [60, 64, 67]
 				}
 			]
+		},
+		{
+			title: "Another Sample",
+			tempo: 750,
+			description: "This sample has only one chord",
+			chords: [
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}
+			]
 		}
 	]
 };

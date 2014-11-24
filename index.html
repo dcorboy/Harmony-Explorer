@@ -11,38 +11,11 @@
 	<script src="./chords.js" type="text/javascript"></script>
 	<script src="./samples.json" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="chords.css">
-	
 </head>
 <body>
 	<script type="text/javascript">
 		window.onload = init();
 	</script>
-	<div id="overlay0" class="overlay" onclick="dismissOverlay(0, event);">
-		<div class="border overlay-inner">
-			<div class="color1 header">
-				<h1 class="uiheading">Helpful Dialog</h1>
-				<span class="captionbutn" onclick="dismissOverlay(0, false);">&#x2612;</span>
-			</div>
-			<div class="overlay-body">
-				<p>Play the current chord with the &#x266c; button. Chord name and notes are displayed under the Chord selection box.</p>
-				<p>Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).<p>
-				<p>The Shift key will raise the chord an octave while the Ctrl key will lower the chord an octave.</p>
-				<p>Choose a different root note from the Key selection box on the top-left and either Major or Minor from the radio buttons below it.</p>
-				<p>More complex variations of the root note can be selected from the Chord selection box on the top-right.</p>
-				<p>Clicking the keyboard with the Alt/Option key pressed will add notes to the current chord.
-					Clicking without Alt/Option will start a new custom chord.</p>
-				<h2>Recording</h2>
-				<ul>
-					<li>To record the current chord, click the &#x2617; &#x266c; button</li>
-					<li>To record a rest measure, click the &#x2617; &#x2300; button</li>
-					<li>To play back the recorded chords, click the &#x25b6; button</li>
-					<li>To delete the last recorded chord, click the &#x232b; button</li>
-					<li>To clear the current recording, click the &#x274c; button</li>
-					<li>Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.</li>
-				</ul>
-			</div>
-		</div>
-	</div>
 	<div id="container" class="border">
 		<div id="topbar" class="section">
 			<div class="color1 header">
@@ -90,7 +63,7 @@
 					<div id="delete" class="color1 tile button" title="Remove last chord" onclick="gRecorder.deleteRecording();" >&#x232b;</div>
 					<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="gRecorder.clearRecording();" >&#x274c;</div>
 					<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" >&#x26ab;</div>
-					<div id="load" class="color1 tile button" title="fixme" onclick="loadRecording();">L</div>
+					<div id="load" class="color1 tile button" title="fixme" onclick="selectOverlay(1);">L</div>
 					<div id="save" class="color1 tile button" title="fixme" onclick="gRecorder.saveRecording();" >S</div>
 					<div id="octavectrl" class="fl-r">
 						<div id="octaveup" class="color8 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>
@@ -109,10 +82,48 @@
 		<div id="graphblock" class="section shortpad dimmer dim1 dim2">
 			<img id="harmonychordgraph" class="center" src="harmony-graph.png" width="800" height="500" alt="Harmonies Selector" usemap="#hgraphmap">
 		</div>
-	<div>
+	</div>
 
+	<div id="overlay0" class="overlay" onclick="dismissOverlay(0, event);">
+		<div class="border overlay-inner">
+			<div class="color1 header">
+				<h1 class="uiheading">Helpful Dialog</h1>
+				<span class="captionbutn" onclick="dismissOverlay(0, false);">&#x2612;</span>
+			</div>
+			<div class="overlay-body">
+				<p>Play the current chord with the &#x266c; button. Chord name and notes are displayed under the Chord selection box.</p>
+				<p>Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).<p>
+				<p>The Shift key will raise the chord an octave while the Ctrl key will lower the chord an octave.</p>
+				<p>Choose a different root note from the Key selection box on the top-left and either Major or Minor from the radio buttons below it.</p>
+				<p>More complex variations of the root note can be selected from the Chord selection box on the top-right.</p>
+				<p>Clicking the keyboard with the Alt/Option key pressed will add notes to the current chord.
+					Clicking without Alt/Option will start a new custom chord.</p>
+				<h2>Recording</h2>
+				<ul>
+					<li>To record the current chord, click the &#x2617; &#x266c; button</li>
+					<li>To record a rest measure, click the &#x2617; &#x2300; button</li>
+					<li>To play back the recorded chords, click the &#x25b6; button</li>
+					<li>To delete the last recorded chord, click the &#x232b; button</li>
+					<li>To clear the current recording, click the &#x274c; button</li>
+					<li>Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-
+	<div id="overlay1" class="overlay" onclick="dismissOverlay(1, event);">
+		<div class="border overlay-inner">
+			<div class="color1 header">
+				<h1 class="uiheading">Load Sample</h1>
+				<span class="captionbutn" onclick="dismissOverlay(1, false);">&#x2612;</span>
+			</div>
+			<div class="overlay-body">
+				<p>Click on one of the samples below to load it</p>
+				<ul id="samples">
+				</ul>
+			</div>
+		</div>
+	</div>
 
 	<noscript>
 		<div align="center">

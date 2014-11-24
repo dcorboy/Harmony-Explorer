@@ -725,11 +725,12 @@ function KeyboardEventHandler() {
 // Creates the dynamic UI elements and sets defaults
 function startup() {
 	var parent = null;
-	var len = notes.length;
+	var len = 0;
 	var chord;
 
 	// create root note selection control
 	parent = document.getElementById('keyroot');
+	len = notes.length;
 	for (var i = 0; i < len; i++) {
 		var elem = document.createElement('div')
 		elem.value = i;
@@ -815,6 +816,28 @@ function startup() {
 			lower.appendChild(lowerkey);
 		}
 	}
+
+	// Fill the samples dialog
+	parent = document.getElementById("samples");
+	len = JSONSamples.samples.length;
+	for (var i = 0; i < len; i++) {
+		var li = document.createElement('li');
+		li.setAttribute('onclick','gRecorder.loadRecording(' + i + ');');
+		li.className = 'option';
+		parent.appendChild(li);
+
+		// now build the children of the li node
+		var elem = document.createElement('div');
+		elem.innerHTML = JSONSamples.samples[i].title;
+		elem.className = 'option';
+		li.appendChild(elem);
+
+		elem = document.createElement('div');
+		elem.innerHTML = JSONSamples.samples[i].description;
+		elem.className = 'option';
+		li.appendChild(elem);
+	}
+	
 
 	document.getElementById("modemajor").checked = true;
 	gRecorder = new Recorder(document.getElementById("recordingblock"));
