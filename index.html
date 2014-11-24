@@ -9,6 +9,7 @@
 	<script src="./MIDI.js/inc/base64binary.js" type="text/javascript"></script>
 
 	<script src="./chords.js" type="text/javascript"></script>
+	<script src="./samples.json" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="chords.css">
 	
 </head>
@@ -89,7 +90,7 @@
 					<div id="delete" class="color1 tile button" title="Remove last chord" onclick="gRecorder.deleteRecording();" >&#x232b;</div>
 					<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="gRecorder.clearRecording();" >&#x274c;</div>
 					<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" >&#x26ab;</div>
-					<div id="load" class="color1 tile button" title="fixme" onclick="loadRecording();" >L</div>
+					<div id="load" class="color1 tile button" title="fixme" onclick="loadRecording();">L</div>
 					<div id="save" class="color1 tile button" title="fixme" onclick="gRecorder.saveRecording();" >S</div>
 					<div id="octavectrl" class="fl-r">
 						<div id="octaveup" class="color8 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>

@@ -1,0 +1,86 @@
+var JSONSamples = {
+	samples: [
+		{
+			title: "Sample 2",
+			tempo: 750,
+			description: "This is a more complex example but still uses only the main 7 chords",
+			chords: [
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "C4-V",
+					style: 5,
+					chord: [67, 71, 74]
+				}, 
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "Rest",
+					style: 0,
+					chord: []
+				}, 
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "C4-V",
+					style: 5,
+					chord: [67, 71, 74]
+				}, 
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "Rest",
+					style: 0,
+					chord: []
+				}, 
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "C4-vi",
+					style: 6,
+					chord: [69, 72, 76]
+				}, 
+				{
+					name: "C4-V/vi",
+					style: 12,
+					chord: [64, 68, 71]
+				}, 
+				{
+					name: "C4-IV",
+					style: 4,
+					chord: [65, 69, 72]
+				}, 
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "C4-V",
+					style: 5,
+					chord: [67, 71, 74]
+				}, 
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}
+			]
+		}
+	]
+};
