@@ -174,6 +174,7 @@ td.buttons {
 	border-top-right-radius: 5px;
 	-webkit-background-clip: padding-box;
 	text-align: center;
+	color: white;
 }
 
 /* Overlays */
@@ -212,6 +213,29 @@ td.buttons {
 .overlay-body {
 	color: #444;
 	padding: 1rem 2rem 2rem 2rem;
+}
+
+.overlay-body ul {
+	list-style: none;
+	padding: 0px;
+}
+
+.overlay-body .header {
+	text-align: left;
+	padding: 0px 15px;
+	color: #fff;
+	font-size: 20px;
+	text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+	letter-spacing: -1px;
+}
+
+.overlay-body .desc {
+	border: 1px solid #6463db;
+	border-top: none;
+	font-style: oblique;
+	line-height: 130%;
+	margin: 0 1px 20px 0;
+	padding: 3px 30px 5px;
 }
 
 /* Selectbox Options */
@@ -292,6 +316,7 @@ td.buttons {
 .option ul li:hover span {
 	color: rgba(0,0,0,0.3);
 }
+
 
 /* Keyboard */
 

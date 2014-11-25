@@ -829,12 +829,12 @@ function startup() {
 		// now build the children of the li node
 		var elem = document.createElement('div');
 		elem.innerHTML = JSONSamples.samples[i].title;
-		elem.className = 'option';
+		elem.className = 'color1 header';
 		li.appendChild(elem);
 
 		elem = document.createElement('div');
 		elem.innerHTML = JSONSamples.samples[i].description;
-		elem.className = 'option';
+		elem.className = 'desc';
 		li.appendChild(elem);
 	}
 	
