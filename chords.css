@@ -190,14 +190,14 @@ td.buttons {
     z-index: 10000;
     opacity: 0;
     background: #4D4D4D;
-    transition: opacity 200ms linear, bottom 0s linear 200ms;
+    transition: opacity 1s linear, bottom 1s linear 500ms; /* why is this not working? */
 }
 
 .overlay-open {
 	bottom: 0;
 	opacity: 1;
 	background-color: rgba(0,0,0,0.6);
-	transition: opacity 200ms linear, bottom 0s linear;
+	/* transition: opacity 800ms linear, bottom 500ms linear; */
 }
  
 .overlay-view {
@@ -218,6 +218,12 @@ td.buttons {
 .overlay-body ul {
 	list-style: none;
 	padding: 0px;
+	cursor: pointer;
+}
+
+.overlay-body li:hover {
+	color: black;
+	transform: scale(1.05, 1.05);
 }
 
 .overlay-body .header {
@@ -236,6 +242,7 @@ td.buttons {
 	line-height: 130%;
 	margin: 0 1px 20px 0;
 	padding: 3px 30px 5px;
+	font-size: 14px;
 }
 
 /* Selectbox Options */

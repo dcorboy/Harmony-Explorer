@@ -642,8 +642,9 @@ function selectChord(optionnode) {
 // loadRecording()
 //
 // Select and load a sample recording
-function loadRecording() {
-	gRecorder.loadRecording(0);
+function loadRecording(index) {
+	gRecorder.loadRecording(index);
+	dismissOverlay(1, false);
 }
 
 //
@@ -658,6 +659,7 @@ function selectOverlay(overlaynum) {
 	}
 }
 
+// if event is not false, checks event.target for clicks outside the dialog
 function dismissOverlay(overlaynum, event) {
 	var overlay = document.getElementById('overlay'+overlaynum);
 	if (overlay && (!event || (event.target == overlay))) {
@@ -822,8 +824,8 @@ function startup() {
 	len = JSONSamples.samples.length;
 	for (var i = 0; i < len; i++) {
 		var li = document.createElement('li');
-		li.setAttribute('onclick','gRecorder.loadRecording(' + i + ');');
-		li.className = 'option';
+		li.setAttribute('onclick','loadRecording(' + i + ');');
+		li.className = 'fixme';
 		parent.appendChild(li);
 
 		// now build the children of the li node
