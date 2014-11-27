@@ -3,7 +3,7 @@ var JSONSamples = {
 		{
 			title: "Yankee Doodle",
 			tempo: 600,
-			description: "This tune of olde uses only the I, IV and V harmonies. The first four chords fall as YANkee DOOdle WENT to TOWN so try to sing it in your head.",
+			description: "This tune of olde uses only the I, IV and V harmonies. The first four chords fall as YANkee DOOdle WENT to TOWN &mdash; so try to sing it in your head.",
 			chords: [
 				{
 					name: "D4-I",
@@ -390,6 +390,137 @@ var JSONSamples = {
 					name: "D3-I",
 					style: 1,
 					chord: [50, 54, 57]
+				}
+			]
+		},
+		{
+			title: "All Through the Night",
+			tempo: 1400,
+			description: "This Irish Christmas song uses the V/V harmony as an unexpected diversion.",
+			chords: [
+				{
+					name: "F3-I",
+					style: 1,
+					chord: [53, 57, 60]
+				}, 
+				{
+					name: "F2-IV",
+					style: 4,
+					chord: [46, 50, 53]
+				}, 
+				{
+					name: "F3-V/V",
+					style: 11,
+					chord: [55, 59, 62]
+				}, 
+				{
+					name: "F2-V",
+					style: 5,
+					chord: [48, 52, 55]
+				}, 
+				{
+					name: "F2-IV",
+					style: 4,
+					chord: [46, 50, 53]
+				}, 
+				{
+					name: "F2-V",
+					style: 5,
+					chord: [48, 52, 55]
+				}, 
+				{
+					name: "F3-I",
+					style: 1,
+					chord: [53, 57, 60]
+				}
+			]
+		},
+		{
+			title: "Pomp and Circumstance",
+			tempo: 1500,
+			description: "This traditional graduation song uses V/V as a powerful change.",
+			chords: [
+				{
+					name: "C4-I",
+					style: 1,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "C4-V",
+					style: 5,
+					chord: [67, 71, 74]
+				}, 
+				{
+					name: "C3-vi",
+					style: 6,
+					chord: [57, 60, 64]
+				}, 
+				{
+					name: "C3-I",
+					style: 1,
+					chord: [48, 52, 55]
+				}, 
+				{
+					name: "C3-IV",
+					style: 4,
+					chord: [53, 57, 60]
+				}, 
+				{
+					name: "C3-I",
+					style: 1,
+					chord: [48, 52, 55]
+				}, 
+				{
+					name: "C3-V/V",
+					style: 11,
+					chord: [50, 54, 57]
+				}
+			]
+		},
+		{
+			title: "We Wish You a Merry Christmas",
+			tempo: 1150,
+			description: "This Christmas song adds vi and ii, as well as V/V and V/vi.",
+			chords: [
+				{
+					name: "G4-I",
+					style: 1,
+					chord: [67, 71, 74]
+				}, 
+				{
+					name: "G3-IV",
+					style: 4,
+					chord: [60, 64, 67]
+				}, 
+				{
+					name: "G4-V/V",
+					style: 11,
+					chord: [69, 73, 76]
+				}, 
+				{
+					name: "G3-V",
+					style: 5,
+					chord: [62, 66, 69]
+				}, 
+				{
+					name: "G4-V/vi",
+					style: 12,
+					chord: [71, 75, 78]
+				}, 
+				{
+					name: "G3-vi",
+					style: 6,
+					chord: [64, 67, 71]
+				}, 
+				{
+					name: "G4-ii",
+					style: 2,
+					chord: [69, 72, 76]
+				}, 
+				{
+					name: "G4-I",
+					style: 1,
+					chord: [67, 71, 74]
 				}
 			]
 		},
