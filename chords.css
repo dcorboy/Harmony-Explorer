@@ -140,6 +140,11 @@ td.buttons {
 	letter-spacing: -5px;
 }
 
+#loadsample.button {
+	letter-spacing: -1px;
+	margin-left: 20px;
+}
+
 .bbbutton {
 	padding: 5px 10px 8px;
 	display: inline;

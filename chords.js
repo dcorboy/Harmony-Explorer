@@ -34,6 +34,9 @@
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
+// bug when double-clicking play (subsequent plays are jacked)
+// fix the issue when doc width is at keybd width
+// add confirm before deleting recording
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
