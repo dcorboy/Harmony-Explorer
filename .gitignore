@@ -218,8 +218,8 @@ pip-log.txt
 #############
 ## My Stuff
 #############
-# Ignore the source doc for the chordboard
-/*.ai
+# Ignore the source docs for the chordboard
+/Blog
 # Ignore test files
 /test*.*
 # Ignore historical directory
