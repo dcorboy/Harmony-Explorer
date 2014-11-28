@@ -73,7 +73,7 @@ td.buttons {
 }
 
 .shortpad {
-	padding: 5px 20px;
+	padding: 5px 12px;
 }
 
 .center {
@@ -146,7 +146,9 @@ td.buttons {
 
 #loadsample.button {
 	letter-spacing: -1px;
-    margin-left: 25px;
+    margin-left: 20px;
+	line-height: 130%;
+	font-size: 30px;
 }
 
 #recblock1 {
@@ -225,11 +227,13 @@ td.buttons {
 	background: #FFF;
 	margin: 5rem auto;
 	max-width: 700px;
+	border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .overlay-body {
 	color: #444;
-	padding: 1rem 2rem 2rem 2rem;
+	padding: 0rem 2rem;
 }
 
 .overlay-body ul {
@@ -270,7 +274,7 @@ td.buttons {
 	padding: 0;
 	width: 100%;
 	overflow: scroll;
-	height: 300px;
+	height: 220px;
 	cursor: pointer;
 }
 

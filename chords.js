@@ -30,12 +30,11 @@
 // encapsulate keyboard as object
 // tile UI sizeToContent
 // tempo setting?
-// examples
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
 // bug when double-clicking play (subsequent plays are jacked)
-// custom chords named with notes
+// custom chord color?
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -171,6 +170,7 @@ function Chord(modecallback, infocallback) {
 
 	// setChord(delta)
 	// octavedelta - if known, the octave offset of the octave change
+	//	(otherwise use object octave)
 	//
 	// Determines how to set the chord based on current mode
 	//   0 - harmony chords, index into harmony names/formulas
@@ -183,11 +183,9 @@ function Chord(modecallback, infocallback) {
 				break;
 			case 1:
 				setExtChord(chordtype);
-//				setExtChord(chordtype[1]);
 				break;
 			default:
 				setHarmonyChord(chordtype);
-//				setHarmonyChord(chordtype[0]);
 		}
 		infochangecallback(self.name, self.notes);
 	}
@@ -381,7 +379,8 @@ function Recorder(recordingnode) {
 		var newNode = document.createElement('div');
 
 		newNode.className = 'tile uiheading recordtile color'+(gChord.getChordType() + 1);
-		newNode.innerHTML = gChord.name;
+		if (gChord.getType() == 2) newNode.innerHTML = gChord.notes;
+		else newNode.innerHTML = gChord.name;
 		newNode.chord = gChord.chord.slice(0);	// do not store the global object array
 		recNode.appendChild(newNode);
 	};
@@ -459,8 +458,8 @@ function Recorder(recordingnode) {
 
 	// saveRecording()
 	//
-	// Dev function to out put the chord data for the current recording
-	// in a JSON format, to be added to the samples.json file
+	// Dev function to output the chord data for the current recording
+	// in a JSON format so it can be added to the samples.json file
 	this.saveRecording = function() {
 		var nodes = recNode.childNodes;
 		var nodecount = nodes.length;
