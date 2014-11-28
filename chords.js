@@ -35,6 +35,7 @@
 // decode arbitrary chords?
 // bug when double-clicking play (subsequent plays are jacked)
 // custom chord color?
+// change color/icon of play button to allow stop
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];

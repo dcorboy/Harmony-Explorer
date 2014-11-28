@@ -90,6 +90,11 @@ td.buttons {
     float: left;
 }
 
+.bold {
+	font-weight: bold;
+	color: #6463db;
+}
+
 .uiheading {
 	/* background: url(http://noisepng.com/100-90-4-monochrome.png); */
 	text-align: center;
@@ -142,6 +147,14 @@ td.buttons {
 	text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
 	margin: 4px 1px;
 	letter-spacing: -5px;
+}
+
+p.info-footer {
+	text-align: center;
+	font-style: italic;
+	margin-right: 40px;
+	margin-left: 40px;
+	
 }
 
 #loadsample.button {
@@ -236,13 +249,19 @@ td.buttons {
 	padding: 0rem 2rem;
 }
 
-.overlay-body ul {
+.overlay-body h2 {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.overlay-body ul.selection {
 	list-style: none;
 	padding: 0px;
 	cursor: pointer;
+	padding-left: 20px;
 }
 
-.overlay-body li:hover {
+.overlay-body ul.selection li:hover {
 	color: black;
 	transform: scale(1.05, 1.05);
 }

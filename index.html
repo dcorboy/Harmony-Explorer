@@ -99,22 +99,27 @@
 				<span class="captionbutn" onclick="dismissOverlay(0, false);">&#x2612;</span>
 			</div>
 			<div class="overlay-body">
-				<p>Play the current chord with the &#x266c; button. Chord name and notes are displayed under the Chord selection box.</p>
+				<p>Play the current chord with the <span class="bold">&#x266c;</span> button. Chord name and notes are displayed under the <span class="bold">Chord</span> selection box.</p>
 				<p>Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).<p>
-				<p>The Shift key will raise the chord an octave while the Ctrl key will lower the chord an octave.</p>
-				<p>Choose a different root note from the Key selection box on the top-left and either Major or Minor from the radio buttons below it.</p>
-				<p>More complex variations of the root note can be selected from the Chord selection box on the top-right.</p>
-				<p>Clicking the keyboard with the Alt/Option key pressed will add notes to the current chord.
-					Clicking without Alt/Option will start a new custom chord.</p>
+				<p>The <span class="bold">Shift</span> key will raise the chord an octave while the <span class="bold">Ctrl</span> key will lower the chord an octave.</p>
+				<p>Choose a different root note from the <span class="bold">Key</span> selection box on the top-left and either
+					<span class="bold">Major</span> or <span class="bold">Minor</span> from the radio buttons below it.</p>
+				<p>More complex variations of the root note can be selected from the <span class="bold">Chord</span> selection box on the top-right.</p>
+				<p>Clicking the keyboard with the <span class="bold">Alt/Option</span> key pressed will add notes to the current chord.
+					Clicking without <span class="bold">Alt/Option</span> will start a new custom chord.</p>
 				<h2>Recording</h2>
 				<ul>
-					<li>To record the current chord, click the &#x2617; &#x266c; button</li>
-					<li>To record a rest measure, click the &#x2617; &#x2300; button</li>
-					<li>To play back the recorded chords, click the &#x25b6; button</li>
-					<li>To delete the last recorded chord, click the &#x232b; button</li>
-					<li>To clear the current recording, click the &#x274c; button</li>
-					<li>Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.</li>
+					<li>To record the current chord, click the <span class="bold">&#x2617; &#x266c;</span> button</li>
+					<li>To record a rest measure, click the <span class="bold">&#x2617; &#x2300;</span> button</li>
+					<li>To play back the recorded chords, click the <span class="bold">&#x25b6;</span> button</li>
+					<li>To delete the last recorded chord, click the <span class="bold">&#x232b;</span> button</li>
+					<li>To clear the current recording, click the <span class="bold">&#x274c;</span> button</li>
+					<li>Toggle the record mode by clicking the <span class="bold">&#x26ab;</span> button. In record mode, all chords played will be recorded.</li>
 				</ul>
+				<p>Load sample chord progressions from popular songs by clicking the <span class="bold">Samples</span> button.</p>
+				<hr />
+				<p class="info-footer"><span class="bold">Harmony Explorer</span> is open source and available on <a href="https://github.com/dcorboy/Harmony-Explorer" target="_blank">GitHub</a>.
+					More information is available <a href="http://www.cormerica.com/harmony-explorer/" target="_blank">here</a>.</p>
 			</div>
 		</div>
 	</div>
@@ -126,7 +131,7 @@
 				<span class="captionbutn" onclick="dismissOverlay(1, false);">&#x2612;</span>
 			</div>
 			<div class="overlay-body">
-				<ul id="samples">
+				<ul id="samples" class="selection">
 				</ul>
 			</div>
 		</div>
