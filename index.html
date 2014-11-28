@@ -59,19 +59,24 @@
 					</div>
 				</td>
 				<td id="recinfoblock" class="shortpad buttons">
-					<div id="playchord" class="color1 tile button" title="Play current chord" onclick="playChord();" >&#x266c;</div>
-					<div id="record" class="color1 tile button" title="Record current chord" onclick="gRecorder.addRecording();" >&#x2617; &#x266c;</div>
-					<div id="rest" class="color1 tile button" title="Record a rest interval" onclick="gRecorder.addRest();" >&#x2617; &#x2300;</div>
-					<div id="play" class="color1 tile button" title="Play current recording" onclick="gRecorder.playRecording();" >&#x25b6;</div>
-					<div id="delete" class="color1 tile button" title="Remove last chord" onclick="gRecorder.deleteRecording();" >&#x232b;</div>
-					<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="clearRecording();" >&#x274c;</div>
-					<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" >&#x26ab;</div>
-					<div id="loadsample" class="color4 tile button" title="Load a harmony sample" onclick="selectOverlay(1);">Samples</div>
-<!-- 					<div id="save" class="color1 tile button" title="fixme" onclick="gRecorder.saveRecording();" >Save</div> -->
-					<div id="octavectrl" class="fl-r">
-						<div id="octaveup" class="color6 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>
-						<span id="octaveoutput" class="output" title="Current octave">O</span>
-						<div id="octavedown" class="color6 tile button" title="Lower octave" onclick="chgOctave(-1);" >&#x25bd;</div>
+					<div id="recblock1" class="fl-l">
+						<div id="playchord" class="color1 tile button" title="Play current chord" onclick="playChord();" >&#x266c;</div>
+						<div id="record" class="color1 tile button" title="Record current chord" onclick="gRecorder.addRecording();" >&#x2617; &#x266c;</div>
+						<div id="rest" class="color1 tile button" title="Record a rest interval" onclick="gRecorder.addRest();" >&#x2617; &#x2300;</div>
+						<div id="play" class="color1 tile button" title="Play current recording" onclick="gRecorder.playRecording();" >&#x25b6;</div>
+						<div id="delete" class="color1 tile button" title="Remove last chord" onclick="gRecorder.deleteRecording();" >&#x232b;</div>
+						<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="clearRecording();" >&#x274c;</div>
+						<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" >&#x26ab;</div>
+					</div>
+					<div id="recblock2" class="fl-l">
+	<!-- 					<div id="save" class="color1 tile button" title="fixme" onclick="gRecorder.saveRecording();" >Save</div> -->
+						<div id="octavectrl">
+							<span id="octavelbl" class="uiheading">Octave</span>
+							<div id="octaveup" class="color6 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>
+							<span id="octaveoutput" class="output" title="Current octave">O</span>
+							<div id="octavedown" class="color6 tile button" title="Lower octave" onclick="chgOctave(-1);" >&#x25bd;</div>
+						</div>
+						<div id="loadsample" class="color4 tile button" title="Load a harmony sample" onclick="selectOverlay(1);">Samples</div>
 					</div>
 				</td>
 				<td id="rightblock" class="shortpad">

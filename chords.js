@@ -35,7 +35,6 @@
 // use codepoints for flat/sharp
 // decode arbitrary chords?
 // bug when double-clicking play (subsequent plays are jacked)
-// fix the issue when doc width is at keybd width
 // custom chords named with notes
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];

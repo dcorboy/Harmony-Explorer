@@ -86,6 +86,10 @@ td.buttons {
     float: right;
 }
 
+.fl-l {
+    float: left;
+}
+
 .uiheading {
 	/* background: url(http://noisepng.com/100-90-4-monochrome.png); */
 	text-align: center;
@@ -131,18 +135,26 @@ td.buttons {
 }
 
 .button {
-	padding: 5px 13px 8px 7px;
-	display: inline;
+	padding: 0px 14px 2px 8px;
+	display: inline-block;
 	cursor: pointer;
 	font-size: 32px;
 	text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
-	margin: 1px;
+	margin: 4px 1px;
 	letter-spacing: -5px;
 }
 
 #loadsample.button {
 	letter-spacing: -1px;
-	margin-left: 20px;
+    margin-left: 25px;
+}
+
+#recblock1 {
+	margin-right: 30px;
+}
+
+#octavectrl {
+	display: inline-block;
 }
 
 .bbbutton {
