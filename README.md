@@ -40,7 +40,7 @@ git submodule update --init
 
 ## Usage
 
-Play the current chord with the &#x266c; button. Chord name and notes are displayed under the Chord selection box.
+Play the current chord with the &#x266c; button. Chord name and notes are displayed under the **Chord** selection box.
 
 Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).
 
@@ -62,6 +62,8 @@ Clicking the keyboard with the **Alt/Option** key pressed will add notes to the 
 * To delete the last recorded chord, click the &#x232b; button
 * To clear the current recording, click the &#x274c; button
 * Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.
+
+Load sample chord progressions from popular songs by clicking the **Samples** button.
 	
 ## In Development
 
