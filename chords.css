@@ -24,6 +24,7 @@ table {
 }
 
 #container {
+	background: #202020 url("http://subtlepatterns.com/patterns/zwartevilt.png") repeat scroll 0 0;
 	margin: 0 auto;
 	min-width: 950px;
 }
@@ -61,7 +62,6 @@ td.buttons {
 }
 
 .section {
-	background: #202020 url("http://subtlepatterns.com/patterns/zwartevilt.png") repeat scroll 0 0
 }
 
 .fillcell {

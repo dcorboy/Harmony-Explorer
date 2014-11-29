@@ -35,7 +35,6 @@
 // decode arbitrary chords?
 // bug when double-clicking play (subsequent plays are jacked)
 // custom chord color?
-// change color/icon of play button to allow stop
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
 var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -312,6 +311,7 @@ function Chord(modecallback, infocallback) {
 function Recorder(recordingnode) {
 	var self = this;				// because ECMAScript
 	var recNode = recordingnode;	// node containing the recording elements
+	var uiCallback = updatePlayButton;	// hard-coded uiCallback
 
 	// playback variables
 	var isRecording = false;
@@ -333,6 +333,7 @@ function Recorder(recordingnode) {
 			window.clearInterval(pCallbackID);
 			pCallbackID = null;
 			updateChordKeys(gChord.chord);
+			uiCallback(false);
 		}
 		else {
 			var thisNode = pNodes[pCurrent++];
@@ -360,15 +361,18 @@ function Recorder(recordingnode) {
 	// Plays the chords encoded in the recorded DOM objects
 	// using a timed interval.
 	this.playRecording = function() {
-		pNodes = recNode.childNodes;
-		pCount = pNodes.length;
+	
+		if (pCallbackID) {		// playback in progress
+			pCurrent = pCount;	// force player stop
+			playRecordingCallback();
+		} else if (pCount = (pNodes = recNode.childNodes).length) {	// start playback if chords exist
 
-		MIDI.setVolume(0, 127);
-
-		if (pCount) {
+			MIDI.setVolume(0, 127);
+			uiCallback(true);
 			pCurrent = 0;
 
 			playRecordingCallback();	// play first note immediately
+
 			pCallbackID = window.setInterval(playRecordingCallback, pTempo);
 		}
 	};
@@ -510,6 +514,22 @@ function updateChordInfo(name, notes) {
 	document.getElementById('chordoutput').innerHTML = notes;
 	updateChordKeys(gChord.chord);
 	document.getElementById('octaveoutput').innerHTML = gChord.getOctave();
+}
+
+// updatePlayButton(state)
+// state - indicates play mode (true = playing)
+//
+// Updates play button with current play state
+function updatePlayButton(state) {
+	playButn = document.getElementById('play');
+
+	if (state) {
+			addClass(playButn, 'dim');
+			playButn.innerHTML = '&#x2b1b;'
+	} else {
+			removeClass(playButn, 'dim');
+			playButn.innerHTML = '&#x25b6';
+	}
 }
 
 // Class manipulation functions
