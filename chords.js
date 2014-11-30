@@ -294,11 +294,11 @@ function Chord(modecallback, infocallback) {
 	// Plays the current chord
 	// Basically a pass-through to MIDI.js
 	this.play = function () {
-		var delay = 0;
 		var velocity = 127; // how hard the note hits
 		MIDI.setVolume(0, 127);
 
-		MIDI.chordOn(0, this.chord, velocity, delay);
+		MIDI.chordOn(0, this.chord, velocity, 0);
+		MIDI.chordOff(0, this.chord, .5);
 	};
 
 };
@@ -343,6 +343,7 @@ function Recorder(recordingnode) {
 			updateChordKeys(thisNode.chord);
 
 			MIDI.chordOn(0, thisNode.chord, 127, 0);
+			MIDI.chordOff(0, thisNode.chord, pTempo/1100);
 
 			pLast = thisNode;
 		}
@@ -887,7 +888,22 @@ function init() {
 		soundfontUrl: "./midi-js-soundfonts/FluidR3_GM/",
 		instrument: "acoustic_grand_piano",
 		callback: function() {
+			MIDI.programChange(0, 0); // set channel 0 to piano
 			startup();
+		}
+	});
+}
+
+// reinit()
+//
+// Load and initializes the MIDI.js plugin
+function reinit() {
+
+	MIDI.loadPlugin({
+		soundfontUrl: "./midi-js-soundfonts/FluidR3_GM/",
+		instrument: "string_ensemble_1",
+		callback: function() {
+			MIDI.programChange(0, 48); // set channel 0 to piano
 		}
 	});
 }
