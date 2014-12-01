@@ -238,6 +238,10 @@ p.info-footer {
     border-top-right-radius: 5px;
 }
 
+#instrument-overlay.overlay-inner{
+	max-width: 400px;
+}
+
 .overlay-body {
 	color: #444;
 	padding: 0rem 2rem;
@@ -267,6 +271,17 @@ p.info-footer {
 	font-size: 20px;
 	text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
 	letter-spacing: -1px;
+}
+
+.overlay-body .single-select {
+	margin-bottom: 10px;
+	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5), 
+				inset 0px -3px 15px -1px rgba(0,0,0,0.2);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+	
 }
 
 .overlay-body .desc {

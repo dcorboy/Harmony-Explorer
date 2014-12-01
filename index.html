@@ -76,7 +76,7 @@
 							<div id="octavedown" class="color6 tile button" title="Lower octave" onclick="chgOctave(-1);" >&#x25bd;</div>
 						</div>
 						<div id="loadsample" class="color4 tile button widebutton" title="Load a harmony sample" onclick="selectOverlay(1);">Samples</div>
-						<div id="loadinstrument" class="color5 tile button widebutton" title="Choose an instrument" onclick="reinit();">Voice</div>
+						<div id="loadinstrument" class="color5 tile button widebutton" title="Choose an instrument" onclick="selectOverlay(2);">Voice</div>
 <!-- 					<div id="save" class="color2 tile button" title="Development save function" onclick="gRecorder.saveRecording();" >Save</div> -->
 					</div>
 				</td>
@@ -118,6 +118,7 @@
 					<li>Toggle the record mode by clicking the <span class="bold">&#x26ab;</span> button. In record mode, all chords played will be recorded.</li>
 				</ul>
 				<p>Load sample chord progressions from popular songs by clicking the <span class="bold">Samples</span> button.</p>
+				<p>Load different instruments by clicking the <span class="bold">Voice</span> button.</p>
 				<hr />
 				<p class="info-footer"><span class="bold">Harmony Explorer</span> is open source and available on <a href="https://github.com/dcorboy/Harmony-Explorer" target="_blank">GitHub</a>.
 					More information is available <a href="http://www.cormerica.com/harmony-explorer/" target="_blank">here</a>.</p>
@@ -133,6 +134,19 @@
 			</div>
 			<div class="overlay-body">
 				<ul id="samples" class="selection">
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="overlay2" class="overlay" onclick="dismissOverlay(2, event);">
+		<div id="instrument-overlay" class="border overlay-inner">
+			<div class="color5 header">
+				<h1 class="uiheading">Load Instrument</h1>
+				<span class="captionbutn" onclick="dismissOverlay(2, false);">&#x2612;</span>
+			</div>
+			<div class="overlay-body">
+				<ul id="instruments" class="selection">
 				</ul>
 			</div>
 		</div>

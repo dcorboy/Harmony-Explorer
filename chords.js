@@ -33,7 +33,6 @@
 // toggle notes with modifier keys (add/remove)
 // use codepoints for flat/sharp
 // decode arbitrary chords?
-// bug when double-clicking play (subsequent plays are jacked)
 // custom chord color?
 
 var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
@@ -73,15 +72,49 @@ var JSONInstruments = {
 		{
 			name: 'Grand Piano',
 			number: 1,
-			description: 'An acoustic grand piano.',
 			filename: 'acoustic_grand_piano',
 			duration: 0
 		},
 		{
 			name: 'String Ensemble',
 			number: 49,
-			description: 'An acoustic grand piano.',
 			filename: 'string_ensemble_1',
+			duration: 1
+		},
+		{
+			name: 'Church Organ',
+			number: 20,
+			filename: 'church_organ',
+			duration: 1
+		},
+		{
+			name: 'Violin',
+			number: 41,
+			filename: 'violin',
+			duration: 1
+		},
+		{
+			name: 'Choir',
+			number: 53,
+			filename: 'choir_aahs',
+			duration: 1
+		},
+		{
+			name: 'Calliope',
+			number: 83,
+			filename: 'lead_3_calliope',
+			duration: 1
+		},
+		{
+			name: 'Brass Section',
+			number: 62,
+			filename: 'brass_section',
+			duration: 1
+		},
+		{
+			name: 'Harpsichord',
+			number: 7,
+			filename: 'harpsichord',
 			duration: 1
 		}
 	]
@@ -704,7 +737,7 @@ function loadInstrument(index) {
 		}
 	});
 
-	//dismissOverlay(2, false);
+	dismissOverlay(2, false);
 }
 
 // clearRecording()
@@ -889,10 +922,11 @@ function startup() {
 	// Fill the samples dialog
 	parent = document.getElementById("samples");
 	len = JSONSamples.samples.length;
+
 	for (var i = 0; i < len; i++) {
 		var li = document.createElement('li');
 		li.setAttribute('onclick','loadRecording(' + i + ');');
-		li.className = 'fixme';
+		//li.className = 'fixme';
 		parent.appendChild(li);
 
 		// now build the children of the li node
@@ -906,7 +940,23 @@ function startup() {
 		elem.className = 'desc';
 		li.appendChild(elem);
 	}
-	
+
+	// Fill the instruments dialog
+	parent = document.getElementById("instruments");
+	len = JSONInstruments.instruments.length;
+
+	for (var i = 0; i < len; i++) {
+		var li = document.createElement('li');
+		li.setAttribute('onclick','loadInstrument(' + i + ');');
+		//li.className = 'fixme';
+		parent.appendChild(li);
+
+		// now build the children of the li node
+		var elem = document.createElement('div');
+		elem.innerHTML = JSONInstruments.instruments[i].name;
+		elem.className = 'color5 header single-select';
+		li.appendChild(elem);
+	}
 
 	document.getElementById("modemajor").checked = true;
 	gRecorder = new Recorder(document.getElementById("recordingblock"));
