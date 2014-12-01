@@ -115,7 +115,7 @@ var JSONInstruments = {
 			name: 'Harpsichord',
 			number: 7,
 			filename: 'harpsichord',
-			duration: 1
+			duration: 0
 		}
 	]
 };
@@ -728,12 +728,15 @@ function loadInstrument(index) {
 
 	gInstrument = JSONInstruments.instruments[index];
 
+	selectOverlay(3);	// put up loading screen
+
 	MIDI.loadPlugin({
 		soundfontUrl: './midi-js-soundfonts/FluidR3_GM/',
 		instrument: gInstrument.filename,
 		callback: function() {
 			MIDI.setVolume(0, 127);
 			MIDI.programChange(0, gInstrument.number-1); // set channel 0 to instrument
+			dismissOverlay(3, false);	// dismiss loading screen
 		}
 	});
 
@@ -961,7 +964,8 @@ function startup() {
 	document.getElementById("modemajor").checked = true;
 	gRecorder = new Recorder(document.getElementById("recordingblock"));
 	gChord.changeHarmony(0);	// C Major-I
-	gChord.changeOctave(4);	// Middle C octave
+	gChord.changeOctave(4);		// Middle C octave
+	dismissOverlay(3, false);	// dismiss loading screen
 //	gChord.play();
 }
 

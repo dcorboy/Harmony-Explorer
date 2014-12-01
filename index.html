@@ -15,7 +15,7 @@
 	<script src="./samples.json" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="chords.css">
 </head>
-<body>
+<body class="overlay-view">
 	<script type="text/javascript">
 		window.onload = init();
 	</script>
@@ -148,6 +148,16 @@
 			<div class="overlay-body">
 				<ul id="instruments" class="selection">
 				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="overlay3" class="overlay overlay-open">
+		<div id="loading-overlay" class="border overlay-inner">
+			<div class="color1 header">
+				<h1 class="uiheading">Loading</h1>
+			</div>
+			<div class="overlay-body">Loading Instrument Samples...
 			</div>
 		</div>
 	</div>

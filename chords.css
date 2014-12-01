@@ -216,14 +216,12 @@ p.info-footer {
     z-index: 10000;
     opacity: 0;
     background: #4D4D4D;
-    transition: opacity 1s linear, bottom 1s linear 500ms; /* why is this not working? */
 }
 
 .overlay-open {
 	bottom: 0;
 	opacity: 1;
 	background-color: rgba(0,0,0,0.6);
-	/* transition: opacity 800ms linear, bottom 500ms linear; */
 }
  
 .overlay-view {
@@ -238,8 +236,13 @@ p.info-footer {
     border-top-right-radius: 5px;
 }
 
-#instrument-overlay.overlay-inner{
+#instrument-overlay.overlay-inner {
 	max-width: 400px;
+}
+
+#loading-overlay.overlay-inner {
+	max-width: 400px;
+	margin-top: 15rem;
 }
 
 .overlay-body {
