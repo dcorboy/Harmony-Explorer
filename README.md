@@ -54,6 +54,10 @@ More complex variations of the root note can be selected from the **Chord** sele
 Clicking the keyboard with the **Alt/Option** key pressed will add notes to the current chord. Clicking without
 **Alt/Option** will start a new custom chord.
 
+Load sample chord progressions from popular songs by clicking the **Samples** button.
+
+Load different instruments by clicking the **Voice** button.
+
 #### Recording
 
 * To record the current chord, click the &#x2617; &#x266c; button
@@ -62,14 +66,6 @@ Clicking the keyboard with the **Alt/Option** key pressed will add notes to the 
 * To delete the last recorded chord, click the &#x232b; button
 * To clear the current recording, click the &#x274c; button
 * Toggle the record mode by clicking the &#x26ab; button. In record mode, all chords played will be recorded.
-
-Load sample chord progressions from popular songs by clicking the **Samples** button.
-	
-## In Development
-
-* Support for some additional instruments
-* Sample chord progressions
-* Tempo control
 
 ## License
 
