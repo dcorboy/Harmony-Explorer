@@ -169,7 +169,7 @@ var JSONSamples = {
 		},
 		{
 			title: "Pachelbel's Canon in D",
-			tempo: 1500,
+			tempo: 1600,
 			description: "Pachelbel's famous piece contains only the five core harmonies, in a tightening loop that converges on the tonic chord.",
 			chords: [
 				{

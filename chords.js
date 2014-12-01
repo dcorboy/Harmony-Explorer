@@ -52,25 +52,46 @@ var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,1
 //     etc.
 // encodings[3]: [x0, y0, x1, y1] of the hitbox on the graph image
 var harmonies = [
-				['I','0,2,4',[11,225,121,335]],
-				['ii','1,3,5',[468,280,578,373]],
-				['iii','2,4,6',[680,225,790,335]],
-				['IV','3,5,7',[468,187,578,280]],
-				['V','4,6,8',[250,187,360,280]],
-				['vi','5,7,9',[327,56,437,166]],
-				['vii','6,8,10',[250,280,360,373]],
-				['V/ii','5,#7,9',[557,385,627,455]],
-				['V/iii','6,#8,#10',[710,76,780,146]],
-				['V7/IV','0,2,4,b7',[557,104,627,174]],
-				['V/V','1,#3,5',[347,385,417,455]],
-				['V/vi','2,#4,6',[230,104,300,174]]];
+					['I','0,2,4',[11,225,121,335]],
+					['ii','1,3,5',[468,280,578,373]],
+					['iii','2,4,6',[680,225,790,335]],
+					['IV','3,5,7',[468,187,578,280]],
+					['V','4,6,8',[250,187,360,280]],
+					['vi','5,7,9',[327,56,437,166]],
+					['vii','6,8,10',[250,280,360,373]],
+					['V/ii','5,#7,9',[557,385,627,455]],
+					['V/iii','6,#8,#10',[710,76,780,146]],
+					['V7/IV','0,2,4,b7',[557,104,627,174]],
+					['V/V','1,#3,5',[347,385,417,455]],
+					['V/vi','2,#4,6',[230,104,300,174]]
+				];
 				
 var scales = [[0,2,4,5,7,9,11], [0,2,3,5,7,8,10]];	// intervals of the major and minor scales
+
+var JSONInstruments = {
+	instruments: [
+		{
+			name: 'Grand Piano',
+			number: 1,
+			description: 'An acoustic grand piano.',
+			filename: 'acoustic_grand_piano',
+			duration: 0
+		},
+		{
+			name: 'String Ensemble',
+			number: 49,
+			description: 'An acoustic grand piano.',
+			filename: 'string_ensemble_1',
+			duration: 1
+		}
+	]
+};
 
 MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
 var gChord = new Chord(updateUIMode, updateChordInfo);
 var gRecorder = null;
+var gInstrument = JSONInstruments.instruments[0];
 
 function Chord(modecallback, infocallback) {
 	var self = this;		// because ECMAScript
@@ -294,11 +315,9 @@ function Chord(modecallback, infocallback) {
 	// Plays the current chord
 	// Basically a pass-through to MIDI.js
 	this.play = function () {
-		var velocity = 127; // how hard the note hits
-		MIDI.setVolume(0, 127);
-
-		MIDI.chordOn(0, this.chord, velocity, 0);
-		MIDI.chordOff(0, this.chord, .5);
+		MIDI.chordOn(0, this.chord, 127, 0);
+		if (gInstrument.duration)
+			MIDI.chordOff(0, this.chord, gInstrument.duration);
 	};
 
 };
@@ -367,13 +386,9 @@ function Recorder(recordingnode) {
 			pCurrent = pCount;	// force player stop
 			playRecordingCallback();
 		} else if (pCount = (pNodes = recNode.childNodes).length) {	// start playback if chords exist
-
-			MIDI.setVolume(0, 127);
 			uiCallback(true);
 			pCurrent = 0;
-
 			playRecordingCallback();	// play first note immediately
-
 			pCallbackID = window.setInterval(playRecordingCallback, pTempo);
 		}
 	};
@@ -634,8 +649,9 @@ function selectNote(note, event) {
 	
 	gChord.addCustomNote(note);
 
-	MIDI.setVolume(0, 127);
 	MIDI.noteOn(0, note, 127, 0);
+	if (gInstrument.duration)
+		MIDI.noteOff(0, note, gInstrument.duration);
 }
 
 // selectKey(optionnode)
@@ -669,6 +685,26 @@ function selectChord(optionnode) {
 function loadRecording(index) {
 	gRecorder.loadRecording(index);
 	dismissOverlay(1, false);
+}
+
+// loadInstrument(index)
+// index - index into instruments array
+//
+// Load the indicated soundfont
+function loadInstrument(index) {
+
+	gInstrument = JSONInstruments.instruments[index];
+
+	MIDI.loadPlugin({
+		soundfontUrl: './midi-js-soundfonts/FluidR3_GM/',
+		instrument: gInstrument.filename,
+		callback: function() {
+			MIDI.setVolume(0, 127);
+			MIDI.programChange(0, gInstrument.number-1); // set channel 0 to instrument
+		}
+	});
+
+	//dismissOverlay(2, false);
 }
 
 // clearRecording()
@@ -885,25 +921,12 @@ function startup() {
 function init() {
 
 	MIDI.loadPlugin({
-		soundfontUrl: "./midi-js-soundfonts/FluidR3_GM/",
-		instrument: "acoustic_grand_piano",
+		soundfontUrl: './midi-js-soundfonts/FluidR3_GM/',
+		instrument: gInstrument.filename,
 		callback: function() {
-			MIDI.programChange(0, 0); // set channel 0 to piano
+			MIDI.setVolume(0, 127);
+			MIDI.programChange(0, gInstrument.number-1); // set channel 0 to instrument
 			startup();
-		}
-	});
-}
-
-// reinit()
-//
-// Load and initializes the MIDI.js plugin
-function reinit() {
-
-	MIDI.loadPlugin({
-		soundfontUrl: "./midi-js-soundfonts/FluidR3_GM/",
-		instrument: "string_ensemble_1",
-		callback: function() {
-			MIDI.programChange(0, 48); // set channel 0 to piano
 		}
 	});
 }
