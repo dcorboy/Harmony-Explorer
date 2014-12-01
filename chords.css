@@ -275,6 +275,7 @@ p.info-footer {
 
 .overlay-body .single-select {
 	margin-bottom: 10px;
+	padding-bottom: 3px;
 	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.5), 
 				inset 0px -3px 15px -1px rgba(0,0,0,0.2);
 	-webkit-border-radius: 5px;
@@ -285,7 +286,7 @@ p.info-footer {
 }
 
 .overlay-body .desc {
-	border: 1px solid #6463db;
+	border: 1px solid #b965e0;
 	border-top: none;
 	font-style: oblique;
 	line-height: 130%;
