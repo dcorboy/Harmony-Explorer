@@ -68,16 +68,16 @@
 						<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="clearRecording();" >&#x274c;</div>
 						<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" >&#x26ab;</div>
 					</div>
-					<div id="recblock2" class="fl-l">
-	<!-- 					<div id="save" class="color1 tile button" title="fixme" onclick="gRecorder.saveRecording();" >Save</div> -->
+					<div id="recblock2" class="fl-r">
 						<div id="octavectrl">
 							<span id="octavelbl" class="uiheading">Octave</span>
 							<div id="octaveup" class="color6 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>
 							<span id="octaveoutput" class="output" title="Current octave">O</span>
 							<div id="octavedown" class="color6 tile button" title="Lower octave" onclick="chgOctave(-1);" >&#x25bd;</div>
 						</div>
-						<div id="loadsample" class="color4 tile button" title="Load a harmony sample" onclick="selectOverlay(1);">Samples</div>
-						<div id="test" class="color1 tile button" title="Test Function" onclick="reinit();">T</div>
+						<div id="loadsample" class="color4 tile button widebutton" title="Load a harmony sample" onclick="selectOverlay(1);">Samples</div>
+						<div id="loadinstrument" class="color5 tile button widebutton" title="Choose an instrument" onclick="reinit();">Voice</div>
+<!-- 					<div id="save" class="color2 tile button" title="Development save function" onclick="gRecorder.saveRecording();" >Save</div> -->
 					</div>
 				</td>
 				<td id="rightblock" class="shortpad">

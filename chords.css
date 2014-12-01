@@ -53,6 +53,10 @@ td.buttons {
 	vertical-align: middle;
 }
 
+td#recinfoblock {
+	padding: 5px 0;
+}
+
 .dim  {
 	opacity: 0.4;
 }
@@ -74,6 +78,7 @@ td.buttons {
 
 .shortpad {
 	padding: 5px 12px;
+	vertical-align: middle;
 }
 
 .center {
@@ -140,10 +145,10 @@ td.buttons {
 }
 
 .button {
-	padding: 0px 14px 2px 8px;
+	padding: 0px 12px 2px 8px;
 	display: inline-block;
 	cursor: pointer;
-	font-size: 32px;
+	font-size: 24px;
 	text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
 	margin: 4px 1px;
 	letter-spacing: -5px;
@@ -157,29 +162,18 @@ p.info-footer {
 	
 }
 
-#loadsample.button {
+.widebutton {
 	letter-spacing: -1px;
-    margin-left: 20px;
-	line-height: 130%;
-	font-size: 30px;
+	line-height: 170%;
+	font-size: 22px;
 }
 
 #recblock1 {
-	margin-right: 30px;
+	margin-right: 10px;
 }
 
 #octavectrl {
 	display: inline-block;
-}
-
-.bbbutton {
-	padding: 5px 10px 8px;
-	display: inline;
-	cursor: pointer;
-	font-size: 32px;
-	text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
-	margin: 1px;
-	letter-spacing: -5px;
 }
 
 .output {
