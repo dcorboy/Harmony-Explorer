@@ -22,7 +22,7 @@
 	<div id="container" class="border">
 		<div id="topbar" class="section">
 			<div class="color1 header">
-				<h1 class="uiheading">Harmony-Explorer </h1>
+				<h1 class="uiheading" onclick="selectOverlay(4);">Harmony-Explorer </h1>
 				<span>v1.0</span>
 				<span class="captionbutn" onclick="selectOverlay(0);">&#x24d8;</span>
 			</div>
@@ -158,6 +158,92 @@
 				<h1 class="uiheading">Loading</h1>
 			</div>
 			<div class="overlay-body">Loading Instrument Samples...
+			</div>
+		</div>
+	</div>
+
+	<div id="overlay4" class="overlay" onclick="dismissOverlay(4, event);">
+		<div class="border overlay-inner">
+			<div class="color6 header">
+				<h1 class="uiheading">Secret Dialog</h1>
+				<span class="captionbutn" onclick="dismissOverlay(4, false);">&#x2612;</span>
+			</div>
+			<div class="overlay-body">
+				<p>Let me know which Unicode symbols do not render for you.</p>
+				<table id="unicode">
+					<tr>
+						<td>&#x2669;</td>
+						<td>&#x266a;</td>
+						<td>&#x266b;</td>
+						<td>&#x266c;</td>
+						<td>&#x266d;</td>
+						<td>&#x266e;</td>
+						<td>&#x266f;</td>
+						<td>&#x2613;</td>
+						<td>&#x274e;</td>
+						<td>&#x274c;</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+						<td>4</td>
+						<td>5</td>
+						<td>6</td>
+						<td>7</td>
+						<td>8</td>
+						<td>9</td>
+						<td>10</td>
+					</tr>
+					<tr>
+						<td>&#x25b3;</td>
+						<td>&#x25b2;</td>
+						<td>&#x25bc;</td>
+						<td>&#x25bd;</td>
+						<td>&#x25b6;</td>
+						<td>&#x25ba;</td>
+						<td>&#x25b7;</td>
+						<td>&#x2b1b;</td>
+						<td>&#x2b1c;</td>
+						<td>&#x232b;</td>
+					</tr>
+					<tr>
+						<td>11</td>
+						<td>12</td>
+						<td>13</td>
+						<td>14</td>
+						<td>15</td>
+						<td>16</td>
+						<td>17</td>
+						<td>18</td>
+						<td>19</td>
+						<td>20</td>
+					</tr>
+					<tr>
+						<td>&#x2616;</td>
+						<td>&#x2617;</td>
+						<td>&#x26aa;</td>
+						<td>&#x26ab;</td>
+						<td>&#x2300;</td>
+						<td>&#x2205;</td>
+						<td>&#x25c9;</td>
+						<td>&#x233e;</td>
+						<td>&#x26d4;</td>
+						<td>&#x25cf;</td>
+					</tr>
+					<tr>
+						<td>21</td>
+						<td>22</td>
+						<td>23</td>
+						<td>24</td>
+						<td>25</td>
+						<td>26</td>
+						<td>27</td>
+						<td>28</td>
+						<td>29</td>
+						<td>30</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>

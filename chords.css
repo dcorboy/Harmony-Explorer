@@ -19,10 +19,6 @@ label {
 	display: block;
 }
 
-table {
-    border-collapse: collapse;
-}
-
 #container {
 	background: #202020 url("http://subtlepatterns.com/patterns/zwartevilt.png") repeat scroll 0 0;
 	margin: 0 auto;
@@ -44,6 +40,10 @@ table {
 	width: 225px;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 td {
 	vertical-align: top;
 	padding: 0;
@@ -55,6 +55,31 @@ td.buttons {
 
 td#recinfoblock {
 	padding: 5px 0;
+}
+
+table#unicode {
+	text-align: center;
+    width: 100%;
+	margin-bottom: 30px;
+}
+
+table#unicode td {
+    font-size: 1em;
+    border: 3px solid #51a647;
+    padding: 3px 7px 2px 7px;
+}
+
+table#unicode tr:nth-child(even) {
+	background-color: #8bd982;
+}
+
+table#unicode tr:nth-child(even) td {
+	border-top: none;
+}
+
+table#unicode tr:nth-child(odd) td {
+	border-bottom: none;
+	font-size: 1.3em;
 }
 
 .dim  {
@@ -151,7 +176,7 @@ td#recinfoblock {
 	font-size: 24px;
 	text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
 	margin: 4px 1px;
-	letter-spacing: -5px;
+	letter-spacing: -2px;
 }
 
 p.info-footer {
