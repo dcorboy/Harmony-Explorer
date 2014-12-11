@@ -31,12 +31,13 @@
 // tile UI sizeToContent
 // tempo setting?
 // toggle notes with modifier keys (add/remove)
-// use codepoints for flat/sharp
 // decode arbitrary chords?
 // custom chord color?
 
-var notes = ['C','C&#x266f / D&#x266d','D','D# / Eb','E','F','F# / Gb','G','G# / Ab','A','A# / Bb','B'];
-var disp = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
+
+var notes = ['C','C&#x266f / D&#x266d','D','D&#x266f / E&#x266d','E','F','F&#x266f / G&#x266d','G','G&#x266f / A&#x266d','A','A&#x266f / B&#x266d','B'];
+var disp = ['C','C&#x266f','D','D&#x266f','E','F','F&#x266f','G','G&#x266f','A','A&#x266f','B'];
 var chordnames = ['Major','Major 7th','Major 9','Major 11','Major 13','Major 7th add 11','Major 7th add 13','Major 7th Sus4','Major 9 Sus4','Minor','Minor 6','Minor 7th','Minor 9','Minor 11','Minor 13','Minor add 9','Minor 6 add 9','Minor 7th add 11','Minor 7th add 13','Minor Major 7th','Minor Major 9','Minor Major 11','Minor Major 13','Minor Major 7th add 11','Minor Major 7th add 13','Dominant 7th','Dominant 7th add 11','Dominant 7th add 13','Sus 2','Sus 4','6sus4','7sus4','9sus4'];
 var chordformulas = ['0,4,7','0,4,7,11','0,2,4,7,11','0,2,4,5,7,11','0,2,4,7,9,11','0,4,5,7,11','0,4,7,9,11','0,5,7,11','0,2,5,7,11','0,3,7','0,3,7,9','0,3,7,10','0,2,3,7,10','0,2,3,5,7,10','0,2,3,7,9,10','0,2,3,7','0,2,3,7,9','0,3,5,7,10','0,3,7,9,10','0,3,7,11','0,2,3,7,11','0,2,3,5,7,11','0,2,3,7,9,11','0,3,5,7,11','0,3,7,9,11','0,4,7,10','0,4,5,7,10','0,4,7,9,10','0,2,7','0,5,7','0,5,7,9','0,5,7,10','0,2,5,7,10'];
 
@@ -119,8 +120,6 @@ var JSONInstruments = {
 		}
 	]
 };
-
-MIDI.USE_XHR = false;	// allows MIDI.js to run from file. Remove this line if publishing to a server.
 
 var gChord = new Chord(updateUIMode, updateChordInfo);
 var gRecorder = null;
