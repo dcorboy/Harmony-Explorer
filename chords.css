@@ -101,6 +101,11 @@ table#unicode tr:nth-child(odd) td {
 	padding: 20px;
 }
 
+.spacer {
+	display: inline-block;
+	width: 5px;
+}
+
 .shortpad {
 	padding: 5px 12px;
 	vertical-align: middle;
