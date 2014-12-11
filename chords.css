@@ -125,6 +125,10 @@ table#unicode tr:nth-child(odd) td {
 	color: #6463db;
 }
 
+.texthlt {
+	color: #6463db;
+}
+
 .uiheading {
 	/* background: url(http://noisepng.com/100-90-4-monochrome.png); */
 	text-align: center;
@@ -141,6 +145,7 @@ table#unicode tr:nth-child(odd) td {
 	font-size: 24px;
 	line-height: 145%;
     margin-right: 10px;
+	margin-top: 2px;
 	text-shadow: 1px 1px 0px rgba(0,0,0,0.8);
 	cursor: pointer;
 }

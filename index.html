@@ -11,6 +11,10 @@
 	<script src="./MIDI.js/inc/Base64.js" type="text/javascript"></script>
 	<script src="./MIDI.js/inc/base64binary.js" type="text/javascript"></script>
 
+	<!-- I really tried to use Unicode code points and dealing with the various browser/font
+		implementations made me feel like it was 1994 again. So font-awesome. -->
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
 	<script src="./chords.js" type="text/javascript"></script>
 	<script src="./samples.json" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="chords.css">
@@ -24,7 +28,8 @@
 			<div class="color1 header">
 				<h1 class="uiheading" onclick="selectOverlay(4);">Harmony-Explorer </h1>
 				<span>v1.0</span>
-				<span class="captionbutn" onclick="selectOverlay(0);">&#x24d8;</span>
+				<span class="captionbutn fa fa-info-circle" onclick="selectOverlay(0);"></span>
+
 			</div>
 			<div id="keyboard">
 				<div id="upperkeys"></div>
@@ -60,20 +65,20 @@
 				</td>
 				<td id="recinfoblock" class="shortpad buttons">
 					<div id="recblock1" class="fl-l">
-						<div id="playchord" class="color1 tile button" title="Play current chord" onclick="playChord();" >&#x266c;</div>
-						<div id="record" class="color1 tile button" title="Record current chord" onclick="gRecorder.addRecording();" >&#x2617; &#x266c;</div>
-						<div id="rest" class="color1 tile button" title="Record a rest interval" onclick="gRecorder.addRest();" >&#x2617; &#x2300;</div>
-						<div id="play" class="color1 tile button" title="Play current recording" onclick="gRecorder.playRecording();" >&#x25b6;</div>
-						<div id="delete" class="color1 tile button" title="Remove last chord" onclick="gRecorder.deleteRecording();" >&#x232b;</div>
-						<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="clearRecording();" >&#x274c;</div>
-						<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" >&#x26ab;</div>
+						<div id="playchord" class="color1 tile button" title="Play current chord" onclick="playChord();" ><span class="fa fa-music"></span>&#8203;</div>
+						<div id="record" class="color1 tile button" title="Record current chord" onclick="gRecorder.addRecording();" ><span class="fa fa-music"></span> <span class="fa fa-level-up"></span></div>
+						<div id="rest" class="color1 tile button" title="Record a rest interval" onclick="gRecorder.addRest();" ><span class="fa fa-square-o"></span> <span class="fa fa-level-up"></div>
+						<div id="play" class="color1 tile button" title="Play current recording" onclick="gRecorder.playRecording();" ><span id="playchar" class="fa fa-play"></span>&#8203;</div>
+						<div id="delete" class="color1 tile button" title="Remove last chord" onclick="gRecorder.deleteRecording();" ><span class="fa fa-undo"></span>&#8203;</div>
+						<div id="clear" class="color1 tile button" title="Clear entire recording" onclick="clearRecording();" ><span class="fa fa-trash"></span>&#8203;</div>
+						<div id="recordmode" class="color10 tile button dim" title="Toggle live record" onclick="gRecorder.toggleRecording(this);" ><span class="fa fa-circle"></span>&#8203;</div>
 					</div>
 					<div id="recblock2" class="fl-r">
 						<div id="octavectrl">
 							<span id="octavelbl" class="uiheading">Octave</span>
-							<div id="octaveup" class="color6 tile button" title="Raise octave" onclick="chgOctave(1);" >&#x25b3;</div>
+							<div id="octaveup" class="color6 tile button" title="Raise octave" onclick="chgOctave(1);" ><span class="fa fa-chevron-up"></span>&#8203;</div>
 							<span id="octaveoutput" class="output" title="Current octave">O</span>
-							<div id="octavedown" class="color6 tile button" title="Lower octave" onclick="chgOctave(-1);" >&#x25bd;</div>
+							<div id="octavedown" class="color6 tile button" title="Lower octave" onclick="chgOctave(-1);" ><span class="fa fa-chevron-down"></span>&#8203;</div>
 						</div>
 						<div id="loadsample" class="color4 tile button widebutton" title="Load a harmony sample" onclick="selectOverlay(1);">Samples</div>
 						<div id="loadinstrument" class="color5 tile button widebutton" title="Choose an instrument" onclick="selectOverlay(2);">Voice</div>
@@ -100,7 +105,7 @@
 				<span class="captionbutn" onclick="dismissOverlay(0, false);">&#x2612;</span>
 			</div>
 			<div class="overlay-body">
-				<p>Play the current chord with the <span class="bold">&#x266c;</span> button. Chord name and notes are displayed under the <span class="bold">Chord</span> selection box.</p>
+				<p>Play the current chord with the <span class="texthlt fa fa-music"></span> button. Chord name and notes are displayed under the <span class="bold">Chord</span> selection box.</p>
 				<p>Click on the colored graph below the main UI to follow the general progression of chords in C-Major (the default).<p>
 				<p>The <span class="bold">Shift</span> key will raise the chord an octave while the <span class="bold">Ctrl</span> key will lower the chord an octave.</p>
 				<p>Choose a different root note from the <span class="bold">Key</span> selection box on the top-left and either
@@ -112,12 +117,12 @@
 				<p>Load different instruments by clicking the <span class="bold">Voice</span> button.</p>
 				<h2>Recording</h2>
 				<ul>
-					<li>To record the current chord, click the <span class="bold">&#x2617; &#x266c;</span> button</li>
-					<li>To record a rest measure, click the <span class="bold">&#x2617; &#x2300;</span> button</li>
-					<li>To play back the recorded chords, click the <span class="bold">&#x25b6;</span> button</li>
-					<li>To delete the last recorded chord, click the <span class="bold">&#x232b;</span> button</li>
-					<li>To clear the current recording, click the <span class="bold">&#x274c;</span> button</li>
-					<li>Toggle the record mode by clicking the <span class="bold">&#x26ab;</span> button. In record mode, all chords played will be recorded.</li>
+					<li>To record the current chord, click the <span class="texthlt fa fa-music"></span> <span class="texthlt fa fa-level-up"></span> button</li>
+					<li>To record a rest measure, click the <span class="texthlt fa fa-square-o"></span> <span class="texthlt fa fa-level-up"></span> button</li>
+					<li>To play back the recorded chords, click the <span class="texthlt fa fa-play"></span> button</li>
+					<li>To delete the last recorded chord, click the <span class="texthlt fa fa-undo"></span> button</li>
+					<li>To clear the current recording, click the <span class="texthlt fa fa-trash"></span> button</li>
+					<li>Toggle the record mode by clicking the <span class="texthlt fa fa-circle"></span> button. In record mode, all chords played will be recorded.</li>
 				</ul>
 				<hr />
 				<p class="info-footer"><span class="bold">Harmony Explorer</span> is open source and available on <a href="https://github.com/dcorboy/Harmony-Explorer" target="_blank">GitHub</a>.

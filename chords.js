@@ -570,13 +570,16 @@ function updateChordInfo(name, notes) {
 // Updates play button with current play state
 function updatePlayButton(state) {
 	playButn = document.getElementById('play');
+	playChar = document.getElementById('playchar');
 
 	if (state) {
 			addClass(playButn, 'dim');
-			playButn.innerHTML = '&#x2b1b;'
+			removeClass(playChar, 'fa-play');
+			addClass(playChar, 'fa-stop');
 	} else {
 			removeClass(playButn, 'dim');
-			playButn.innerHTML = '&#x25b6';
+			removeClass(playChar, 'fa-stop');
+			addClass(playChar, 'fa-play');
 	}
 }
 
